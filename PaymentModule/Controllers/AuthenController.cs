@@ -15,7 +15,11 @@ namespace PaymentModule.Controllers
     [ApiController]
     public class AuthenController : ControllerBase
     {
-        public static AccountModel account = new AccountModel();
+        
+
+        public static List<UserModel> users = new List<UserModel>();
+        public static List<AccountModel> accounts = new List<AccountModel>();
+
         private readonly IConfiguration _config;
         private readonly IAccountRepository _accountRepository;
         public AuthenController(IConfiguration configuration, IAccountRepository accountRepository)
@@ -30,30 +34,37 @@ namespace PaymentModule.Controllers
             return Ok(_accountRepository.GetMyAccount());
         }
 
-        [HttpPost("RefreshToken")]
-        public IActionResult RefreshMyToken()
-        {
-            var refreshToken = Request.Cookies["refreshToken"];
-            if(!account.refreshToken.Equals(refreshToken))
-            {
-                return Unauthorized("TOKEN INVALID");
-            } else if(account.tokenExpires < DateTime.Now) {
-                return Unauthorized("TOKEN EXPIRED");
-            }
-            string token = CreateToken(account);
-            var newRefreshToken = CreateRefreshToken();
-            SetRefreshToken(newRefreshToken);
-            return Ok(token);
-        }
+        
 
         [HttpPost("Register")]
-        public IActionResult Register(AccountDto request)
+        public IActionResult Register(UserDto request)
         {
-            hashPassword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
-            account.username = request.username;
-            account.passwordHash = passwordHash;
-            account.passwordSalt = passwordSalt;
-            return Ok(account);
+
+
+            if (request.password == request.confirmPassword) {
+                var userModel = new UserModel();
+                userModel.firstName = request.firstName;
+                userModel.lastName = request.lastName;
+                userModel.email = request.email;
+                userModel.password = request.password;
+                userModel.phoneNumber = request.phoneNumber;
+                users.Add(userModel);
+
+                hashPassword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
+
+                var accountModel = new AccountModel
+                {
+                    email = request.email,
+                    passwordHash = passwordHash,
+                    passwordSalt = passwordSalt
+                };
+                accounts.Add(accountModel);
+                return Ok(accounts);
+            } else
+            {
+                return Ok(new { mess = "PASSWORD KO TRÙNG KHỚP" });
+            }
+            
         }
         private void hashPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -68,20 +79,42 @@ namespace PaymentModule.Controllers
         [HttpPost("Login")]
         public IActionResult Login(AccountDto request)
         {
-            if (account.username != request.username)
+            var myAccount = accounts.SingleOrDefault(acc => acc.email == request.email);
+            if (myAccount == null)
             {
                 return Ok("NOT FOUND YOUR ACCOUNT");
             }
-            if (!VerifyPassword(request.password, account.passwordHash, account.passwordSalt))
+            if (!VerifyPassword(request.password, myAccount.passwordHash, myAccount.passwordSalt))
             {
                 return BadRequest("INCORRECT PASSWORD");
             }
-            string token = CreateToken(account);
+
+            string token = CreateToken(myAccount);
 
             var refreshToken = CreateRefreshToken();
-            SetRefreshToken(refreshToken);
-            return Ok(new { token, refreshToken });
+            
+            SetRefreshToken(myAccount, refreshToken);
+        
+            return Ok(new { token , refreshToken});
         }
+
+       /* [HttpPost("RefreshToken")]
+        public IActionResult RefreshMyToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            if (!account.refreshToken.Equals(refreshToken))
+            {
+                return Unauthorized("TOKEN INVALID");
+            }
+            else if (account.tokenExpires < DateTime.Now)
+            {
+                return Unauthorized("TOKEN EXPIRED");
+            }
+            string token = CreateToken(account);
+            var newRefreshToken = CreateRefreshToken();
+            SetRefreshToken(newRefreshToken);
+            return Ok(token);
+        }*/
 
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -96,7 +129,7 @@ namespace PaymentModule.Controllers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, account.username),
+                new Claim(ClaimTypes.Email, account.email),
                 new Claim(ClaimTypes.Role, "Admin"),
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
@@ -122,7 +155,7 @@ namespace PaymentModule.Controllers
             return refreshToken;
         }
 
-        private void SetRefreshToken(RefreshToken newRefreshToken)
+        private void SetRefreshToken(AccountModel acc, RefreshToken newRefreshToken)
         {
             var cookieOptions = new CookieOptions
             {
@@ -131,9 +164,9 @@ namespace PaymentModule.Controllers
             };
             Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
 
-            account.refreshToken = newRefreshToken.Token;
-            account.tokenCreated = newRefreshToken.Created;
-            account.tokenExpires = newRefreshToken.Expires;
+            acc.refreshToken = newRefreshToken.Token;
+            acc.tokenCreated = newRefreshToken.Created;
+            acc.tokenExpires = newRefreshToken.Expires;
         }
     }
 }
