@@ -6,16 +6,15 @@ import React from "react";
 
 function ViewPayment() {
   return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}>
-        <ViewSider></ViewSider>
-      <Layout>
+    <div>
+  
+    
         <ViewHeader></ViewHeader>
+        <div>
         <ViewContent></ViewContent>
-      </Layout>
-    </Layout>
+        </div>
+    
+    </div>
   );
 }
 

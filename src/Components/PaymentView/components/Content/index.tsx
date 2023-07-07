@@ -15,7 +15,7 @@ const ViewContent: React.FC = () => {
   } = theme.useToken();
 
   return (
-    <Content
+    <div
       style={{
         margin: 0,
       }}
@@ -23,8 +23,7 @@ const ViewContent: React.FC = () => {
       <div
         style={{
           paddingLeft: 16,
-          minHeight: "100%",
-          minWidth: "100%",
+          
           background: colorBgContainer,
         }}
       >
@@ -183,7 +182,7 @@ const ViewContent: React.FC = () => {
           <Comment></Comment>
         </div>
       </div>
-    </Content>
+    </div>
   );
 };
 

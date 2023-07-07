@@ -11,34 +11,10 @@ const Employee:React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
-   <Layout>
-      <HeaderRequest/>
-      <Content>
-        <Layout >
-        <Sider
-          style={{
-            background: colorBgContainer,
-          }}
-          width={200}>
-          <Search
-            placeholder="input search text"
-            // onSearch={onSearch}
-            style={{
-              width: 200,
-            }}
-          />
-          <NavbarRequest/>
-        </Sider>
-        <Content
-          style={{
-            padding: "0 12px",
-          }}>
-          <InforUser />
-        </Content>
-        </Layout>
-      </Content>
-     
-    </Layout>
+  
+       
+    <InforUser />
+      
   )
 }
 

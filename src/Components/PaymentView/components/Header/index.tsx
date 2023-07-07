@@ -13,10 +13,10 @@ const ViewHeader: React.FC = () => {
   return (
     <Header
     style={{
-      padding: 0,
       minWidth: '100%',
       background: '#ccc',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+      position: 'fixed',
+      zIndex: 1
     }} >
 
       <Row gutter={12} style={{paddingLeft: '1.5%'}}>
