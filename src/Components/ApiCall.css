@@ -1,0 +1,106 @@
+.content {
+    margin: 100px 250px;
+}
+.All{
+    background-image: url("https://tasken.io/images/background-landing-page1.jpg");
+}
+.content-col {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 12px;
+}
+
+.topfooter-col {
+    background-color: #42b3e5;
+    height: 180px;
+    /* width: 200px; */
+    border-right: #ddd solid;
+    padding-top: 40px;
+}
+
+.bottomfooter-col {
+    text-align: left;
+    padding: 0 20px 20px;
+    color: #fff;
+    /* width: 200px; */
+}
+
+.footer {
+    background-color: #2b3237;
+    margin-top: 20px;
+    padding: 0 180px 100px;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.bottomfooter-row {
+    /* padding: 20px 160px 60px; */
+    padding: 20px 0 60px;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .content {
+        margin: 100px 100px;
+    }
+
+    .footer {
+        padding: 10px 20px;
+    }
+
+    .topfooter-col {
+        width: 100%;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .content {
+        margin: 100px 100px;
+    }
+
+    .footer {
+        padding: 10px 20px;
+    }
+
+    .topfooter-col {
+        width: 100%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .content {
+        margin: 100px 100px;
+    }
+
+    .footer {
+        padding: 0 20px;
+    }
+
+    .topfooter-col {
+        width: 100%;
+    }
+
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .footer {
+        padding: 0 200px;
+    }
+
+    .topfooter-col {
+        width: 33.33%;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1240px) {
+    .content {
+        margin: 100px 150px;
+    }
+}

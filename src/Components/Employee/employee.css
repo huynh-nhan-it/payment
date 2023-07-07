@@ -1,0 +1,32 @@
+.avatar-employee{
+    width: 100px;
+}
+
+.employee-avatar-name-edit{
+    display: flex;
+}
+
+.name-employee{
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    padding:  0 20px;
+}
+
+.edit-employee{
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+}
+
+.header-employee{
+    color: #8894A1;
+    border-bottom: 0.1px solid #ccc;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 0 20px;
+}
+
+.return-employee{
+    padding: 0 10px;
+}
