@@ -1,6 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
+
 import { Col, Row } from "antd";
+
+// import CardContent from "./CardContent";
+import { Card, Col, Row } from "antd";
+
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import CardContent from "./Card";

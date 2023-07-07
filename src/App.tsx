@@ -21,6 +21,9 @@ function App() {
           <Route path="system/employee" element={<Employee />} />
         </Routes>
       </BrowserRouter>
+       {/* <ApiCall/> */}
+       {/* <ViewPayment></ViewPayment> */}
+       
     </div>
   );
 }

@@ -1,19 +1,12 @@
 import { Card, Col, Row } from "antd";
 import "./CardContent.css";
 
-function CardContent({id,className,icon,title, decription }) {
-
-  const handleClickLink = (id) =>{
-    console.log("click",id);
-  }
+function CardContent({className,icon,title, decription }) {
   return (
 
     <Card
-    id={id}
       className="card-content"
-      bordered={false}
-      onClick={()=>handleClickLink(id)}
-      >
+      bordered={false}>
         <div className={className}>{icon}</div>
         <div className="border-bottom"></div>
       <p className="type-content-title">{title}</p>

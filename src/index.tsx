@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-const a = document.getElementById("root") as HTMLElement;
-const root = ReactDOM.createRoot(a);
-root.render(<App />);
+const root = document.getElementById("root");
+const rootElement = document.createElement('div');
+const rootContainer  = ReactDOM.createRoot(root ?? rootElement);
+rootContainer.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
