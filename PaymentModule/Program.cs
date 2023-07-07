@@ -1,11 +1,16 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PaymentModule.Context;
 using PaymentModule.Repository;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//ADD CONTEXT
+builder.Services.AddDbContext<PaymentContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("PaymentDB")));
 
 // Add services to the container.
 
@@ -45,6 +50,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = false
     };
 });
+
 
 //CORS
 builder.Services.AddCors(p => p.AddPolicy("CORS", build =>

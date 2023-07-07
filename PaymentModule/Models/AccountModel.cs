@@ -10,7 +10,6 @@
         public DateTime tokenCreated { get; set; }
         public DateTime tokenExpires { get; set; }
 
-
         public AccountModel()
         {
 

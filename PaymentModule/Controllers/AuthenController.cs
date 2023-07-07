@@ -16,7 +16,6 @@ namespace PaymentModule.Controllers
     public class AuthenController : ControllerBase
     {
         
-
         public static List<UserModel> users = new List<UserModel>();
         public static List<AccountModel> accounts = new List<AccountModel>();
 
@@ -28,19 +27,15 @@ namespace PaymentModule.Controllers
             _accountRepository = accountRepository;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet, Authorize(Roles = "Admin")]
         public IActionResult GetMyAccount()
         {
             return Ok(_accountRepository.GetMyAccount());
         }
 
-        
-
         [HttpPost("Register")]
         public IActionResult Register(UserDto request)
         {
-
-
             if (request.password == request.confirmPassword) {
                 var userModel = new UserModel();
                 userModel.firstName = request.firstName;
@@ -74,7 +69,6 @@ namespace PaymentModule.Controllers
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
-
 
         [HttpPost("Login")]
         public IActionResult Login(AccountDto request)
