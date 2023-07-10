@@ -18,7 +18,6 @@ namespace PaymentModule.Controllers
         
         public static List<UserModel> users = new List<UserModel>();
         public static List<AccountModel> accounts = new List<AccountModel>();
-
         private readonly IConfiguration _config;
         private readonly IAccountRepository _accountRepository;
         public AuthenController(IConfiguration configuration, IAccountRepository accountRepository)

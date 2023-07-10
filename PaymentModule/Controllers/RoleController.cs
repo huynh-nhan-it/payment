@@ -13,18 +13,16 @@ namespace EFPatrick.Controllers
     public class RoleController : ControllerBase
     {
         private PaymentContext _context;
-
         public RoleController(PaymentContext paymentContext) {
             _context = paymentContext;
         }
 
         [HttpPost]
-        public IActionResult insert(RoleDto role)
+        public IActionResult Insert(RoleDto role)
         {
             var roleEntity = new RoleEntity
             {
                 Role = role.Role,
-
             };
             _context.Roles.Add(roleEntity);
             _context.SaveChanges();

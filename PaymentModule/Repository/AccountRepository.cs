@@ -5,7 +5,6 @@ namespace PaymentModule.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-
         public AccountRepository(IHttpContextAccessor httpContextAccessor) {
             _httpContextAccessor = httpContextAccessor;
         }  

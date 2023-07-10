@@ -20,7 +20,8 @@ namespace PaymentModule.Entities
         [Required]
         public Guid AccountId { get; set; }
         public virtual AccountEntity MyAccount { get; set; }
-
         public ICollection<RoleEntity> Roles { get; set; }
+        public ICollection<PaymentRequestEntity> PaymentRequests { get; set; }
+        public ICollection<DetailRequestEntity> DetailRequests { get; set; }
     }
 }

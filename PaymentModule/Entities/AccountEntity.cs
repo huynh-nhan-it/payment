@@ -12,6 +12,6 @@ namespace PaymentModule.Entities
         public byte[] PasswordSalt { get; set; }
         [ForeignKey("UserEntity")]
         public Guid UserId { get; set; }
-        public virtual UserEntity MyUser { get; set; }    
+        public UserEntity MyUser { get; set; }    
     }
 }
