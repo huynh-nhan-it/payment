@@ -1,5 +1,5 @@
 1. Folder DTO
-Đối tượng DTO sẽ nhận các dữ liệu mà người dùng nhập vào trên giao diện, sau đó sẽ gáng lại vào model / entity, để thêm-sửa-xóa vào database
+Đối tượng DTO sẽ nhận các dữ liệu mà người dùng nhập vào trên giao diện, sau đó sẽ chuyển đổi thành model / entity tương ứng, để thực hiện các API thêm-sửa-xóa vào database.
 
 2. Folder Entity
 Đối tượng Entity định nghĩa các table trong database .
@@ -14,4 +14,6 @@ Sau khi định nghĩa table trong Entity, vào đây để định nghĩa DbSet
 Thực hiện các logic (đơn giản: mapping, CRUD,..) để controller gọi.
 
 6. Folder Service
-Thực hiện các logic, nghiệp vụ,... cũng để controller gọi.
+Thực hiện các logic, nghiệp vụ,... phức tạp hơn. Cũng để controller gọi.
+
+
