@@ -7,7 +7,6 @@ namespace PaymentModule.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
         public Guid Id { get; set; }
         [Required]
         public string FirstName { get; set; } = string.Empty;
@@ -23,5 +22,6 @@ namespace PaymentModule.Entities
         public ICollection<RoleEntity> Roles { get; set; }
         public ICollection<PaymentRequestEntity> PaymentRequests { get; set; }
         public ICollection<DetailRequestEntity> DetailRequests { get; set; }
+        public string JobTitle { get; set; }
     }
 }

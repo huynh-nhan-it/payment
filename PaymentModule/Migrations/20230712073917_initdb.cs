@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PaymentModule.Migrations
 {
-    public partial class initdatabase : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace PaymentModule.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExchangeRate = table.Column<int>(type: "int", nullable: false)
+                    ExchangeRate = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,11 +91,54 @@ namespace PaymentModule.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DetailRequests",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentFor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PONumber = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SupplierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaymentMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetailRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DetailRequests_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
+                        principalTable: "Currencies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetailRequests_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetailRequests_PaymentMethods_PaymentMethodId",
+                        column: x => x.PaymentMethodId,
+                        principalTable: "PaymentMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetailRequests_Suppliers_SupplierId",
+                        column: x => x.SupplierId,
+                        principalTable: "Suppliers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,32 +163,6 @@ namespace PaymentModule.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PaymentRequests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PaymentRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PaymentRequests_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PaymentRequests_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserRole",
                 columns: table => new
                 {
@@ -165,53 +182,6 @@ namespace PaymentModule.Migrations
                         name: "FK_UserRole_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DetailRequests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DetailContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SupplierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DetailRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_Currencies_CurrencyId",
-                        column: x => x.CurrencyId,
-                        principalTable: "Currencies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_PaymentMethods_PaymentRequestId",
-                        column: x => x.PaymentRequestId,
-                        principalTable: "PaymentMethods",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_PaymentRequests_PaymentRequestId",
-                        column: x => x.PaymentRequestId,
-                        principalTable: "PaymentRequests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_Suppliers_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Suppliers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -271,6 +241,7 @@ namespace PaymentModule.Migrations
                     Amount = table.Column<double>(type: "float", nullable: false),
                     InvNo = table.Column<int>(type: "int", nullable: false),
                     Industry = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartmentTableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DetailRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -278,35 +249,52 @@ namespace PaymentModule.Migrations
                 {
                     table.PrimaryKey("PK_DetailTables", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_DetailTables_Departments_DepartmentTableId",
+                        column: x => x.DepartmentTableId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_DetailTables_DetailRequests_DetailRequestId",
                         column: x => x.DetailRequestId,
                         principalTable: "DetailRequests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DetailTableDepartment",
+                name: "PaymentRequests",
                 columns: table => new
                 {
-                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DetailTableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RequestCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DetailRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DetailTableDepartment", x => new { x.DepartmentId, x.DetailTableId });
+                    table.PrimaryKey("PK_PaymentRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DetailTableDepartment_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
+                        name: "FK_PaymentRequests_DetailRequests_DetailRequestId",
+                        column: x => x.DetailRequestId,
+                        principalTable: "DetailRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PaymentRequests_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DetailTableDepartment_DetailTables_DetailTableId",
-                        column: x => x.DetailTableId,
-                        principalTable: "DetailTables",
+                        name: "FK_PaymentRequests_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -336,10 +324,9 @@ namespace PaymentModule.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetailRequests_PaymentRequestId",
+                name: "IX_DetailRequests_PaymentMethodId",
                 table: "DetailRequests",
-                column: "PaymentRequestId",
-                unique: true);
+                column: "PaymentMethodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DetailRequests_SupplierId",
@@ -347,13 +334,18 @@ namespace PaymentModule.Migrations
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetailTableDepartment_DetailTableId",
-                table: "DetailTableDepartment",
-                column: "DetailTableId");
+                name: "IX_DetailTables_DepartmentTableId",
+                table: "DetailTables",
+                column: "DepartmentTableId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DetailTables_DetailRequestId",
                 table: "DetailTables",
+                column: "DetailRequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PaymentRequests_DetailRequestId",
+                table: "PaymentRequests",
                 column: "DetailRequestId",
                 unique: true);
 
@@ -385,19 +377,25 @@ namespace PaymentModule.Migrations
                 name: "Attachments");
 
             migrationBuilder.DropTable(
-                name: "DetailTableDepartment");
+                name: "DetailTables");
+
+            migrationBuilder.DropTable(
+                name: "PaymentRequests");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "DetailTables");
+                name: "DetailRequests");
+
+            migrationBuilder.DropTable(
+                name: "Statuses");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "DetailRequests");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Currencies");
@@ -409,16 +407,7 @@ namespace PaymentModule.Migrations
                 name: "PaymentMethods");
 
             migrationBuilder.DropTable(
-                name: "PaymentRequests");
-
-            migrationBuilder.DropTable(
                 name: "Suppliers");
-
-            migrationBuilder.DropTable(
-                name: "Statuses");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

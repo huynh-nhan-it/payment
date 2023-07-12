@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PaymentModule.Context;
 using PaymentModule.DTOs;
 using PaymentModule.Models;
 using PaymentModule.Repository;
@@ -18,10 +20,12 @@ namespace PaymentModule.Controllers
         
         public static List<UserModel> users = new List<UserModel>();
         public static List<AccountModel> accounts = new List<AccountModel>();
+        private readonly PaymentContext _context;
         private readonly IConfiguration _config;
         private readonly IAccountRepository _accountRepository;
-        public AuthenController(IConfiguration configuration, IAccountRepository accountRepository)
+        public AuthenController(IConfiguration configuration, IAccountRepository accountRepository, PaymentContext context)
         {
+            _context = context;
             _config = configuration;
             _accountRepository = accountRepository;
         }
@@ -43,7 +47,7 @@ namespace PaymentModule.Controllers
                 userModel.password = request.password;
                 userModel.phoneNumber = request.phoneNumber;
                 users.Add(userModel);
-
+                
                 hashPassword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
 
                 var accountModel = new AccountModel
@@ -91,7 +95,7 @@ namespace PaymentModule.Controllers
             return Ok(new { token , refreshToken});
         }
 
-       /* [HttpPost("RefreshToken")]
+       *//* [HttpPost("RefreshToken")]
         public IActionResult RefreshMyToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -107,7 +111,7 @@ namespace PaymentModule.Controllers
             var newRefreshToken = CreateRefreshToken();
             SetRefreshToken(newRefreshToken);
             return Ok(token);
-        }*/
+        }*//*
 
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -117,7 +121,6 @@ namespace PaymentModule.Controllers
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
-
         private string CreateToken(AccountModel account)
         {
             List<Claim> claims = new List<Claim>
@@ -163,3 +166,4 @@ namespace PaymentModule.Controllers
         }
     }
 }
+*/

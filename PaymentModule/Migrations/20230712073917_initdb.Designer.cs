@@ -12,8 +12,8 @@ using PaymentModule.Context;
 namespace PaymentModule.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-    [Migration("20230710032148_initdatabase")]
-    partial class initdatabase
+    [Migration("20230712073917_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,21 +37,6 @@ namespace PaymentModule.Migrations
                     b.HasIndex("DetailRequestId");
 
                     b.ToTable("ApproverDetailRequest");
-                });
-
-            modelBuilder.Entity("DetailTableDepartment", b =>
-                {
-                    b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DetailTableId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("DepartmentId", "DetailTableId");
-
-                    b.HasIndex("DetailTableId");
-
-                    b.ToTable("DetailTableDepartment");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.AccountEntity", b =>
@@ -117,8 +102,9 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ExchangeRate")
-                        .HasColumnType("int");
+                    b.Property<string>("ExchangeRate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -156,15 +142,19 @@ namespace PaymentModule.Migrations
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DetailContent")
+                    b.Property<int>("PONumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentFor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PaymentMethodId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentRequestId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uniqueidentifier");
@@ -175,8 +165,7 @@ namespace PaymentModule.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("PaymentRequestId")
-                        .IsUnique();
+                    b.HasIndex("PaymentMethodId");
 
                     b.HasIndex("SupplierId");
 
@@ -191,6 +180,9 @@ namespace PaymentModule.Migrations
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
+
+                    b.Property<Guid>("DepartmentTableId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DetailRequestId")
                         .HasColumnType("uniqueidentifier");
@@ -215,8 +207,9 @@ namespace PaymentModule.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DetailRequestId")
-                        .IsUnique();
+                    b.HasIndex("DepartmentTableId");
+
+                    b.HasIndex("DetailRequestId");
 
                     b.ToTable("DetailTables");
                 });
@@ -242,7 +235,17 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PaymentContent")
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DetailRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -253,6 +256,9 @@ namespace PaymentModule.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DetailRequestId")
+                        .IsUnique();
 
                     b.HasIndex("StatusId");
 
@@ -323,6 +329,10 @@ namespace PaymentModule.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -366,21 +376,6 @@ namespace PaymentModule.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DetailTableDepartment", b =>
-                {
-                    b.HasOne("PaymentModule.Entities.DepartmentEntity", null)
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PaymentModule.Entities.DetailTableEntity", null)
-                        .WithMany()
-                        .HasForeignKey("DetailTableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("PaymentModule.Entities.AccountEntity", b =>
                 {
                     b.HasOne("PaymentModule.Entities.UserEntity", "MyUser")
@@ -417,14 +412,8 @@ namespace PaymentModule.Migrations
 
                     b.HasOne("PaymentModule.Entities.PaymentMethodEntity", null)
                         .WithMany("DetailRequests")
-                        .HasForeignKey("PaymentRequestId")
+                        .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PaymentModule.Entities.PaymentRequestEntity", "PaymentRequest")
-                        .WithOne("DetailRequest")
-                        .HasForeignKey("PaymentModule.Entities.DetailRequestEntity", "PaymentRequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("PaymentModule.Entities.SupplierEntity", null)
@@ -432,23 +421,31 @@ namespace PaymentModule.Migrations
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("PaymentRequest");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.DetailTableEntity", b =>
                 {
-                    b.HasOne("PaymentModule.Entities.DetailRequestEntity", "DetailRequest")
-                        .WithOne("DetailTable")
-                        .HasForeignKey("PaymentModule.Entities.DetailTableEntity", "DetailRequestId")
+                    b.HasOne("PaymentModule.Entities.DepartmentEntity", null)
+                        .WithMany("DetailTables")
+                        .HasForeignKey("DepartmentTableId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("DetailRequest");
+                    b.HasOne("PaymentModule.Entities.DetailRequestEntity", null)
+                        .WithMany("DetailRequestTables")
+                        .HasForeignKey("DetailRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.PaymentRequestEntity", b =>
                 {
+                    b.HasOne("PaymentModule.Entities.DetailRequestEntity", "DetailRequest")
+                        .WithOne("PaymentRequest")
+                        .HasForeignKey("PaymentModule.Entities.PaymentRequestEntity", "DetailRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PaymentModule.Entities.StatusEntity", null)
                         .WithMany("PaymentRequests")
                         .HasForeignKey("StatusId")
@@ -460,6 +457,8 @@ namespace PaymentModule.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("DetailRequest");
                 });
 
             modelBuilder.Entity("UserRole", b =>
@@ -485,25 +484,23 @@ namespace PaymentModule.Migrations
             modelBuilder.Entity("PaymentModule.Entities.DepartmentEntity", b =>
                 {
                     b.Navigation("DetailRequests");
+
+                    b.Navigation("DetailTables");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.DetailRequestEntity", b =>
                 {
                     b.Navigation("Attachments");
 
-                    b.Navigation("DetailTable")
+                    b.Navigation("DetailRequestTables");
+
+                    b.Navigation("PaymentRequest")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.PaymentMethodEntity", b =>
                 {
                     b.Navigation("DetailRequests");
-                });
-
-            modelBuilder.Entity("PaymentModule.Entities.PaymentRequestEntity", b =>
-                {
-                    b.Navigation("DetailRequest")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.StatusEntity", b =>

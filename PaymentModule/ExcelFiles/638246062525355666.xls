@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+           
+        }
+    </style>
+
+</head>
+<body>
+    <table style="width:100%;">
+        <thead>
+            <tr style="font-weight:bold;">
+                <td>
+                    Request Code
+                </td>
+                <td>
+                    Purpose
+                </td>
+                <td>
+                    Created by
+                </td>
+                <td>
+                    Created date
+                </td>
+                <td>
+                    Status
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>2022OPS-PAY-000012</td><td>Mua TV</td><td>Sarah Miller</td><td>7/10/2023 12:00:00 AM</td><td>Rejected</td></tr><tr><td>2023OPS-PAY-000001</td><td>Mua DT</td><td>Daniel Wilson</td><td>7/10/2023 12:00:00 AM</td><td>Approving</td></tr><tr><td>2023OPS-PAY-000002</td><td>Mua IPhone</td><td>Michael Johnson</td><td>7/10/2023 12:00:00 AM</td><td>Approved</td></tr><tr><td>2023OPS-PAY-000003</td><td>Mua Laptop</td><td>Jane Smith</td><td>7/10/2023 12:00:00 AM</td><td>Approving</td></tr><tr><td>2023OPS-PAY-000004</td><td>Tra no</td><td>Alice Johnson</td><td>7/10/2023 12:00:00 AM</td><td>Draft</td></tr>
+
+        </tbody>
+    </table>
+</body>
+</html>

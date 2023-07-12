@@ -1,6 +1,9 @@
-﻿
+﻿/*
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using PaymentModule.Context;
 using PaymentModule.DTOs;
 using PaymentModule.Entities;
@@ -20,13 +23,34 @@ namespace EFPatrick.Controllers
         [HttpPost]
         public IActionResult Insert(RoleDto role)
         {
-            var roleEntity = new RoleEntity
+            string connectionString = "Data Source=DESKTOP-3VU8FT9\\SQLEXPRESS01;Initial Catalog=PaymentDB;Integrated Security=True";
+            
+            string insertQuery = "INSERT INTO ROlES (Id, Role) VALUES (@Id, @Role)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                Role = role.Role,
-            };
-            _context.Roles.Add(roleEntity);
-            _context.SaveChanges();
+                using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                {
+                    // Thay thế các tham số trong câu truy vấn bằng giá trị thực tế
+                    command.Parameters.AddWithValue("@Id", Guid.NewGuid());
+                    command.Parameters.AddWithValue("@Role", role.Role);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
             return Ok();
+
         }
+
+        *//*[HttpGet]
+        public IActionResult GetAll()
+        {
+            string sql = "SELECT * FROM Roles";
+            var results = _context.ExecuteRawSql(sql);
+
+            // Xử lý kết quả hoặc thực hiện các thao tác khác...
+            return Ok(results);
+        }*//*
     }
 }
+*/
