@@ -42,7 +42,7 @@ interface Item {
   amount: number;
   rec_no: string;
   cost_industry: string;
-  //cost_department: selection;
+  cost_department: string;
   note: string;
 }
 
@@ -101,21 +101,28 @@ const RequestDetailsLayout2: React.FC = () => {
       amount: '0',
       rec_no: '',
       cost_industry: '',
-  //     cost_department:<Select
-  //     defaultValue="1"
-  //     style={{ width: 200 }}
-  //     //onChange={handleChangeDeparment}
-  //     options={[
-  //         { value: '1', label: 'Nothing selected' },
-  //         { value: '2', label: 'Phòng Bán Hàng' },
-  //         { value: '3', label: 'Phòng Dự Án' },
-  //         { value: '', label: 'Disabled', disabled: true },
-  //     ]}
-  // /> ,
+      cost_department:'',
      note: '',
 }
   
   ]);
+
+  const handleDepartmentChange = (newValue) => {
+    // Lấy giá trị mới của Department từ tham số newValue
+    // Cập nhật lại chuỗi dữ liệu Item dựa trên giá trị mới của Department
+    
+    // Ví dụ: Tạo một bản sao của chuỗi dữ liệu Item
+    const updatedData = [...data];
+    
+    // Tìm phần tử hiện tại trong chuỗi dữ liệu Item
+    const currentItem = updatedData.find(item => item.key === '0');
+    
+    // Cập nhật giá trị của Department trong phần tử hiện tại
+    currentItem.cost_department = newValue;
+    
+    // Cập nhật lại chuỗi dữ liệu Item
+    setData(updatedData);
+  };
 
   const handleDateChange = (date: Moment, record: Item) => {
     const newData = data.map((item) => {
@@ -216,6 +223,19 @@ const RequestDetailsLayout2: React.FC = () => {
       dataIndex: 'cost_department',
       width: '15%',
       editable: false,
+      render:(_:any, record: Item) => (
+        <Select
+      defaultValue="1"
+      style={{ width: 200 }}
+      onChange={handleDepartmentChange}
+      options={[
+          { value: '1', label: 'Nothing selected' },
+          { value: '2', label: 'Phòng Bán Hàng' },
+          { value: '3', label: 'Phòng Dự Án' },
+          { value: '', label: 'Disabled', disabled: true },
+      ]}
+  /> 
+      )
     },
     {
       title: 'Note',
@@ -273,7 +293,7 @@ const RequestDetailsLayout2: React.FC = () => {
   const handleAdd = () => {
     const newData: Item = {
       key: count,
-      //rec_date: moment(),
+      rec_date: moment(),
       pay_content: '',
       amount: '',
       rec_no: '',
@@ -368,7 +388,7 @@ const RequestDetailsLayout2: React.FC = () => {
           onChange: cancel,
         }}
       />
-     <Form style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+     <Form style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width:'500px' }}>
   <div style={{ marginBottom: '16px', fontWeight: 'bold',fontSize: '18px' }}>
     Total Amount: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{totalAmount}</span>
   </div>
@@ -387,6 +407,7 @@ const RequestDetailsLayout2: React.FC = () => {
   <div style={{ marginBottom: '16px', fontWeight: 'bold', fontSize: '18px' }}>
     Total Payment: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{total}</span>
   </div>
+  
 </Form>
       </Form> 
       </div>
