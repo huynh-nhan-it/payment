@@ -10,7 +10,7 @@ namespace PaymentModule.Entities
         public Guid Id { get; set; }
         public string RequestCode { get; set; }
         
-        public string PaymentContent { get; set; }
+        public string Purpose { get; set; }
         public Guid StatusId { get; set; }
         public Guid UserId { get; set; } //created by
         public DetailRequestEntity DetailRequest { get; set; }
