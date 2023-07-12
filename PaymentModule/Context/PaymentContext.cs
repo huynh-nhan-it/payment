@@ -22,8 +22,14 @@ namespace PaymentModule.Context
         public virtual DbSet<SupplierEntity> Suppliers { get; set; }
         public virtual DbSet<CurrencyEntity> Currencies { get; set; }
         public virtual DbSet<AttachmentEntity> Attachments { get; set; }
-        public virtual DbSet<DetailTableEntity> DetailTables { get; set; }
         public virtual DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+
+        public virtual DbSet<DetailTableEntity> DetailTables { get; set; }
+
+       /* public List<RoleEntity> ExecuteRawSql(string sql)
+        {
+            return RoleEntity.Fro
+        }*/
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Thiết lập mối quan hệ 1-1
@@ -33,17 +39,18 @@ namespace PaymentModule.Context
                 .HasForeignKey<AccountEntity>(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<PaymentRequestEntity>()
+            /*modelBuilder.Entity<PaymentRequestEntity>()
                 .HasOne(u => u.DetailRequest)
                 .WithOne(a => a.PaymentRequest)
                 .HasForeignKey<DetailRequestEntity>(a => a.PaymentRequestId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);*/
 
             modelBuilder.Entity<DetailRequestEntity>()
-                .HasOne(u => u.DetailTable)
+                .HasOne(u => u.PaymentRequest)
                 .WithOne(a => a.DetailRequest)
-                .HasForeignKey<DetailTableEntity>(a => a.DetailRequestId)
+                .HasForeignKey<PaymentRequestEntity>(a => a.DetailRequestId)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
             //Thiết lập mối quan hệ 1-n
             modelBuilder.Entity<StatusEntity>()
@@ -51,6 +58,8 @@ namespace PaymentModule.Context
                .WithOne()
                .HasForeignKey(r => r.StatusId)
                .OnDelete(DeleteBehavior.Cascade);
+
+           
 
             modelBuilder.Entity<UserEntity>()
                 .HasMany(u => u.PaymentRequests)
@@ -88,6 +97,18 @@ namespace PaymentModule.Context
                .HasForeignKey(r => r.PaymentMethodId)
                .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<DepartmentEntity>()
+              .HasMany(u => u.DetailTables)
+              .WithOne()
+              .HasForeignKey(r => r.DepartmentTableId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DetailRequestEntity>()
+               .HasMany(u => u.DetailRequestTables)
+               .WithOne()
+               .HasForeignKey(r => r.DetailRequestId)
+               .OnDelete(DeleteBehavior.Cascade);
+
             //Thiết lập mối quan hệ n-n 
             modelBuilder.Entity<UserEntity>()
             .HasMany(u => u.Roles)
@@ -106,15 +127,8 @@ namespace PaymentModule.Context
                     j => j.HasOne<UserEntity>().WithMany().HasForeignKey("ApproverId").OnDelete(DeleteBehavior.Cascade),
                     j => j.HasOne<DetailRequestEntity>().WithMany().HasForeignKey("DetailRequestId").OnDelete(DeleteBehavior.Cascade)
                 );
+        
 
-            modelBuilder.Entity<DetailTableEntity>()
-                .HasMany(u => u.Departments)
-                .WithMany(r => r.DetailTables)
-                .UsingEntity<Dictionary<string, object>>(
-                    "DetailTableDepartment",
-                    j => j.HasOne<DepartmentEntity>().WithMany().HasForeignKey("DepartmentId").OnDelete(DeleteBehavior.Cascade),
-                    j => j.HasOne<DetailTableEntity>().WithMany().HasForeignKey("DetailTableId").OnDelete(DeleteBehavior.Cascade)
-                );
         }
     }
 }

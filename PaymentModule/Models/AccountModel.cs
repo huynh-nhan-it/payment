@@ -12,7 +12,6 @@
 
         public AccountModel()
         {
-
         }
         public AccountModel(string email)
         {
