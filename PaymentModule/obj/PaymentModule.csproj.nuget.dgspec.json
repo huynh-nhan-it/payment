@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\84961\\source\\repos\\PaymentModule\\PaymentModule\\PaymentModule.csproj": {}
+    "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj": {}
   },
   "projects": {
-    "C:\\Users\\84961\\source\\repos\\PaymentModule\\PaymentModule\\PaymentModule.csproj": {
+    "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\84961\\source\\repos\\PaymentModule\\PaymentModule\\PaymentModule.csproj",
+        "projectUniqueName": "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj",
         "projectName": "PaymentModule",
-        "projectPath": "C:\\Users\\84961\\source\\repos\\PaymentModule\\PaymentModule\\PaymentModule.csproj",
-        "packagesPath": "C:\\Users\\84961\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\84961\\source\\repos\\PaymentModule\\PaymentModule\\obj\\",
+        "projectPath": "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj",
+        "packagesPath": "C:\\Users\\Huynh Nhan\\.nuget\\packages\\",
+        "outputPath": "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\84961\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Huynh Nhan\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -42,6 +42,10 @@
           "targetAlias": "net6.0",
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.19, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[6.0.19, )"
             },

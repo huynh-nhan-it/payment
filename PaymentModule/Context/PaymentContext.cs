@@ -85,7 +85,7 @@ namespace PaymentModule.Context
             modelBuilder.Entity<PaymentMethodEntity>()
                .HasMany(u => u.DetailRequests)
                .WithOne()
-               .HasForeignKey(r => r.PaymentRequestId)
+               .HasForeignKey(r => r.PaymentMethodId)
                .OnDelete(DeleteBehavior.Cascade);
 
             //Thiết lập mối quan hệ n-n 
