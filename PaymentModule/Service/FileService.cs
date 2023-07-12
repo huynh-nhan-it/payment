@@ -8,7 +8,7 @@ namespace PaymentModule.Service
 
         public async Task<ObjectResult> HandleFile(IFormFileCollection files, Guid Id)
         {
-            var fileNames = new List<string>();
+
             ICollection<AttachmentEntity> attachments = new List<AttachmentEntity>();
 
             foreach (var file in files)
@@ -22,7 +22,7 @@ namespace PaymentModule.Service
                         file.FileName, file.ContentType, Id
                     );
                     attachments.Add(attachment);
-                    fileNames.Add(file.FileName); // Add the file name to the list of successfully saved files
+                   // Add the file name to the list of successfully saved files
                 }
                 else
                 {
