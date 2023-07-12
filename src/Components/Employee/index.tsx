@@ -5,16 +5,18 @@ import HeaderRequest from '../Request/HeaderRequest';
 import NavbarRequest from '../Request/NavbarRequest';
 
 const { Search } = Input;
-const { Content, Sider} = Layout;
-const Employee:React.FC = () => {
+const { Content, Sider } = Layout;
+const Employee: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
-  
-       
-    <InforUser />
-      
+
+    <div style={{paddingTop:64}}>
+      <InforUser />
+    </div>
+
+
   )
 }
 

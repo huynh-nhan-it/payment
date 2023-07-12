@@ -41,17 +41,24 @@ const data = [
     createddate: "03/07/2023",
   },
   {
-    requirement: "2023OPS-PAY-000009",
+    requirement: "2023OPS-PAY-000012",
     purpose: "Joe Black",
     createdby: "Bang Nguyen Minh",
     createddate: "03/07/2023",
   },
   {
-    requirement: "2023OPS-PAY-000009",
+    requirement: "2023OPS-PAY-0000013",
     purpose: "Joe Black",
     createdby: "Bang Nguyen Minh",
     createddate: "03/07/2023",
   },
+  {
+    requirement: "2023OPS-PAY-0000014",
+    purpose: "Joe Black",
+    createdby: "Bang Nguyen Minh",
+    createddate: "03/07/2023",
+  },
+ 
 ];
 const Payment: React.FC = () => {
   return (
