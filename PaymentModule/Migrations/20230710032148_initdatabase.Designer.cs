@@ -12,8 +12,8 @@ using PaymentModule.Context;
 namespace PaymentModule.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-    [Migration("20230710081806_initDB")]
-    partial class initDB
+    [Migration("20230710032148_initdatabase")]
+    partial class initdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -117,9 +117,8 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ExchangeRate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ExchangeRate")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -157,10 +156,7 @@ namespace PaymentModule.Migrations
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PONumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PaymentFor")
+                    b.Property<string>("DetailContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -169,10 +165,6 @@ namespace PaymentModule.Migrations
 
                     b.Property<Guid>("PaymentRequestId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SupplierId")
                         .HasColumnType("uniqueidentifier");
@@ -250,11 +242,7 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequestCode")
+                    b.Property<string>("PaymentContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
