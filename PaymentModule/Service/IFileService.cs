@@ -4,6 +4,6 @@ namespace PaymentModule.Service
 {
     public interface IFileService
     {
-        Task<ObjectResult> HandleFile(IFormFileCollection files, Guid Id);
+        public Task<ObjectResult> HandleFile(IFormFileCollection files, Guid Id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using Microsoft.Data.SqlClient;
 using PaymentModule.Context;
 using PaymentModule.DTOs;
@@ -38,7 +39,7 @@ namespace PaymentModule.Controllers
         }
 
 
-        private void InsertDetailRequest(DetailRequestDto request, Guid requestId)
+        private void InsertDetailRequest(DetailRequestDto request, Guid theId)
         {
             Guid? departmentId = _departmentRepository.GetIdByDepartmentName(request.DepartmentName);
             Guid? supplierId = _supplierRepository.GetIdBySupplierName(request.SupplierName);
@@ -46,7 +47,7 @@ namespace PaymentModule.Controllers
             Guid? paymentId = _paymentMethodRepository.GetIdByMethod(request.PaymentMethod);
             var detailRequest = new DetailRequestEntity
             {
-                Id = requestId,
+                Id = theId,
                 Purpose = request.Purpose,
                 PaymentFor = request.PaymentFor,
                 PONumber = request.PONumber,
@@ -131,20 +132,10 @@ namespace PaymentModule.Controllers
                 PaymentMethod = prd.PaymentMethod,
             };
 
-            List<DetailTableDto> detailTable = new List<DetailTableDto>();
-            foreach (DetailTableDto raw in prd.DetailTable)
-            {
-                detailTable.Add(raw);
-            }
-
-            List<ApproverDto> approverList = new List<ApproverDto>();
-            foreach (ApproverDto app in prd.Approvers)
-            {
-                approverList.Add(app);
-            }
+            /*ICollection<IFormFile> files = prd.files;*/
             InsertDetailRequest(detailRequestDto, theId);
-            InsertDetailTable(detailTable, theId);
-            InsertApprovers(approverList, theId);
+            InsertDetailTable(prd.DetailTable, theId);
+            InsertApprovers(prd.Approvers, theId);
             InsertpaymentRequest(theId);
             return Ok(new { theId, detailRequestDto });
         }

@@ -5,11 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PaymentModule.Migrations
 {
-<<<<<<<< HEAD:PaymentModule/Migrations/20230710081806_initDB.cs
-    public partial class initDB : Migration
-========
     public partial class initdb : Migration
->>>>>>>> origin/export-excel:PaymentModule/Migrations/20230712073917_initdb.cs
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -167,36 +163,6 @@ namespace PaymentModule.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:PaymentModule/Migrations/20230710081806_initDB.cs
-                name: "PaymentRequests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RequestCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PaymentRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PaymentRequests_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PaymentRequests_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-========
->>>>>>>> origin/export-excel:PaymentModule/Migrations/20230712073917_initdb.cs
                 name: "UserRole",
                 columns: table => new
                 {
@@ -221,58 +187,6 @@ namespace PaymentModule.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:PaymentModule/Migrations/20230710081806_initDB.cs
-                name: "DetailRequests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaymentFor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PONumber = table.Column<int>(type: "int", nullable: false),
-                    PaymentRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SupplierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PaymentMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DetailRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_Currencies_CurrencyId",
-                        column: x => x.CurrencyId,
-                        principalTable: "Currencies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_PaymentMethods_PaymentRequestId",
-                        column: x => x.PaymentRequestId,
-                        principalTable: "PaymentMethods",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_PaymentRequests_PaymentRequestId",
-                        column: x => x.PaymentRequestId,
-                        principalTable: "PaymentRequests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_DetailRequests_Suppliers_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Suppliers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-========
->>>>>>>> origin/export-excel:PaymentModule/Migrations/20230712073917_initdb.cs
                 name: "ApproverDetailRequest",
                 columns: table => new
                 {
@@ -301,9 +215,8 @@ namespace PaymentModule.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     DetailRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

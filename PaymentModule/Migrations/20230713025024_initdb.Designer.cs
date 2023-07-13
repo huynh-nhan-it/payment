@@ -12,13 +12,8 @@ using PaymentModule.Context;
 namespace PaymentModule.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-<<<<<<<< HEAD:PaymentModule/Migrations/20230710081806_initDB.Designer.cs
-    [Migration("20230710081806_initDB")]
-    partial class initDB
-========
-    [Migration("20230712073917_initdb")]
+    [Migration("20230713025024_initdb")]
     partial class initdb
->>>>>>>> origin/export-excel:PaymentModule/Migrations/20230712073917_initdb.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,14 +74,10 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte[]>("Content")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<Guid>("DetailRequestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("FilePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -156,10 +147,6 @@ namespace PaymentModule.Migrations
 
                     b.Property<Guid>("PaymentMethodId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Purpose")
                         .IsRequired()
@@ -244,15 +231,12 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-<<<<<<<< HEAD:PaymentModule/Migrations/20230710081806_initDB.Designer.cs
-========
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("DetailRequestId")
                         .HasColumnType("uniqueidentifier");
 
->>>>>>>> origin/export-excel:PaymentModule/Migrations/20230712073917_initdb.Designer.cs
                     b.Property<string>("Purpose")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
