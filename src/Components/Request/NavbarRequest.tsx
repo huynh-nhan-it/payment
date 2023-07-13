@@ -20,19 +20,19 @@ const items = [
     icon: <BsFolder2Open />,
     children: [
       {
-        key: 1,
+        key: "1-1",
         label: `All Requests`,
       },
       {
-        key: 2,
+        key: "1-2",
         label: `Sent to me`,
       },
       {
-        key: 3,
+        key: "1-3",
         label: `Sent to others`,
       },
       {
-        key: 4,
+        key: "1-4",
         label: `Shared with me`,
       },
     ],
@@ -43,19 +43,19 @@ const items = [
     icon: <BiBarChartAlt />,
     children: [
       {
-        key: 5,
+        key: "2-1",
         label: `Draft`,
       },
       {
-        key: 6,
+        key: "2-2",
         label: `Approving`,
       },
       {
-        key: 7,
+        key: "2-3",
         label: `Approved`,
       },
       {
-        key: 8,
+        key: "2-4",
         label: `Rejected`,
       },
     ],

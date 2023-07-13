@@ -5,9 +5,10 @@ import DropdownFilter from './DropdownFilter'
 
 const PaymentAll:React.FC = () => {
   return (
-    <div>
+    <div style={{paddingTop:"64px"}}>
         <HeaderPayment/>
         <Payment/>
+        {/* <DropdownFilter/> */}
     </div>
   )
 }

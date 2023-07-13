@@ -1,0 +1,485 @@
+{
+    "initialDataOverview": [
+        {
+            "key": "1",
+            "name": "Login",
+            "infor": "bangnm@o365.vn",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "2",
+            "name": "Email",
+            "infor": "bangnm@o365.vn",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "3",
+            "name": "Employee number",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "4",
+            "name": "First name",
+            "infor": "Bang",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "5",
+            "name": "Last name",
+            "infor": "Nguyen Minh",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "6",
+            "name": "Sex",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "7",
+            "name": "Birth Day",
+            "infor": "",
+            "isEditable": false,
+            "type": "date"
+        },
+        {
+            "key": "8",
+            "name": "Job Title",
+            "infor": "Developer",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "9",
+            "name": "Position",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "10",
+            "name": "Company",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "11",
+            "name": "Unit",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "12",
+            "name": "Function",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "13",
+            "name": "Department",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "14",
+            "name": "Sections/Teams",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "15",
+            "name": "Groups",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "16",
+            "name": "Office location",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "17",
+            "name": "Line Manager",
+            "infor": "Hao Ha Anh",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "18",
+            "name": "Belong to department",
+            "infor": "Cộng tác viên, Dự án test, Hỗ trợ khách hàng, IT/ Technical, Kiểm thử Testing, Test 3, Test Project",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "19",
+            "name": "Cost",
+            "infor": "Center",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "20",
+            "name": "Sections/Teams",
+            "infor": "",
+            "isEditable": false,
+            "type": "string"
+        },
+        {
+            "key": "21",
+            "name": "Rank",
+            "infor": "",
+            "isEditable": true,
+            "type": "string"
+        },
+        {
+            "key": "22",
+            "name": "Employee type",
+            "infor": "",
+            "isEditable": true,
+            "type": "string"
+        },
+        {
+            "key": "23",
+            "name": "Rights",
+            "infor": "Request Admin, General Viewer, AVN Document Approval Request Reporters, Car Booking Request Admin, AVN Proposal Approval Request Reporters",
+            "isEditable": false,
+            "type": "string"
+        }
+    ],
+    "initialDataAdditional": [
+        {
+            "key": "1",
+            "label": "Infor",
+            "children": [
+                {
+                    "key": "1-1",
+                    "name": "Nation",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "1-2",
+                    "name": "Phone",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "1-3",
+                    "name": "ID card number",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "1-4",
+                    "name": "Date of ID card",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "1-5",
+                    "name": "Place of ID card",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "1-6",
+                    "name": "Place of ID card",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "1-7",
+                    "name": "Health insurance",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "1-8",
+                    "name": "Starting date",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "date"
+                },
+                {
+                    "key": "1-9",
+                    "name": "Starting date offical",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "date"
+                },
+                {
+                    "key": "1-10",
+                    "name": "Leaving date",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "date"
+                },
+                {
+                    "key": "1-11",
+                    "name": "Start Date Maternity Leave",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "date"
+                },
+                {
+                    "key": "1-12",
+                    "name": "Note",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "key": "2",
+            "label": "Literacy",
+            "children": [
+                {
+                    "key": "2-1",
+                    "name": "Academic level",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "2-2",
+                    "name": "Specialized qualification",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "key": "3",
+            "label": "Contact Infor",
+            "children": [
+                {
+                    "key": "3-1",
+                    "name": "Business phone",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "3-2",
+                    "name": "Home phone",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "3-3",
+                    "name": "Personal Email",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "key": "4",
+            "label": "Bank account",
+            "children": [
+               
+                {
+                    "key": "4-1",
+                    "name": "Bank Name",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "4-2",
+                    "name": "Branch number",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "4-3",
+                    "name": "Bank brach name",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "4-4",
+                    "name": "Bank account number",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "4-5",
+                    "name": "Bank Account Name",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "key": "5",
+            "label": "Address",
+            "children": [
+               
+                {
+                    "key": "5-1",
+                    "name": "Street",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "5-2",
+                    "name": "Building / flatnumber",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "5-3",
+                    "name": "City",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "5-4",
+                    "name": "Province / state",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "5-5",
+                    "name": "Postal code",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "5-6",
+                    "name": "Country",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "initialDataFamily": [
+        {
+            "key": "1",
+            "label": "Martial status",
+            "children": [
+                {
+                    "key": "1-1",
+                    "name": "Martial status",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "key": "2",
+            "label": "Emergency contact",
+            "children": [
+                {
+                    "key": "2-1",
+                    "name": "Contact name",
+                    "infor": "Nguyễn Thị A",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "2-2",
+                    "name": "Relationship",
+                    "infor": "Vợ",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "2-3",
+                    "name": "Phone",
+                    "infor": "0876839834",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "key": "3",
+            "label": "Permanent Address",
+            "children": [
+                {
+                    "key": "3-1",
+                    "name": "Street",
+                    "infor": "19",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "3-2",
+                    "name": "Building / flatnumber",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "3-3",
+                    "name": "City",
+                    "infor": "Hồ Chí Minh",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "3-4",
+                    "name": "Province / state",
+                    "infor": "",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "3-5",
+                    "name": "Postal code",
+                    "infor": "700000",
+                    "isEditable": true,
+                    "type": "string"
+                },
+                {
+                    "key": "3-7",
+                    "name": "Country",
+                    "infor": "Việt Nam",
+                    "isEditable": true,
+                    "type": "string"
+                }
+            ]
+        }
+    ]
+}
