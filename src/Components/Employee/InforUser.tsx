@@ -114,7 +114,6 @@ const InforUser = () => {
     <div>
       <HeaderEmployee setEditable={setEditable} data={data as [Employee[], AdditionalInfor[], FamilyInfor[]]} isEditable={editable} />
       <div className="employee-avatar-name-edit">
-
         <h2 className="name-employee">
         {editable && 
         <span style={{
@@ -133,10 +132,10 @@ const InforUser = () => {
         }
           <span>
 
-            
-            {editable?<Avatar/> :<img
+          <Avatar/> 
+            {/* <img
               className="avatar-employee"
-              src="https://img.freepik.com/free-icon/user_318-159711.jpg"></img>}
+              src="https://img.freepik.com/free-icon/user_318-159711.jpg"></img> */}
             
           </span>Bang Nguyen Minh </h2>
         <div onClick={handleClickEdit} className="edit-employee">

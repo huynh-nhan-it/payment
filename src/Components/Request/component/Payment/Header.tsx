@@ -2,22 +2,11 @@ import React from "react";
 import { Layout } from "antd";
 import { FaFilter } from "react-icons/fa";
 import { TbArrowBarToRight } from "react-icons/tb";
-import { RiArrowDownSFill } from "react-icons/ri";
-import { useState } from "react";
 import "./payment.css";
 
-import {
-  Space,
-  Menu,
-  DatePicker,
-  Form,
-  Input,
-  Dropdown,
-  Button,
-  Switch,
-  Select,
-} from "antd";
 import DropdownFilter from "./DropdownFilter";
+import { Link } from "react-router-dom";
+// import RequestDetailsLayout2 from "./RequestDetailsLayout2";
 // import moment from 'moment';
 
 const { Header } = Layout;
@@ -38,13 +27,12 @@ const HeaderPayment: React.FC = () => {
           <span className="padding-left-6 padding-right-6">Export Excel</span>
         </div>
         <div className="filter padding-10 bg-header-payment color-header-payment">
-          <FaFilter />{" "}
-          <DropdownFilter/>
+          <FaFilter /> <DropdownFilter  />
         </div>
 
         <div className="create-new padding-10 bg-create-new color-white">
           {" "}
-          <span className="plus-payment-new">+</span>Create New
+         <Link to={"/request/create-request"}> + Create New</Link>
         </div>
       </div>
     </Header>

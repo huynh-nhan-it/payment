@@ -18,7 +18,12 @@
 .company-name {
     color: #fff;
     padding: 0 10px;
-    border-right: #fff 1px solid;
+    border-right: #fff 0.1px solid;
+}
+
+.eOffice{
+    color: #fff;
+    padding: 0 10px;
 }
 
 .right-request {

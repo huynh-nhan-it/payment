@@ -18,62 +18,62 @@ import { Link } from "react-router-dom";
 const { Header } = Layout;
 
 const HeaderRequest = () => {
-  const menu = (
-    <Menu style={{ right: "-26px", top: "10px" }}>
-      <Menu.Item key="form">
-        <Form style={{ width: "300px" }} className="padding-bottom-12">
-          <Form.Item label="Filter">
-            <Button type="primary" htmlType="submit" className="clear-payment">
-              Clear
-            </Button>
-            <Button type="primary" htmlType="submit" className="apply-payment">
-              Submit
-            </Button>
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            label="Purpose"
-            labelAlign="left"
-            className="margin-bottom-8">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            label="Request Code"
-            labelAlign="left"
-            className="margin-bottom-8">
-            <Input />
-          </Form.Item>
-          <Form.Item
-            labelCol={{ span: 24 }}
-            label="Created"
-            labelAlign="left"
-            className="margin-bottom-8">
-            <DatePicker className="width-100 margin-bottom-8" />
-            <DatePicker className="width-100" />
-          </Form.Item>
-          <Form.Item
-            label="Select"
-            labelCol={{ span: 24 }}
-            className="margin-bottom-8">
-            <Select>
-              <Select.Option value="demo">Demo</Select.Option>
-              <Select.Option value="demo">Demo1</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label="Select"
-            labelCol={{ span: 24 }}
-            className="margin-bottom-8">
-            <Select>
-              <Select.Option value="demo">Demo</Select.Option>
-              <Select.Option value="demo">Demo1</Select.Option>
-            </Select>
-          </Form.Item>
-        </Form>
-      </Menu.Item>
-    </Menu>
-  );
+  // const menu = (
+  //   <Menu style={{ right: "-26px", top: "10px" }}>
+  //     <Menu.Item key="form">
+  //       <Form style={{ width: "300px" }} className="padding-bottom-12">
+  //         <Form.Item label="Filter">
+  //           <Button type="primary" htmlType="submit" className="clear-payment">
+  //             Clear
+  //           </Button>
+  //           <Button type="primary" htmlType="submit" className="apply-payment">
+  //             Submit
+  //           </Button>
+  //         </Form.Item>
+  //         <Form.Item
+  //           labelCol={{ span: 24 }}
+  //           label="Purpose"
+  //           labelAlign="left"
+  //           className="margin-bottom-8">
+  //           <Input />
+  //         </Form.Item>
+  //         <Form.Item
+  //           labelCol={{ span: 24 }}
+  //           label="Request Code"
+  //           labelAlign="left"
+  //           className="margin-bottom-8">
+  //           <Input />
+  //         </Form.Item>
+  //         <Form.Item
+  //           labelCol={{ span: 24 }}
+  //           label="Created"
+  //           labelAlign="left"
+  //           className="margin-bottom-8">
+  //           <DatePicker className="width-100 margin-bottom-8" />
+  //           <DatePicker className="width-100" />
+  //         </Form.Item>
+  //         <Form.Item
+  //           label="Select"
+  //           labelCol={{ span: 24 }}
+  //           className="margin-bottom-8">
+  //           <Select>
+  //             <Select.Option value="demo">Demo</Select.Option>
+  //             <Select.Option value="demo">Demo1</Select.Option>
+  //           </Select>
+  //         </Form.Item>
+  //         <Form.Item
+  //           label="Select"
+  //           labelCol={{ span: 24 }}
+  //           className="margin-bottom-8">
+  //           <Select>
+  //             <Select.Option value="demo">Demo</Select.Option>
+  //             <Select.Option value="demo">Demo1</Select.Option>
+  //           </Select>
+  //         </Form.Item>
+  //       </Form>
+  //     </Menu.Item>
+  //   </Menu>
+  // );
   return (
     <div>
       <Header
@@ -95,7 +95,7 @@ const HeaderRequest = () => {
           <Link to="/">
             <div className="company-name"> Opus Solution</div>
           </Link>
-          <div className="company-name"> eOffice </div>
+          <div className="eOffice"> eOffice </div>
         </div>
         <div className="right-request">
           <div className="help-request">

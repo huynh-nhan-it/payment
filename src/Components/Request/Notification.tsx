@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Space, Dropdown, Menu } from "antd";
-import { BsQuestionLg } from "react-icons/bs";
 import { IoCloseSharp, IoNotifications } from "react-icons/io5";
 
 import type { MenuProps } from "antd";

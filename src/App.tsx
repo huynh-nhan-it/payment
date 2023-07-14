@@ -14,6 +14,8 @@ import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import NavbarRequest from "./Components/Request/NavbarRequest";
 import ViewPayment from "./Components/PaymentView/ViewIndex";
+import Login from "./Components/Login/Login";
+import RegisterForm from "./Components/Register/Register";
 const { Search } = Input;
 
 function App() {
@@ -24,7 +26,6 @@ function App() {
   return (
     <div className="App">
       {/* <ApiCall /> */}
-
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ApiCall />} />
@@ -61,6 +62,8 @@ function App() {
                   <Route path="request/payment/view" element={<ViewPayment></ViewPayment>}></Route>
                   <Route path="request" element={<Request />} />
                   <Route path="system/employee" element={<Employee />} />
+                  <Route path="login" element={<Login/>}></Route>
+                  <Route path="register" element={<RegisterForm/>}></Route>
                 </Routes>
               </Content>
             </Layout>

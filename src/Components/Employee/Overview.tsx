@@ -38,42 +38,43 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
     });
     setData(updatedData);
   };
+  // console.log(data);
 
 
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
+  // const columns = [
+  //   {
+  //     title: "Name",
+  //     dataIndex: "name",
+  //     key: "name",
+  //   },
 
-    {
-      title: "Infor",
-      dataIndex: "infor",
-      key: "infor",
-      render: (text: string, record: Employee) =>
-        (isEditable) ? (
-          <Form>
-            <Form.Item>
-              {record.isEditable ?
-                (<Input
-                  value={text}
-                  onChange={(e) =>
-                    handleInputChange(e.target.value, record.key, "infor")
-                  }
-                />) : (
-                  <Input
-                    value={text}
-                    disabled={true}
-                  />
-                )}
-            </Form.Item>
-          </Form>
-        ) : (
-          text
-        ),
-    },
-  ];
+  //   {
+  //     title: "Infor",
+  //     dataIndex: "infor",
+  //     key: "infor",
+  //     render: (text: string, record: Employee) =>
+  //       (isEditable) ? (
+  //         <Form>
+  //           <Form.Item>
+  //             {record.isEditable ?
+  //               (<Input
+  //                 value={text}
+  //                 onChange={(e) =>
+  //                   handleInputChange(e.target.value, record.key, "infor")
+  //                 }
+  //               />) : (
+  //                 <Input
+  //                   value={text}
+  //                   disabled={true}
+  //                 />
+  //               )}
+  //           </Form.Item>
+  //         </Form>
+  //       ) : (
+  //         text
+  //       ),
+  //   },
+  // ];
 
   return (
     <div>

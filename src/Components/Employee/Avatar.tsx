@@ -6,6 +6,12 @@ import React, { useState } from 'react';
 
 const Avatar: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([
+    {
+      uid: '-1',
+      name: 'image.png',
+      status: 'done',
+      url: 'https://img.freepik.com/free-icon/user_318-159711.jpg',
+    },
   ]);
 
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -29,6 +35,7 @@ const Avatar: React.FC = () => {
 
 
   const uploadButton = (
+    
     <div>
       <PlusOutlined />
       <div style={{ marginTop: 8 }}>Upload</div>
@@ -41,6 +48,7 @@ const Avatar: React.FC = () => {
         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         fileList={fileList}
         listType="picture-circle"
+        defaultFileList={fileList}
         onChange={onChange}
         onPreview={onPreview}
       >

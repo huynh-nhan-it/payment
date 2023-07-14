@@ -1,7 +1,6 @@
 import React from "react";
 import "./employee.css";
 import { DatePicker, Form, Input, Table } from "antd";
-import { parseISO, format } from 'date-fns';
 
 interface Employee {
   key: string;
