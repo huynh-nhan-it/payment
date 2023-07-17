@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+           
+        }
+    </style>
+
+</head>
+<body>
+    <table style="width:100%;">
+        <thead>
+            <tr style="font-weight:bold;">
+                <td>
+                    Request Code
+                </td>
+                <td>
+                    Purpose
+                </td>
+                <td>
+                    Created by
+                </td>
+                <td>
+                    Created date
+                </td>
+                <td>
+                    Status
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>2023OPS-PAY-000002</td><td>Mua Đất</td><td>Emily Williams</td><td>7/14/2023 2:08:40 PM</td><td>Approving</td></tr>
+
+        </tbody>
+    </table>
+</body>
+</html>
