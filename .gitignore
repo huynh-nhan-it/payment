@@ -1,6 +1,4 @@
 
-.vs/PaymentModule/DesignTimeBuild/.dtbcache.v2
-.vs/PaymentModule/v17/.futdcache.v2
+*.v2
 .vs/PaymentModule/v17/.suo
-.vs/ProjectEvaluation/paymentmodule.metadata.v7.bin
-.vs/ProjectEvaluation/paymentmodule.projects.v7.bin
+*.bin
