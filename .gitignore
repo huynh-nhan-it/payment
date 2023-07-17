@@ -1,0 +1,27 @@
+# Thư mục và tệp tin được bỏ qua
+bin/
+obj/
+packages/
+*.user
+*.suo
+.vs/
+
+
+# Tệp tin nhật ký
+*.log
+logs/
+
+# Các tệp tin tạm thời và nhất thời
+*.tmp
+*.bak
+*.swp
+
+# Các tệp tin công cụ
+*.exe
+*.dll
+*.pdb
+*.cache
+
+# Các thư mục cấu hình IDE
+.idea/
+.vscode/
