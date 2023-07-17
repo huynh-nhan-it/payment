@@ -12,13 +12,22 @@ namespace PaymentModule.Repository
         }   
         Guid? IDepartmentRepository.GetIdByDepartmentName(string departmentName)
         {
-             var department = _context.Departments.FirstOrDefault(d => d.Name.Contains(departmentName) == true);
+            var department = _context.Departments.FirstOrDefault(d => d.Name.Contains(departmentName) == true);
             if (department != null)
             {
-                string s = department.Id.ToString("N").ToUpper();
-                return new Guid(s);
+                return department.Id;
             }
             return null;
+        }
+
+        string IDepartmentRepository.GetNameByDepartmentId(Guid id)
+        {
+            var department = _context.Departments.FirstOrDefault(de => de.Id.Equals(id) == true);
+            if (department != null)
+            {
+                return department.Name;
+            }
+            return "";
         }
     }
 }

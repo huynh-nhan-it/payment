@@ -72,10 +72,14 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<Guid>("DetailRequestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -17,6 +17,7 @@ namespace PaymentModule.Entities
         public Guid DepartmentTableId { get; set; }
         public string Note { get; set; }
         public Guid DetailRequestId { get; set; }
+       
     }
 }
 

@@ -1,4 +1,4 @@
-﻿/*using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using PaymentModule.Context;
@@ -23,12 +23,62 @@ namespace PaymentModule.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPaymentRequets()
+        public IActionResult GetPaymentRequests(string? Purpose, string? RequestCode, DateTime? from, DateTime? to, string? Creater, string? Status, int? page)
         {
             try
             {
-                return Ok(_context.PaymentRequests.ToList());
-            } catch (Exception ex) { 
+                var paymentRequests = _context.PaymentRequests.AsQueryable();
+
+                if(!string.IsNullOrEmpty(Purpose))
+                {
+                    paymentRequests = paymentRequests.Where(paymentRequest =>  paymentRequest.Purpose.Contains(Purpose));
+                }
+
+                if(!string.IsNullOrEmpty(RequestCode))
+                {
+                    paymentRequests = paymentRequests.Where(paymentRequest => paymentRequest.RequestCode.Contains(RequestCode));
+                }
+
+                if (!string.IsNullOrEmpty(Creater))
+                {
+                    Guid CreaterId = (Guid) _userRepository.GetIdByFullName(Creater);
+                    paymentRequests = paymentRequests.Where(paymentRequest => paymentRequest.UserId.Equals(CreaterId));
+                }
+
+                if (!string.IsNullOrEmpty(Status))
+                {
+                    Guid statusId = _statusRepository.GetIdByStatus(Status);
+                    paymentRequests = paymentRequests.Where(paymentRequest => paymentRequest.StatusId.Equals(statusId));
+                }
+
+                if (from.HasValue)
+                {
+                    paymentRequests = paymentRequests.Where(paymentRequest => paymentRequest.CreateAt >= from.Value);
+                }
+
+                if (to.HasValue)
+                {
+                    DateTime toDate = to.Value.AddDays(1);
+                    paymentRequests = paymentRequests.Where(paymentRequest => paymentRequest.CreateAt < toDate);
+                }
+                if(page.HasValue)
+                {
+                    paymentRequests = paymentRequests.Skip((int)(page - 1) * 1).Take(1);
+                }
+                var paymentRequestList = paymentRequests.ToList().Select(PREntity => new PaymentRequestModel
+                {
+                    RequestCode = PREntity.RequestCode,
+                    Purpose = PREntity.Purpose,
+                    CreatedBy = _userRepository.GetFullNameById(PREntity.UserId),
+                    CreatedDate = PREntity.CreateAt,
+                    Status = _statusRepository.GetStatusById(PREntity.StatusId),
+                });
+                return Ok(paymentRequestList.ToList());
+
+        
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
@@ -84,4 +134,3 @@ namespace PaymentModule.Controllers
         }
     }
 }
-*/

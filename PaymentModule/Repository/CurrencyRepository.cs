@@ -11,6 +11,17 @@ namespace PaymentModule.Repository
         {
             _context = context;
         }
+
+        string ICurrencyRepository.GetCurrencyNameById(Guid id)
+        {
+            var department = _context.Currencies.FirstOrDefault(de => de.Id.Equals(id) == true);
+            if (department != null)
+            {
+                return department.Name;
+            }
+            return "";
+        }
+
         Guid? ICurrencyRepository.GetIdByCurrency(string currency)
         {
             var curr= _context.Currencies.FirstOrDefault(cu => cu.Name.Contains(currency) == true);

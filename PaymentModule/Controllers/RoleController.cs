@@ -16,15 +16,14 @@ namespace EFPatrick.Controllers
     public class RoleController : ControllerBase
     {
         private PaymentContext _context;
-        public RoleController(PaymentContext paymentContext) {
+        public RoleController(PaymentContext paymentContext)
+        {
             _context = paymentContext;
         }
-
-        [HttpPost]
         public IActionResult Insert(RoleDto role)
         {
             string connectionString = "Data Source=DESKTOP-3VU8FT9\\SQLEXPRESS01;Initial Catalog=PaymentDB;Integrated Security=True";
-            
+
             string insertQuery = "INSERT INTO ROlES (Id, Role) VALUES (@Id, @Role)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -42,15 +41,7 @@ namespace EFPatrick.Controllers
 
         }
 
-        *//*[HttpGet]
-        public IActionResult GetAll()
-        {
-            string sql = "SELECT * FROM Roles";
-            var results = _context.ExecuteRawSql(sql);
-
-            // Xử lý kết quả hoặc thực hiện các thao tác khác...
-            return Ok(results);
-        }*//*
+       
     }
 }
 */
