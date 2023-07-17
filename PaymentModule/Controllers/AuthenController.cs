@@ -98,9 +98,9 @@ namespace PaymentModule.Controllers
 
             string token = CreateToken(myAccount);
 
-            var refreshToken = CreateRefreshToken();
+            /*var refreshToken = CreateRefreshToken();
 
-            SetRefreshToken(myAccount, refreshToken);
+            SetRefreshToken(myAccount, refreshToken);*/
 
             return Ok(token);
         }
