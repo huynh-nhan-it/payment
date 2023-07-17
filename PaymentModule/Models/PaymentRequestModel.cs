@@ -9,5 +9,6 @@ namespace PaymentModule.Models
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; } 
         public string Status { get; set; }
+        
     }
 }

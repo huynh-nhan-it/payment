@@ -9,6 +9,17 @@ namespace PaymentModule.Repository
         {
             _context = context;
         }
+
+        string IPaymentMethodRepository.GetPaymentMethodById(Guid id)
+        {
+            var department = _context.PaymentMethods.FirstOrDefault(de => de.Id.Equals(id) == true);
+            if (department != null)
+            {
+                return department.Name;
+            }
+            return "";
+        }
+
         Guid? IPaymentMethodRepository.GetIdByMethod(string methodName)
         {
             var method = _context.PaymentMethods.FirstOrDefault(m => m.Name.Contains(methodName) == true);

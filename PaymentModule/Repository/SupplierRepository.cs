@@ -19,5 +19,15 @@ namespace PaymentModule.Repository
             }
             return null;
         }
+
+        string ISupplierRepository.GetSupplierNameById(Guid supplierId)
+        {
+            var supplier = _context.Suppliers.FirstOrDefault(de => de.Id.Equals(supplierId) == true);
+            if (supplier != null)
+            {
+                return supplier.Name;
+            }
+            return "";
+        }
     }
 }

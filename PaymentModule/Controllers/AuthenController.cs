@@ -1,10 +1,11 @@
-﻿/*using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PaymentModule.Context;
 using PaymentModule.DTOs;
+using PaymentModule.Entities;
 using PaymentModule.Models;
 using PaymentModule.Repository;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,7 +18,7 @@ namespace PaymentModule.Controllers
     [ApiController]
     public class AuthenController : ControllerBase
     {
-        
+
         public static List<UserModel> users = new List<UserModel>();
         public static List<AccountModel> accounts = new List<AccountModel>();
         private readonly PaymentContext _context;
@@ -39,32 +40,41 @@ namespace PaymentModule.Controllers
         [HttpPost("Register")]
         public IActionResult Register(UserDto request)
         {
-            if (request.password == request.confirmPassword) {
-                var userModel = new UserModel();
-                userModel.firstName = request.firstName;
-                userModel.lastName = request.lastName;
-                userModel.email = request.email;
-                userModel.password = request.password;
-                userModel.phoneNumber = request.phoneNumber;
-                users.Add(userModel);
-                
-                hashPassword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
-
-                var accountModel = new AccountModel
+            if (request.password == request.confirmPassword)
+            {
+                Guid theId = Guid.NewGuid();
+                var userEntity = new UserEntity
                 {
-                    email = request.email,
-                    passwordHash = passwordHash,
-                    passwordSalt = passwordSalt
+                    Id = theId,
+                    FirstName = request.firstName,
+                    LastName = request.lastName,
+                    Email = request.email,
+                    PhoneNumber = request.phoneNumber,
+                    JobTitle = request.jobTitle,
                 };
-                accounts.Add(accountModel);
-                return Ok(accounts);
-            } else
+                _context.Users.Add(userEntity);
+                _context.SaveChanges();
+
+                HashPassword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
+
+                var accountEntity = new AccountEntity
+                {
+                    Email = request.email,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    UserId = theId
+                };
+
+                _context.Accounts.Add(accountEntity);
+                _context.SaveChanges();
+                return Ok(new {mess = "Success"});
+            }
+            else
             {
                 return Ok(new { mess = "PASSWORD KO TRÙNG KHỚP" });
             }
-            
         }
-        private void hashPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private void HashPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
             {
@@ -76,12 +86,12 @@ namespace PaymentModule.Controllers
         [HttpPost("Login")]
         public IActionResult Login(AccountDto request)
         {
-            var myAccount = accounts.SingleOrDefault(acc => acc.email == request.email);
+            var myAccount = _accountRepository.CheckExist(request.email);
             if (myAccount == null)
             {
                 return Ok("NOT FOUND YOUR ACCOUNT");
             }
-            if (!VerifyPassword(request.password, myAccount.passwordHash, myAccount.passwordSalt))
+            if (!VerifyPassword(request.password, myAccount.PasswordHash, myAccount.PasswordSalt)) 
             {
                 return BadRequest("INCORRECT PASSWORD");
             }
@@ -89,13 +99,13 @@ namespace PaymentModule.Controllers
             string token = CreateToken(myAccount);
 
             var refreshToken = CreateRefreshToken();
-            
+
             SetRefreshToken(myAccount, refreshToken);
-        
-            return Ok(new { token , refreshToken});
+
+            return Ok(token);
         }
 
-       *//* [HttpPost("RefreshToken")]
+       /* [HttpPost("RefreshToken")]
         public IActionResult RefreshMyToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
@@ -111,7 +121,7 @@ namespace PaymentModule.Controllers
             var newRefreshToken = CreateRefreshToken();
             SetRefreshToken(newRefreshToken);
             return Ok(token);
-        }*//*
+        }*/
 
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -121,12 +131,13 @@ namespace PaymentModule.Controllers
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
-        private string CreateToken(AccountModel account)
+        private string CreateToken(AccountEntity account)
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, account.email),
-                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.NameIdentifier, account.UserId.ToString()),
+                new Claim(ClaimTypes.Email, account.Email),
+/*                new Claim(ClaimTypes.Role, "User"), account -> user -> role, 1 user có nhiều Role thì nó là một mảng .. ??? */ 
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -166,4 +177,3 @@ namespace PaymentModule.Controllers
         }
     }
 }
-*/
