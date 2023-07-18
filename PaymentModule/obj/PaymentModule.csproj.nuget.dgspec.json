@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\IT\\web_work\\payment\\test-folder\\payment\\PaymentModule\\PaymentModule.csproj": {}
+    "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj": {}
   },
   "projects": {
-    "D:\\IT\\web_work\\payment\\test-folder\\payment\\PaymentModule\\PaymentModule.csproj": {
+    "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\IT\\web_work\\payment\\test-folder\\payment\\PaymentModule\\PaymentModule.csproj",
+        "projectUniqueName": "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj",
         "projectName": "PaymentModule",
-        "projectPath": "D:\\IT\\web_work\\payment\\test-folder\\payment\\PaymentModule\\PaymentModule.csproj",
+        "projectPath": "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj",
         "packagesPath": "C:\\Users\\Huynh Nhan\\.nuget\\packages\\",
-        "outputPath": "D:\\IT\\web_work\\payment\\test-folder\\payment\\PaymentModule\\obj\\",
+        "outputPath": "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Huynh Nhan\\AppData\\Roaming\\NuGet\\NuGet.Config",

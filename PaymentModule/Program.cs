@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PaymentModule.Context;
 using PaymentModule.Repository;
+using PaymentModule.Service;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -27,7 +28,7 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 builder.Services.AddScoped<IDetailRequestRepository, DetailRequestRepository>();
-
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Add 
 builder.Services.AddHttpContextAccessor();

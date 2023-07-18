@@ -1,12 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic.FileIO;
 using PaymentModule.Entities;
 
 namespace PaymentModule.Service
 {
-    public class FileService : IFileService
+    public class UserService : IUserService
     {
+        string IUserService.GetRequestCode(string inputString)
+        {
+            string[] parts = inputString.Split('-');
+            string lastPart = parts[parts.Length - 1];
+            if (int.TryParse(lastPart, out int requestCode))
+            {
+                return GetPaddedSixDigitString(requestCode, parts);
+                
+            }
+            return "";
+        }
+        private string GetPaddedSixDigitString(int number, string[] parts)
+        {
+            // Tạo số mới bằng cách cộng thêm 1 vào số hiện tại
+            int newNumber = number + 1;
 
-        public async Task<ObjectResult> HandleFile(IFormFileCollection files, Guid Id)
+            // Tạo chuỗi mới với số mới và thêm các ký tự "0" vào đằng trước
+            string newSixDigits = newNumber.ToString().PadLeft(6, '0');
+            // Nối lại các phần tử trong mảng, thay phần tử cuối cùng bằng số mới
+            parts[parts.Length - 1] = newSixDigits;
+            string result = string.Join("-", parts);
+            return result;
+        }
+
+        async Task<ObjectResult> IUserService.HandleFile(IFormFileCollection files, Guid Id)
         {
 
             ICollection<AttachmentEntity> attachments = new List<AttachmentEntity>();
@@ -19,9 +43,12 @@ namespace PaymentModule.Service
                 var fileName = Path.Combine(filePath, file.FileName);
                 if (data != null && data.Success != null && data.Success)
                 {
-                    AttachmentEntity attachment = new AttachmentEntity(
-                        fileName, file.ContentType, Id
-                    );
+                    AttachmentEntity attachment = new AttachmentEntity { 
+                        Id = Guid.NewGuid(),
+                        FilePath = filePath,
+                        FileType = file.ContentType,
+                        DetailRequestId = Id,
+                    }; 
                     attachments.Add(attachment);
                    // Add the file name to the list of successfully saved files
                 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4HBu1rLDLy6Phxf1PFcdKQIq/iRSiIK024/YiQg2YosqcU48QBJ2e4L/VzhjB/5bOwzHFRnl8UdsujIhJ1taCw==",
+  "dgSpecHash": "1tJsVdE0Ebt5NIXfGEyeKdIxVIXgN0UmeKwUoWDWyTbLBwDszHXCCCRhLximlIwIe8txD8TRmyBTKnmjdgJ4hw==",
   "success": true,
-  "projectFilePath": "D:\\IT\\web_work\\payment\\test-folder\\payment\\PaymentModule\\PaymentModule.csproj",
+  "projectFilePath": "D:\\IT\\web_work\\payment\\payment-be\\backend\\PaymentModule\\PaymentModule.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Huynh Nhan\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Huynh Nhan\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.19\\microsoft.aspnetcore.authentication.jwtbearer.6.0.19.nupkg.sha512",

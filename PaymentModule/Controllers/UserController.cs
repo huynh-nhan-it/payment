@@ -31,7 +31,7 @@ namespace PaymentModule.Controllers
 
         public static List<UserModel> users = new List<UserModel>();
         public static List<AccountModel> accounts = new List<AccountModel>();
-        private readonly IFileService _fileService;
+        public IUserService _userService;
         public PaymentContext _context;
         public IDepartmentRepository _departmentRepository;
         public ISupplierRepository _supplierRepository;
@@ -45,10 +45,11 @@ namespace PaymentModule.Controllers
             ICurrencyRepository currencyRepository,
             IPaymentMethodRepository paymentMethodRepository,
             IUserRepository userRepository,
+            IUserService userService,
             IDetailRequestRepository detailRequestRepository)
         {
             _context = paymentContext;
-            _fileService = new FileService();
+            _userService = userService;
             _departmentRepository = departmentRepository;
             _supplierRepository = supplierRepository;
             _currencyRepository = currencyRepository;
@@ -60,7 +61,7 @@ namespace PaymentModule.Controllers
 
         private async Task<ObjectResult> handleFile([FromForm] IFormFileCollection files, Guid Id)
         {
-            var result = await _fileService.HandleFile(files, Id);
+            var result = await _userService.HandleFile(files, Id);
             var data = result.Value as dynamic;
             if (data.Success)
             {
@@ -144,19 +145,61 @@ namespace PaymentModule.Controllers
             return new ObjectResult(new { success = true, error = false, });
         }
 
-        private void InsertpaymentRequest(Guid requestId)
+        private ObjectResult InsertpaymentRequest(Guid requestId)
         {
-            var paymentRequest = new PaymentRequestEntity
+            string connectionString = "Data Source=LAPTOP-HA348VVB\\SQLEXPRESS;Initial Catalog=PaymentDB;Integrated Security=True";
+            string RequestCode;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                RequestCode = "2023OPS-PAY-000001", //Testing...
-                Purpose = _detailRequestRepository.GetPurposeById(requestId),
-                StatusId = new Guid("6CE397A7-0949-4208-A56A-F9EBA87686A6"), //Approved
-                UserId = new Guid("A1CC9C62-A8A5-4CFF-A516-1C18007EF7FD"), //Testing...
-                CreateAt = DateTime.Now,
-                DetailRequestId = requestId
-            };
-            _context.PaymentRequests.Add(paymentRequest);
-            _context.SaveChanges();
+                try
+                {
+                    // Mở kết nối
+                    connection.Open();
+
+                    // Tạo câu truy vấn SQL để lấy dòng cuối cùng từ bảng Employees (sắp xếp theo cột Id giảm dần)
+                    string sqlQuery = "SELECT TOP 1 RequestCode FROM PaymentRequests ORDER BY Id DESC";
+
+                    // Tạo đối tượng SqlCommand
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        // Thực thi câu truy vấn và lấy dữ liệu vào SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            string resultRequestCode;
+                            if (reader.Read())
+                            {
+                                RequestCode = reader.GetString(0);
+                                resultRequestCode = _userService.GetRequestCode(RequestCode);
+                                if (resultRequestCode == "") {
+                                    return new ObjectResult(new { success = false, error = true, message = "Can't not get request code from server" });
+                                }
+                            }
+                            else
+                            {
+                                resultRequestCode = "2023OPS-PAY-000001";
+                            }
+                            var paymentRequest = new PaymentRequestEntity
+                            {
+                                RequestCode = resultRequestCode, //Testing...
+                                Purpose = _detailRequestRepository.GetPurposeById(requestId),
+                                StatusId = new Guid("80BCF31A-08AA-433D-879D-AB55E7730045"), //Approving
+                                UserId = new Guid("A3E4D297-29AE-42F8-A2F7-9D511F31B0B9"), //Testing...
+                                CreateAt = DateTime.Now,
+                                DetailRequestId = requestId
+                            };
+                            _context.PaymentRequests.Add(paymentRequest);
+                            _context.SaveChanges();
+                            return new ObjectResult(new { success = true, error = false, message = "Insert payment request success" });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return new ObjectResult(new { success = false, error = true, message = ex.ToString() });
+                }
+                
+            }
         }
 
         [HttpPost("create-request")]
@@ -186,21 +229,34 @@ namespace PaymentModule.Controllers
                 PaymentMethod = paymentmethod,
             };
 
+
             var resultHandDT = HandleDetailTable(detailTables, theId).Value as dynamic;
             var resultHandleDR = HandleDetailRequest(detailRequestDto, theId).Value as dynamic;
             var resultHandleAP = HandleApprovers(approvers, theId).Value as dynamic;
             var resultHandleFile = await handleFile(files, theId);
             var filesResults = resultHandleFile.Value as dynamic;
+            string filePath = Path.Combine("data", theId.ToString());
+
+
             if(purpose == null || department == null || paymentfor == null || supplier == null)
             {
+                if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
                 return BadRequest("Please enter the required information");
+            }
+            if (resultHandDT?.error || resultHandleDR?.error || resultHandleAP?.error)
+            {
+                if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
             }
             if (resultHandDT ?.error) { return BadRequest(resultHandDT ?.message); }
             if (resultHandleDR ?.error) { return BadRequest(resultHandleDR?.message); }
             if (resultHandleAP ?.error) { return BadRequest(resultHandleAP?.message); }
             if (filesResults?.error) { return BadRequest(filesResults?.message); }
 
+
             _context.DetailRequests.Add(resultHandleDR?.detailRequest);
+            _context.SaveChanges();
+
+
             foreach(DetailTableEntity table in resultHandDT.detailTableEntity)
             {
                 _context.DetailTables.Add(table);
@@ -209,9 +265,16 @@ namespace PaymentModule.Controllers
             {
                 _context.Attachments.Add(attachment);
             }
-            InsertpaymentRequest(theId);
-            _context.SaveChanges();
 
+
+            var resultInsertpaymentRequest = InsertpaymentRequest(theId).Value as dynamic;
+            if (resultInsertpaymentRequest?.error) {
+                if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
+                return BadRequest(resultInsertpaymentRequest?.message); 
+            }
+
+
+            _context.SaveChanges();
             return Ok(new { theId, detailRequestDto });
   
         }

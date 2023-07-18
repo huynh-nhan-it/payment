@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="ExcelFiles\" />
     <Folder Include="data\" />
-    <Folder Include="Service\" />
   </ItemGroup>
 
 </Project>
