@@ -11,10 +11,7 @@ import NavbarRequest from "./Components/Request/NavbarRequest";
 import ViewPayment from "./Components/PaymentView/ViewIndex";
 import Login from "./Components/Login/Login";
 import RegisterForm from "./Components/Register/Register";
-import RequestDetailsLayout2 from "./Components/Request/component/CreateRequest/RequestDetailsLayout2";
-import { useState } from "react";
-import Setting from "./Components/Setting";
-import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
+import RequestDetailsLayout2 from "./RequestDetailsLayout2";
 const { Search } = Input;
 
 function App() {
@@ -34,8 +31,46 @@ function App() {
           <Route path="/" element={<ApiCall />} />
         </Routes>
         <Layout>
-          <>
-            <HeaderRequest />
+          <HeaderRequest />
+          <Content>
+            <Layout >
+              <Sider
+                style={{
+                  background: colorBgContainer,
+                  top:"64px",
+                  position:'fixed',
+                  height:"100%",
+                  borderRight:"solid #ccc 0.1px"
+                }}
+                width={200}>
+                <Search
+                  placeholder="input search text"
+                  // onSearch={onSearch}
+                  style={{
+                    width: 200,
+                  }}
+                />
+                <NavbarRequest />
+              </Sider>
+              <Content
+                style={{
+                  padding: "0 12px",
+                  paddingLeft: "200px",
+                  top:"64px"
+                }}>
+                <Routes>
+                  <Route path="request/payment/view" element={<ViewPayment></ViewPayment>}></Route>
+                  <Route path="request" element={<Request />} />
+                  <Route path="system/employee" element={<Employee />} />
+                  <Route path="login" element={<Login/>}></Route>
+                  <Route path="register" element={<RegisterForm/>}></Route>
+                  <Route
+                      path="/request/create-request"
+                      element={<RequestDetailsLayout2 />}></Route>
+                </Routes>
+              </Content>
+            </Layout>
+          </Content>
 
             <Content>
               <Layout>

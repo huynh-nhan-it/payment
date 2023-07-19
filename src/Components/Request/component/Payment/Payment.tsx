@@ -1,4 +1,5 @@
-import { Table } from "antd";
+import { Space, Table, Tag } from "antd";
+// import jsonData from "/Users/hongnguyen/Documents/Giang/opus/payment/src/Components/Request/request.json";
 import { useState } from "react";
 import { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
@@ -29,14 +30,8 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   const [loading, setLoading] = useState(false)
   // console.log(filteredData);
 
-  useEffect(() => {
-    setPurpose(filteredData.purpose);
-    setRequestCode(filteredData.requestCode);
-    setCreatedDateFrom(filteredData.createdDateFrom);
-    setCreateDateTo(filteredData.createdDateTo);
-    setCreatedBy(filteredData.createdBy);
-    setStatus(filteredData.status);
-  });
+// const initialDataList: PaymentRequestList[] = jsonData.PaymentRequestList;
+const initialDataList: PaymentRequestList[] = [];
 
   // console.log(filteredData.createdDateFrom);
   useEffect(() => {
@@ -105,8 +100,8 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     <div>
       <Table
         columns={columns}
-        dataSource={data}
-        onRow={(record) => ({
+        dataSource={dataList}
+        onRow={(record: any) => ({
           onClick: () => handleRowClick(record.requestCode),
         })}
         rowKey="requestCode"

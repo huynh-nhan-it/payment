@@ -1,4 +1,4 @@
-import RequestDetailsLayout1 from './RequestDetailsLayout1';
+//import RequestDetailsLayout1 from './RequestDetailsLayout1';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, MenuProps } from 'antd';
 import { Layout, Menu, theme, DatePicker,Select } from 'antd';
@@ -37,8 +37,8 @@ const items: MenuProps['items'] = [
 
 
 interface Item {
-  key: string;
-  rec_date: Dayjs;
+  key: number;
+  rec_date: Moment;
   pay_content: string;
   amount: number;
   rec_no: string;
@@ -96,8 +96,8 @@ const RequestDetailsLayout2: React.FC = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState<Item[]>([
     {
-      key: '0',
-      rec_date: dayjs(),
+      key: 0,
+      rec_date: moment(),
       pay_content: '',
       amount: 0,
       rec_no: '',
@@ -108,7 +108,7 @@ const RequestDetailsLayout2: React.FC = () => {
   
   ]);
 
-  const handleDepartmentChange = (newValue: string) => {
+  const handleDepartmentChange = (newValue: any) => {
     // Lấy giá trị mới của Department từ tham số newValue
     // Cập nhật lại chuỗi dữ liệu Item dựa trên giá trị mới của Department
     
@@ -116,7 +116,10 @@ const RequestDetailsLayout2: React.FC = () => {
     const updatedData = [...data];
     
     // Tìm phần tử hiện tại trong chuỗi dữ liệu Item
-    const currentItem: Item | undefined = updatedData.find((item: Item) => item.key === '0');
+    const currentItem = updatedData.find(item => item.key === 0);
+    
+    // Cập nhật giá trị của Department trong phần tử hiện tại
+    currentItem!.cost_department = newValue;
     
     if (currentItem) {
       // Cập nhật giá trị của Department trong phần tử hiện tại
@@ -139,7 +142,7 @@ const RequestDetailsLayout2: React.FC = () => {
 
   };
   const [count, setCount] = useState(2);
-  const [editingKey, setEditingKey] = useState('');
+  const [editingKey, setEditingKey] = useState(0);
   
 
   const isEditing = (record: Item) => record.key === editingKey;
@@ -150,7 +153,7 @@ const RequestDetailsLayout2: React.FC = () => {
   };
 
   const cancel = () => {
-    setEditingKey('');
+    setEditingKey(0);
   };
 
   const save = async (key: React.Key) => {
@@ -171,11 +174,11 @@ const RequestDetailsLayout2: React.FC = () => {
         calculateTotalAmount();
         calculateTotal();
         setData(newData);
-        setEditingKey('');
+        setEditingKey(0);
       } else {
         newData.push(row);
         setData(newData);
-        setEditingKey('');
+        setEditingKey(0);
       }    
 
     } catch (errInfo) {
@@ -194,10 +197,8 @@ const RequestDetailsLayout2: React.FC = () => {
       dataIndex: 'rec_date',
       width: '15%',
       editable: false,
-      render: (recDate: Dayjs, record: Item) => (
-        <DatePicker value={dayjs(recDate.toDate())} 
-        // onChange={(date) => handleDateChange(date, record)} 
-        />
+      render: (recDate: any, record: Item) => (
+        <DatePicker value={recDate} onChange={(date: any) => handleDateChange(date, record)} />
       ),
     },
     {
@@ -266,7 +267,7 @@ const RequestDetailsLayout2: React.FC = () => {
           </span>
         ) : (
           <span>
-          <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+          <Typography.Link disabled={editingKey !== 0} onClick={() => edit(record)}>
           <EditFilled style={{fontSize:'30px'}} />
           </Typography.Link>
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
@@ -304,6 +305,7 @@ const RequestDetailsLayout2: React.FC = () => {
       amount: 0,
       rec_no: '',
       cost_industry: '',
+      cost_department: '',
       note: '',
     };
     calculateTotalAmount();
@@ -359,10 +361,23 @@ const RequestDetailsLayout2: React.FC = () => {
 
   return (
     <Layout hasSider>
-      <Layout style={{paddingTop:'128px'}} className="site-layout" >
-      <HeaderCreateRequest/>
-      <RequestDetailsLayout1/>
-        <Content>
+      <Sider
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          bottom: 0,
+        }}
+      >
+        <div className="demo-logo-vertical" />
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+      </Sider>
+      
+      <Layout className="site-layout" style={{ marginLeft: 200 }} >
+      
+        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
         <div style={{ padding: 24, textAlign: 'center', background: colorBgContainer }}>
       <Form form={form} component={false}>   
         <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -391,7 +406,7 @@ const RequestDetailsLayout2: React.FC = () => {
     <InputNumber
       bordered={false}
       value={taxPercentage}
-      onChange={() => handleTaxChange}
+      // onChange={handleTaxChange}
       min={0}
       max={100}
       formatter={(value) => `${value}%`}

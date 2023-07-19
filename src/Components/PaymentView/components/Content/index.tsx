@@ -4,7 +4,8 @@ import React from "react";
 import { Typography } from "antd";
 import ViewTable from "./components/viewTable";
 import Comment from "./components/comment-content";
-import { useParams } from "react-router-dom";
+// import jsonData from "/Users/hongnguyen/Documents/Giang/opus/payment/src/Components/Request/request.json";
+
 const { Text } = Typography;
 
 const { Content } = Layout;

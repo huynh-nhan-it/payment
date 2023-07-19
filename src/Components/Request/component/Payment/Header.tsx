@@ -5,7 +5,7 @@ import { TbArrowBarToRight } from "react-icons/tb";
 import "./payment.css";
 
 import DropdownFilter from "./DropdownFilter";
-import { Link } from "react-router-dom";
+import Link from "antd/es/typography/Link";
 // import RequestDetailsLayout2 from "./RequestDetailsLayout2";
 // import moment from 'moment';
 
@@ -32,7 +32,7 @@ const HeaderPayment: React.FC = () => {
 
         <div className="create-new padding-10 bg-create-new color-white">
           {" "}
-         <Link to={"/request/create-request"}> + Create New</Link>
+         <Link href={"/request/create-request"}> + Create New</Link>
         </div>
       </div>
     </Header>

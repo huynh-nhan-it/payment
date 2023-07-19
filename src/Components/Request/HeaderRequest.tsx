@@ -5,7 +5,7 @@ import { IoIosSettings } from "react-icons/io";
 import HelpRequest from "./Help";
 import Notification from "./Notification";
 import Person from "./Person";
-import { Link } from "react-router-dom";
+import Link from "antd/es/typography/Link";
 
 const { Header } = Layout;
 
@@ -77,14 +77,14 @@ const HeaderRequest = () => {
         }}>
         <div className="opus-logo-name">
           <div className="opus-logo">
-            <Link to="/">
+            <Link href="/">
               <img
                 src="https://o365.vn/wp-content/uploads/logo_w.png"
                 style={{ width: "50px", height: "30px" }}
               />
             </Link>
           </div>
-          <Link to="/">
+          <Link href="/">
             <div className="company-name"> Opus Solution</div>
           </Link>
           <div className="eOffice"> eOffice </div>
