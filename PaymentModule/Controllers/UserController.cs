@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-using Microsoft.EntityFrameworkCore;
 using PaymentModule.Context;
 using PaymentModule.Models;
 using PaymentModule.Entities;
@@ -9,18 +7,10 @@ using PaymentModule.Entities;
 using Microsoft.Data.SqlClient;
 using PaymentModule.DTOs;
 using PaymentModule.Repository;
-
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
-using System.Net.Mail;
-using System.Dynamic;
 using PaymentModule.Service;
-using System.Net.WebSockets;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PaymentModule.Controllers
 {
@@ -39,6 +29,8 @@ namespace PaymentModule.Controllers
         public IPaymentMethodRepository _paymentMethodRepository;
         public IDetailRequestRepository _detailRequestRepository;
         private IUserRepository _userRepository;
+        private readonly IConfiguration _configuration;
+        private readonly ConnectionStringSettings _connectionStringSettings;
 
         public UserController(PaymentContext paymentContext, IDepartmentRepository departmentRepository,
             ISupplierRepository supplierRepository,
@@ -46,7 +38,9 @@ namespace PaymentModule.Controllers
             IPaymentMethodRepository paymentMethodRepository,
             IUserRepository userRepository,
             IUserService userService,
-            IDetailRequestRepository detailRequestRepository)
+            IConfiguration configuration,
+            IDetailRequestRepository detailRequestRepository,
+            ConnectionStringSettings connectionStringSettings)
         {
             _context = paymentContext;
             _userService = userService;
@@ -56,6 +50,8 @@ namespace PaymentModule.Controllers
             _paymentMethodRepository = paymentMethodRepository;
             _userRepository = userRepository;
             _detailRequestRepository = detailRequestRepository;
+            _configuration = configuration;
+            _connectionStringSettings = connectionStringSettings;
         }
 
 
@@ -121,7 +117,7 @@ namespace PaymentModule.Controllers
 
         private ObjectResult HandleApprovers(List<ApproverDto> approvers, Guid requestId)
         {
-            string connectionString = "Data Source=LAPTOP-HA348VVB\\SQLEXPRESS;Initial Catalog=PaymentDB;Integrated Security=True";
+            string connectionString = _connectionStringSettings.ConnectionString;
             string error = "Please enter the required information";
 
             foreach (ApproverDto approver in approvers)
@@ -145,9 +141,9 @@ namespace PaymentModule.Controllers
             return new ObjectResult(new { success = true, error = false, });
         }
 
-        private ObjectResult InsertpaymentRequest(Guid requestId)
+        /*private ObjectResult InsertpaymentRequest(Guid requestId, string userId)
         {
-            string connectionString = "Data Source=LAPTOP-HA348VVB\\SQLEXPRESS;Initial Catalog=PaymentDB;Integrated Security=True";
+            string connectionString = _connectionStringSettings.ConnectionString;
             string RequestCode;
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -181,10 +177,11 @@ namespace PaymentModule.Controllers
                             }
                             var paymentRequest = new PaymentRequestEntity
                             {
+                                Id = Guid.NewGuid(),
                                 RequestCode = resultRequestCode, //Testing...
                                 Purpose = _detailRequestRepository.GetPurposeById(requestId),
                                 StatusId = new Guid("80BCF31A-08AA-433D-879D-AB55E7730045"), //Approving
-                                UserId = new Guid("A3E4D297-29AE-42F8-A2F7-9D511F31B0B9"), //Testing...
+                                UserId = new Guid(userId == "" ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9": userId), //Testing...
                                 CreateAt = DateTime.Now,
                                 DetailRequestId = requestId
                             };
@@ -200,10 +197,54 @@ namespace PaymentModule.Controllers
                 }
                 
             }
+        }*/
+
+        private ObjectResult InsertpaymentRequest(Guid requestId, string userId)
+        {
+            try
+            {
+                string resultRequestCode;
+                var lastPaymentRequest = _context.PaymentRequests
+                    .OrderByDescending(pr => pr.Id)
+                    .FirstOrDefault();
+
+                if (lastPaymentRequest != null)
+                {
+                    resultRequestCode = _userService.GetRequestCode(lastPaymentRequest.RequestCode);
+                    if (resultRequestCode == "")
+                    {
+                        return new ObjectResult(new { success = false, error = true, message = "Can't not get request code from server" });
+                    }
+                }
+                else
+                {
+                    resultRequestCode = "2023OPS-PAY-000001";
+                }
+
+                var paymentRequest = new PaymentRequestEntity
+                {
+                    RequestCode = resultRequestCode, //Testing...
+                    Purpose = _detailRequestRepository.GetPurposeById(requestId),
+                    StatusId = new Guid("80BCF31A-08AA-433D-879D-AB55E7730045"), //Approving
+                    UserId = new Guid(string.IsNullOrEmpty(userId) ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : userId), //Testing...
+                    CreateAt = DateTime.Now,
+                    DetailRequestId = requestId
+                };
+
+                _context.PaymentRequests.Add(paymentRequest);
+                _context.SaveChanges();
+
+                return new ObjectResult(new { success = true, error = false, message = "Insert payment request success" });
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(new { success = false, error = true, message = ex.ToString() });
+            }
         }
 
+
         [HttpPost("create-request")]
-        public async Task<IActionResult> createRequest([FromForm] TestPaymentRequestDto prd)
+        public async Task<IActionResult> createRequest([FromForm] CreatePaymentRequestDto prd)
         {
             Guid theId = Guid.NewGuid();
             string purpose = prd.Purpose;
@@ -216,6 +257,22 @@ namespace PaymentModule.Controllers
             string paymentmethod = prd.PaymentMethod;
             List<DetailTableDto> detailTables = prd.DetailTable;
             List<ApproverDto> approvers = prd.Approvers;
+            string authorizationHeader = Request.Headers["Authorization"];
+            string token = "";
+            string userId = "";
+            var options = new JsonSerializerOptions{ WriteIndented = true, ReferenceHandler = ReferenceHandler.Preserve};
+       
+
+
+            /* if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
+             {
+                 string secretKey = _configuration["AppSettings:Token"];
+                 token = authorizationHeader.Substring("Bearer ".Length);
+                 userId = _userService.DecodeToken(token, secretKey);
+                 if (userId == "") { return BadRequest(new ObjectResult(new { success = false, error = true, message = "Process get token has error" })); }
+             }
+             else { return BadRequest(new { success = false, error = true, message = "Token not found in header" }); }*/
+
 
 
             var detailRequestDto = new DetailRequestDto
@@ -267,7 +324,7 @@ namespace PaymentModule.Controllers
             }
 
 
-            var resultInsertpaymentRequest = InsertpaymentRequest(theId).Value as dynamic;
+            var resultInsertpaymentRequest = InsertpaymentRequest(theId, userId).Value as dynamic;
             if (resultInsertpaymentRequest?.error) {
                 if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
                 return BadRequest(resultInsertpaymentRequest?.message); 
@@ -275,11 +332,11 @@ namespace PaymentModule.Controllers
 
 
             _context.SaveChanges();
-            return Ok(new { theId, detailRequestDto });
+            var jsonPaymentRequests = JsonSerializer.Serialize(new { PaymentRequests = _context.PaymentRequests.ToList() }, options);
+            return Ok(jsonPaymentRequests);
   
         }
 
-        private string connectionString = "Data Source=DESKTOP-3VU8FT9\\SQLEXPRESS01;Initial Catalog=PaymentDB;Integrated Security=True";
       
         [HttpGet("{id}")]
         public IActionResult GetName(Guid id)
@@ -287,32 +344,6 @@ namespace PaymentModule.Controllers
             string myName = _userRepository.GetFullNameById(id);
             return Ok(new { name = myName });
         }
-
-
-        [HttpPost]
-        public IActionResult AddApprover(List<ApproverDto> approvers)
-        {
-            foreach(ApproverDto approver in approvers)
-            {
-                
-
-                string insertQuery = "INSERT INTO ApproverDetailRequest (ApproverId, DetailRequestId) VALUES (@ApproverId, @DetailRequestId)";
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    using (SqlCommand command = new SqlCommand(insertQuery, connection))
-                    {
-                        // Thay thế các tham số trong câu truy vấn bằng giá trị thực tế
-                        command.Parameters.AddWithValue("@DetailRequestId", new Guid("1BE6E7EA-E614-454B-DB18-08DB8299988C"));
-                        command.Parameters.AddWithValue("@ApproverId", (Guid)_userRepository.GetIdByEmail(approver.Email));
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                }
-            }
-            return Ok();
-        }
-        
 
     }
 }

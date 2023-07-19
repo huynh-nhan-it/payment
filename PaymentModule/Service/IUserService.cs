@@ -6,5 +6,7 @@ namespace PaymentModule.Service
     {
         public Task<ObjectResult> HandleFile(IFormFileCollection files, Guid Id);
         public string GetRequestCode(string requestCode);
+
+        public string DecodeToken(string token, string secretKey);
     }
 }

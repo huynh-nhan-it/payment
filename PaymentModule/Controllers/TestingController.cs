@@ -189,7 +189,7 @@ namespace PaymentModule.Controllers
             return Ok(listPaymentRequestDetail[listPaymentRequestDetail.Count - 1]);
         }
         [HttpPost]
-        public IActionResult SubmitRequest(TestPaymentRequestDto prd)
+        public IActionResult SubmitRequest(CreatePaymentRequestDto prd)
         {
             Guid theId = Guid.NewGuid();
 

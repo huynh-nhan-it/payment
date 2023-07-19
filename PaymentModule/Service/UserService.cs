@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic.FileIO;
 using PaymentModule.Entities;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace PaymentModule.Service
 {
@@ -45,7 +49,7 @@ namespace PaymentModule.Service
                 {
                     AttachmentEntity attachment = new AttachmentEntity { 
                         Id = Guid.NewGuid(),
-                        FilePath = filePath,
+                        FilePath = fileName,
                         FileType = file.ContentType,
                         DetailRequestId = Id,
                     }; 
@@ -88,6 +92,35 @@ namespace PaymentModule.Service
                 await file.CopyToAsync(fileStream);
             }
             return new ObjectResult(data);
+        }
+
+        string IUserService.DecodeToken(string token, string secretKey)
+        {
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            try
+            {
+                var claims = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    IssuerSigningKey = key,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true
+                }, out var validatedToken);
+
+                // Lấy thông tin claims từ token
+                var userId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                // Các xử lý khác ...
+
+                return userId;
+            }
+            catch
+            {
+                // Xử lý lỗi nếu token không hợp lệ
+                return "";
+            }
         }
     }
 }

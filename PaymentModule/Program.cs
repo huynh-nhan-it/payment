@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PaymentModule.Context;
+using PaymentModule.Models;
 using PaymentModule.Repository;
 using PaymentModule.Service;
 using Swashbuckle.AspNetCore.Filters;
@@ -13,7 +15,10 @@ var builder = WebApplication.CreateBuilder(args);
 //ADD CONTEXT
 builder.Services.AddDbContext<PaymentContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("PaymentDB")));
 
-// Add services to the container.
+// Add ConnectionString
+string connectionString = builder.Configuration.GetConnectionString("PaymentDB");
+builder.Services.AddSingleton(new ConnectionStringSettings(connectionString));
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
