@@ -39,6 +39,7 @@ import { FaEarthAmericas } from "react-icons/fa6";
 import { TfiTimer } from "react-icons/tfi";
 import { FaPersonDress, FaFileContract } from "react-icons/fa6";
 import { RiComputerLine } from "react-icons/ri";
+import { Link, Route, Routes } from "react-router-dom";
 
 const ApiCall = () => {
   const [data, setData] = useState([]);
@@ -138,13 +139,25 @@ const ApiCall = () => {
                 md={8}
                 lg={6}
                 xl={4}>
-                <CardContent
-                  id={dt.id}
-                  className={dt.icon}
-                  icon={mergedObject[dt.icon]}
-                  decription={dt.decription}
-                  title={dt.title}
-                />
+                {dt.id !== 404 ? (
+                  <CardContent
+                    id={dt.id}
+                    className={dt.icon}
+                    icon={mergedObject[dt.icon]}
+                    decription={dt.decription}
+                    title={dt.title}
+                  />
+                ) : (
+                  <Link to="/request/payment">
+                    <CardContent
+                      id={dt.id}
+                      className={dt.icon}
+                      icon={mergedObject[dt.icon]}
+                      decription={dt.decription}
+                      title={dt.title}
+                    />
+                  </Link>
+                )}
               </Col>
             ) : (
               ""

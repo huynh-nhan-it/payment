@@ -14,21 +14,10 @@
 
 // export default Request;
 
-import { Layout, Input, theme } from "antd";
 import React from "react";
 
-
-import HeaderRequest from "./HeaderRequest";
-import NavbarRequest from "./NavbarRequest";
 import PaymentAll from "./component/Payment";
-const { Search } = Input;
-const { Content, Sider} = Layout;
 const Request: React.FC = () => {
-  const {
-        token: { colorBgContainer },
-      } = theme.useToken();
-  return (
-    <PaymentAll />
-  );
+  return <PaymentAll />;
 };
 export default Request;

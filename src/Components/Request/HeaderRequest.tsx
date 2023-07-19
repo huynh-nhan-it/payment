@@ -2,14 +2,6 @@ import React from "react";
 import { Layout } from "antd";
 import "./request.css";
 import { IoIosSettings } from "react-icons/io";
-import {
-  Menu,
-  DatePicker,
-  Form,
-  Input,
-  Button,
-  Select,
-} from "antd";
 import HelpRequest from "./Help";
 import Notification from "./Notification";
 import Person from "./Person";
@@ -105,7 +97,9 @@ const HeaderRequest = () => {
             <Notification />
           </div>
           <div className="setting-request">
-            <IoIosSettings />
+            <Link to="/setting">
+              <IoIosSettings />
+            </Link>
           </div>
           <div className="person-request">
             <Person />

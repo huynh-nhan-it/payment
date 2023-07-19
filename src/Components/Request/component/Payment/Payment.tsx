@@ -1,7 +1,11 @@
-import { Space, Table, Tag } from "antd";
-import jsonData from "/Users/hongnguyen/Documents/Giang/opus/payment/src/Components/Request/request.json";
+import { Table } from "antd";
 import { useState } from "react";
 import { ColumnsType } from "antd/es/table";
+import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import axios from "axios";
+import { ConnectedProps, connect } from "react-redux";
+import { RootState } from "./store";
 
 interface PaymentRequestList {
   requestCode: string;
@@ -10,10 +14,43 @@ interface PaymentRequestList {
   createdDate: string;
   status: string;
 }
+interface DataListProps extends ConnectedProps<typeof connector> {
+  // Thêm các props khác nếu cần
+}
+const Payment: React.FC<DataListProps> = ({ filteredData }) => {
+  // `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`
+  const [data, setData] = useState([]);
+  const [purpose, setPurpose] = useState("");
+  const [requestCode, setRequestCode] = useState("");
+  const [createdDateFrom, setCreatedDateFrom] = useState("");
+  const [createDateTo, setCreateDateTo] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false)
+  // console.log(filteredData);
 
-const initialDataList: PaymentRequestList[] = jsonData.PaymentRequestList;
+  useEffect(() => {
+    setPurpose(filteredData.purpose);
+    setRequestCode(filteredData.requestCode);
+    setCreatedDateFrom(filteredData.createdDateFrom);
+    setCreateDateTo(filteredData.createdDateTo);
+    setCreatedBy(filteredData.createdBy);
+    setStatus(filteredData.status);
+  });
 
-const Payment: React.FC = () => {
+  // console.log(filteredData.createdDateFrom);
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}`
+      )
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [data]);
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -21,6 +58,8 @@ const Payment: React.FC = () => {
     const year = date.getFullYear();
     return `${day}/${month < 10 ? "0" + month : month}/${year}`;
   };
+  const navigate = useNavigate();
+
   const columns: ColumnsType<PaymentRequestList> = [
     {
       title: "Mã yêu cầu",
@@ -58,24 +97,33 @@ const Payment: React.FC = () => {
     },
   ];
 
-  const [selectedRequestCode, setSelectedRequestCode] = useState<string | null>(null);
-
   const handleRowClick = (requestCode: string) => {
-    // setSelectedRequestCode(requestCode);
-    console.log(requestCode);
+    navigate(`/request/payment/view/${requestCode}`);
   };
-  const [dataList, setDataList] = useState(initialDataList);
-  console.log(dataList);
+  // const {requestCode} = useParams();
   return (
     <div>
       <Table
         columns={columns}
-        dataSource={dataList}
+        dataSource={data}
         onRow={(record) => ({
           onClick: () => handleRowClick(record.requestCode),
         })}
+        rowKey="requestCode"
       />
     </div>
   );
 };
-export default Payment;
+
+// Hàm mapStateToProps để map state từ Redux store thành props của component
+const mapStateToProps = (state: RootState) => {
+  return {
+    filteredData: state.filter,
+  };
+};
+
+const mapDispatchToProps = {};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(Payment);

@@ -1,8 +1,7 @@
 import { Typography } from "antd";
-import { CommentOutlined, UploadOutlined } from "@ant-design/icons";
+import { CommentOutlined } from "@ant-design/icons";
 import "../../../css/index.css";
 import { useState } from "react";
-import type { UploadProps } from "antd";
 import ComponentComment from "./comment-component";
 import CommentForm from "./comment-form";
 

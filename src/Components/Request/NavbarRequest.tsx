@@ -1,14 +1,8 @@
-import { Menu, Layout, theme } from "antd";
+import { Menu, Layout } from "antd";
 import React from "react";
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 import { BsFolder2Open } from "react-icons/bs";
 import { BiBarChartAlt } from "react-icons/bi";
-import { Input, Space } from "antd";
-import { Link } from "react-router-dom";
+import { Input } from "antd";
 const { Search } = Input;
 
 const { Content, Sider } = Layout;
@@ -82,20 +76,13 @@ const item3 = items.map((item) => {
   };
 });
 
-const handleClick=() =>{
-  console.log("test");
-}
 const NavbarRequest: React.FC = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
   return (
     <Menu
       mode="inline"
       defaultSelectedKeys={["1"]}
       defaultOpenKeys={["sub1"]}
-      items={item3}
-    ><Link onClick={handleClick} to="/test"></Link></Menu>
+      items={item3}></Menu>
   );
 };
 export default NavbarRequest;

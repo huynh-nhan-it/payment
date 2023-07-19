@@ -24,7 +24,7 @@ const ViewHeader: React.FC = () => {
     }} >
 
       <Row gutter={24} style={{paddingLeft: '1.5%'}}>
-        <Col > <a href="#" className="text-header"> <TiArrowBackOutline style={{ marginRight: '5px' }}/> Return</a></Col>
+        <Col > <a href="/request/payment" className="text-header"> <TiArrowBackOutline style={{ marginRight: '5px' }}/> Return</a></Col>
         <Col>
         <a href="#" className="text-header"> <BsFiletypePdf style={{ marginRight: '5px' }}/> Download file</a>
 

@@ -1,8 +1,8 @@
-import RequestDetailsLayout1 from './RequestDetailsLayout1.tsx';
+import RequestDetailsLayout1 from './RequestDetailsLayout1';
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography } from 'antd';
+import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, MenuProps } from 'antd';
 import { Layout, Menu, theme, DatePicker,Select } from 'antd';
-import moment, { Moment } from 'moment';
+import dayjs,{Dayjs} from 'dayjs';
 
 import {
   AppstoreOutlined,
@@ -16,6 +16,7 @@ import {
   DeleteFilled,
   EditFilled,
 } from '@ant-design/icons';
+import HeaderCreateRequest from './Header';
 
 const {Content, Sider } = Layout;
 const items: MenuProps['items'] = [
@@ -37,12 +38,12 @@ const items: MenuProps['items'] = [
 
 interface Item {
   key: string;
-  rec_date: Moment;
+  rec_date: Dayjs;
   pay_content: string;
   amount: number;
   rec_no: string;
   cost_industry: string;
-  cost_department: string;
+  cost_department?: string;
   note: string;
 }
 
@@ -96,9 +97,9 @@ const RequestDetailsLayout2: React.FC = () => {
   const [data, setData] = useState<Item[]>([
     {
       key: '0',
-      rec_date: moment(),
+      rec_date: dayjs(),
       pay_content: '',
-      amount: '0',
+      amount: 0,
       rec_no: '',
       cost_industry: '',
       cost_department:'',
@@ -107,7 +108,7 @@ const RequestDetailsLayout2: React.FC = () => {
   
   ]);
 
-  const handleDepartmentChange = (newValue) => {
+  const handleDepartmentChange = (newValue: string) => {
     // Lấy giá trị mới của Department từ tham số newValue
     // Cập nhật lại chuỗi dữ liệu Item dựa trên giá trị mới của Department
     
@@ -115,16 +116,19 @@ const RequestDetailsLayout2: React.FC = () => {
     const updatedData = [...data];
     
     // Tìm phần tử hiện tại trong chuỗi dữ liệu Item
-    const currentItem = updatedData.find(item => item.key === '0');
+    const currentItem: Item | undefined = updatedData.find((item: Item) => item.key === '0');
     
-    // Cập nhật giá trị của Department trong phần tử hiện tại
-    currentItem.cost_department = newValue;
-    
+    if (currentItem) {
+      // Cập nhật giá trị của Department trong phần tử hiện tại
+      currentItem.cost_department = newValue;
+    } else {
+      // Xử lý khi currentItem là undefined
+    }
     // Cập nhật lại chuỗi dữ liệu Item
     setData(updatedData);
   };
 
-  const handleDateChange = (date: Moment, record: Item) => {
+  const handleDateChange = (date: Dayjs, record: Item) => {
     const newData = data.map((item) => {
       if (item.key === record.key) {
         return { ...item, rec_date: date };
@@ -152,8 +156,8 @@ const RequestDetailsLayout2: React.FC = () => {
   const save = async (key: React.Key) => {
     try {
       const row = (await form.validateFields()) as Item;
-      if (!(row.rec_date instanceof moment)) {
-        row.rec_date = moment(row.rec_date); // Chuyển đổi thành đối tượng Moment
+      if (!(row.rec_date instanceof dayjs)) {
+        row.rec_date = dayjs(row.rec_date); // Chuyển đổi thành đối tượng Moment
       }
       console.log(row);
       const newData = [...data];
@@ -190,8 +194,10 @@ const RequestDetailsLayout2: React.FC = () => {
       dataIndex: 'rec_date',
       width: '15%',
       editable: false,
-      render: (recDate: Moment, record: Item) => (
-        <DatePicker value={recDate} onChange={(date) => handleDateChange(date, record)} />
+      render: (recDate: Dayjs, record: Item) => (
+        <DatePicker value={dayjs(recDate.toDate())} 
+        // onChange={(date) => handleDateChange(date, record)} 
+        />
       ),
     },
     {
@@ -292,10 +298,10 @@ const RequestDetailsLayout2: React.FC = () => {
   });
   const handleAdd = () => {
     const newData: Item = {
-      key: count,
-      rec_date: moment(),
+      key: count.toString(),
+      rec_date: dayjs(),
       pay_content: '',
-      amount: '',
+      amount: 0,
       rec_no: '',
       cost_industry: '',
       note: '',
@@ -311,6 +317,7 @@ const RequestDetailsLayout2: React.FC = () => {
     
   };
 
+  console.log(data);
   const handleDelete = (key: React.Key) => {
     const newData = data.filter((item) => item.key !== key);
     calculateTotalAmount();
@@ -352,23 +359,10 @@ const RequestDetailsLayout2: React.FC = () => {
 
   return (
     <Layout hasSider>
-      <Sider
-        style={{
-          overflow: 'auto',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          bottom: 0,
-        }}
-      >
-        <div className="demo-logo-vertical" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
-      </Sider>
-      
-      <Layout className="site-layout" style={{ marginLeft: 200 }} >
+      <Layout style={{paddingTop:'128px'}} className="site-layout" >
+      <HeaderCreateRequest/>
       <RequestDetailsLayout1/>
-        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+        <Content>
         <div style={{ padding: 24, textAlign: 'center', background: colorBgContainer }}>
       <Form form={form} component={false}>   
         <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -397,11 +391,11 @@ const RequestDetailsLayout2: React.FC = () => {
     <InputNumber
       bordered={false}
       value={taxPercentage}
-      onChange={handleTaxChange}
+      onChange={() => handleTaxChange}
       min={0}
       max={100}
       formatter={(value) => `${value}%`}
-      parser={(value) => value ? value.replace('%', '') : ''}
+      // parser={(value) => value ? value.replace('%', '') : ''}
     />
   </div>
   <div style={{ marginBottom: '16px', fontWeight: 'bold', fontSize: '18px' }}>

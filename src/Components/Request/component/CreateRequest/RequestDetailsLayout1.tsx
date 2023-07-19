@@ -11,7 +11,6 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
-import './RequestDetails.css';
 import { Input, Select } from 'antd';
 
 
@@ -58,21 +57,8 @@ const RequestDetailsLayout1: React.FC = () => {
 
   return (
     <Layout hasSider>
-      <Sider
-        style={{
-          overflow: 'auto',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          bottom: 0,
-        }}
-      >
-        <div className="demo-logo-vertical" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
-      </Sider>
       <Layout >
-        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+        <Content style={{overflow: 'initial' }}>
           <div style={{ padding: 24, textAlign: 'center', background: colorBgContainer }}>
             <h1 style={{fontSize: 28}}>PAYMENT REQUEST</h1>
             <td className='font_text'>

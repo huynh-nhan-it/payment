@@ -1,0 +1,25 @@
+.padding-top-64 {
+    padding-top: 64px;
+}
+
+.color-black svg {
+    color: #333;
+}
+
+.setting-card-content {
+    min-width: 170px;
+    max-width: 170px;
+    height: 200px;
+}
+
+.fontsize-60{
+    font-size: 60px;
+}
+
+.display-flex{
+    display: flex;
+}
+
+.margin-20{
+    margin: 20px;
+}

@@ -27,7 +27,7 @@ const HeaderPayment: React.FC = () => {
           <span className="padding-left-6 padding-right-6">Export Excel</span>
         </div>
         <div className="filter padding-10 bg-header-payment color-header-payment">
-          <FaFilter /> <DropdownFilter  />
+          <FaFilter /> <DropdownFilter />
         </div>
 
         <div className="create-new padding-10 bg-create-new color-white">
