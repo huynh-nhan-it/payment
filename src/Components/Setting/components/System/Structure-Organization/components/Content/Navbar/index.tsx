@@ -1,123 +1,57 @@
 import React, { useEffect, useState } from "react";
 import "../../../css/index.css";
 import { MdOutlineGroups } from "react-icons/md";
-import { Affix, Button, Input } from "antd";
+import { Affix, Button, Col, Form, Input, Row, Tabs } from "antd";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { getDepartments } from "../../../../../../../../Services/PaymentRequest/apiForm";
 
 const NavbarDepartment = () => {
-  const Department = [
-    {
-      key: "1",
-      name: "ITTechnical",
-    },
-    {
-      key: "2",
-      name: "OPUS company",
-    },
-    {
-      key: "3",
-      name: "Human Resource",
-    },
-    {
-      key: "4",
-      name: "Sale",
-    },
-    {
-      key: "5",
-      name: "Bán Hàng",
-    },
-    {
-      key: "6",
-      name: "Finance",
-    },
-    {
-      key: "7",
-      name: "Đào Tạo",
-    },
-    {
-      key: "8",
-      name: "Nghiên cứu R&D",
-    },
-    {
-      key: "9",
-      name: "Blockchain",
-    },
-    {
-      key: "10",
-      name: "WordPress",
-    },
-    {
-      key: "11",
-      name: "Cộng tác viên",
-    },
-    {
-      key: "12",
-      name: "OPUS Alumni",
-    },
-    ,
-    {
-      key: "13",
-      name: "Share Point",
-    },
-    {
-      key: "14",
-      name: "Hỗ trợ khách hàng",
-    },
-    {
-      key: "15",
-      name: "Kiểm thử Testing",
-    },
-    {
-      key: "16",
-      name: "Phòng dự án",
-    },
-    {
-      key: "17",
-      name: "Phòng tasken",
-    },
-    {
-      key: "18",
-      name: "Team Building 2018",
-    },
-    {
-      key: "19",
-      name: "UX UI",
-    },
-  ];
-
-  const [dataDepartment, setDataDepartment] = useState([]);
-
+  const [departmentData, setDepartmentData] = useState<{ id: string; name: string }[]>([]);
   useEffect(() => {
-    axios
-      .get(`http://localhost:5005/api/PaymentRequest/`)
-      .then((response) => {
-        setDataDepartment(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+  try {
+    
+    const departmentResponse = await getDepartments();
+
+   
+    setDepartmentData(departmentResponse);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const [selectedDepartment, setSelectedDepartment] = useState<any | null>(null);
+
+  const handleDepartmentClick = (department: any) => {
+    setSelectedDepartment(department);
+    console.log(department)
+  };
+  
+
 
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
-  const handleTest = () => {
-    console.log("object");
-  };
+
   return (
+
+      <Row>
+      <Col span={8}>
     <div className="navbar-department">
       <div className="search-department">
-        <Input placeholder="Search" />
+      <Input placeholder="Search" />
       </div>
-      <div className="scrollable-container">
+      <div className="scrollable-container" >
         <div className="background">
           <Affix target={() => container}>
             <ul>
-              {Department.map((dep) => (
-                <li className="department-list" key={dep?.key}>
-                  <a
-                    className="org-department display-flex color-black"
-                    href="#">
+              {departmentData.map((dep) => (
+                <li onClick={() => handleDepartmentClick(dep.name)}
+                className="department-list"
+                key={dep?.name}>
+                  <a className="org-department display-flex color-black" href="#">
                     <span className="org-department-icon">
                       <MdOutlineGroups />
                     </span>
@@ -130,7 +64,32 @@ const NavbarDepartment = () => {
         </div>
       </div>
     </div>
-  );
+    </Col>
+    <Col span={16}>
+      <div style={{paddingTop: 64}}>
+        {selectedDepartment && (
+          <>
+            <h2 style={{textAlign:"left", fontSize: 40}}>{selectedDepartment}</h2>
+              <Tabs defaultActiveKey="1">
+                <Tabs.TabPane tab="Information" key="1">
+                  {/* Hiển thị thông tin của department */}
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Manager" key="2">
+                  {/* Hiển thị danh sách các Manager của department */}
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Supervisor" key="3">
+                  {/* Hiển thị danh sách các Supervisor của department */}
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Employee" key="4">
+                  {/* Hiển thị danh sách các Employee của department */}
+                </Tabs.TabPane>
+              </Tabs>
+          </>
+          )}
+      </div>
+    </Col>
+  </Row>
+);
 };
 
 export default NavbarDepartment;
