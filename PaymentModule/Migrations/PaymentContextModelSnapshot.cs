@@ -66,6 +66,126 @@ namespace PaymentModule.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.AdditionalEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AcademicLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankAccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankBranchName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BranchNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BuildingOrFlatNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfIDCard")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("HealthInsurance")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HomePhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IDCardNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LeavingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfIDCard")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProvinceOrState")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SpecializedQualification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDateMaternityLeave")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartingDateOfficial")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Additionals");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.AttachmentEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -88,6 +208,47 @@ namespace PaymentModule.Migrations
                     b.HasIndex("DetailRequestId");
 
                     b.ToTable("Attachments");
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.ContractEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AddtionalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContractType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SigningDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddtionalId");
+
+                    b.ToTable("Contracts");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.CurrencyEntity", b =>
@@ -208,6 +369,162 @@ namespace PaymentModule.Migrations
                     b.ToTable("DetailTables");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.FamilyEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BuildingOrFlatNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MartialStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProvinceOrState")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Relationship")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Families");
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.OverviewEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BelongToDepartments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("BirthDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Company")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CostCenter")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmployeeNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FunctionEmployee")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Groups")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LineManager")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfficeLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rank")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rights")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SectionsTeams")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Overviews");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.PaymentMethodEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -261,6 +578,37 @@ namespace PaymentModule.Migrations
                     b.ToTable("PaymentRequests");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.RelationshipEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BirthDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FamilyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Relationship")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FamilyId");
+
+                    b.ToTable("Relationships");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.RoleEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -274,6 +622,38 @@ namespace PaymentModule.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.SignatureEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QRcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Signatures");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.StatusEntity", b =>
@@ -314,6 +694,10 @@ namespace PaymentModule.Migrations
 
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -381,11 +765,31 @@ namespace PaymentModule.Migrations
                     b.Navigation("MyUser");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.AdditionalEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.UserEntity", "User")
+                        .WithOne("Additional")
+                        .HasForeignKey("PaymentModule.Entities.AdditionalEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.AttachmentEntity", b =>
                 {
                     b.HasOne("PaymentModule.Entities.DetailRequestEntity", null)
                         .WithMany("Attachments")
                         .HasForeignKey("DetailRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.ContractEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.AdditionalEntity", null)
+                        .WithMany("contracts")
+                        .HasForeignKey("AddtionalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -432,6 +836,28 @@ namespace PaymentModule.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.FamilyEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.UserEntity", "User")
+                        .WithOne("Family")
+                        .HasForeignKey("PaymentModule.Entities.FamilyEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.OverviewEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.UserEntity", "User")
+                        .WithOne("Overview")
+                        .HasForeignKey("PaymentModule.Entities.OverviewEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.PaymentRequestEntity", b =>
                 {
                     b.HasOne("PaymentModule.Entities.DetailRequestEntity", "DetailRequest")
@@ -455,6 +881,26 @@ namespace PaymentModule.Migrations
                     b.Navigation("DetailRequest");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.RelationshipEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.FamilyEntity", null)
+                        .WithMany("relationships")
+                        .HasForeignKey("FamilyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.SignatureEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.UserEntity", "User")
+                        .WithOne("Signature")
+                        .HasForeignKey("PaymentModule.Entities.SignatureEntity", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("UserRole", b =>
                 {
                     b.HasOne("PaymentModule.Entities.RoleEntity", null)
@@ -468,6 +914,11 @@ namespace PaymentModule.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.AdditionalEntity", b =>
+                {
+                    b.Navigation("contracts");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.CurrencyEntity", b =>
@@ -492,6 +943,11 @@ namespace PaymentModule.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.FamilyEntity", b =>
+                {
+                    b.Navigation("relationships");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.PaymentMethodEntity", b =>
                 {
                     b.Navigation("DetailRequests");
@@ -509,10 +965,22 @@ namespace PaymentModule.Migrations
 
             modelBuilder.Entity("PaymentModule.Entities.UserEntity", b =>
                 {
+                    b.Navigation("Additional")
+                        .IsRequired();
+
+                    b.Navigation("Family")
+                        .IsRequired();
+
                     b.Navigation("MyAccount")
                         .IsRequired();
 
+                    b.Navigation("Overview")
+                        .IsRequired();
+
                     b.Navigation("PaymentRequests");
+
+                    b.Navigation("Signature")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

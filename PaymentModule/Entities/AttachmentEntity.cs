@@ -13,6 +13,6 @@ namespace PaymentModule.Entities
         }
         public string FilePath { get; set; }
         public string FileType { get; set; }
-        public Guid DetailRequestId { get; set; }
+        public Guid DetailRequestId { get; set; }   
     }
 }

@@ -188,38 +188,38 @@ namespace PaymentModule.Controllers
             }
             return Ok(listPaymentRequestDetail[listPaymentRequestDetail.Count - 1]);
         }
-        [HttpPost]
+        /*[HttpPost]
         public IActionResult SubmitRequest(CreatePaymentRequestDto prd)
-        {
-            Guid theId = Guid.NewGuid();
+         {
+             Guid theId = Guid.NewGuid();
 
-            var detailRequestDto = new DetailRequestDto
-            {
-                Purpose = prd.Purpose,
-                DepartmentName = prd.Department,
-                PaymentFor = prd.PaymentFor,
-                SupplierName = prd.Supplier,
-                Currency = prd.Currency,
-                PONumber = prd.PONumber,
-                PaymentMethod = prd.PaymentMethod,
-            };
+             var detailRequestDto = new DetailRequestDto
+             {
+                 Purpose = prd.Purpose,
+                 DepartmentName = prd.Department,
+                 PaymentFor = prd.PaymentFor,
+                 SupplierName = prd.Supplier,
+                 Currency = prd.Currency,
+                 PONumber = prd.PONumber,
+                 PaymentMethod = prd.PaymentMethod,
+             };
 
-            List<DetailTableDto> detailTable = new List<DetailTableDto>();
-            foreach (DetailTableDto raw in prd.DetailTable)
-            {
-                detailTable.Add(raw);
-            }
+             List<DetailTableDto> detailTable = new List<DetailTableDto>();
+             foreach (DetailTableDto raw in prd.DetailTable)
+             {
+                 detailTable.Add(raw);
+             }
 
-            List<ApproverDto> approverList = new List<ApproverDto>();
-            foreach (ApproverDto app in prd.Approvers)
-            {
-                approverList.Add(app);
-            }
-            InsertDetailRequest(detailRequestDto, theId);
-            InsertDetailTable(detailTable, theId);
-            InsertApprovers(approverList, theId);
-            InsertpaymentRequest(theId);
-            return Ok(new { theId, detailRequestDto });
-        }
+             List<ApproverDto> approverList = new List<ApproverDto>();
+             foreach (ApproverDto app in prd.Approvers)
+             {
+                 approverList.Add(app);
+             }
+             InsertDetailRequest(detailRequestDto, theId);
+             InsertDetailTable(detailTable, theId);
+             InsertApprovers(approverList, theId);
+             InsertpaymentRequest(theId);
+             return Ok(new { theId, detailRequestDto });
+         }*/
     }
 }

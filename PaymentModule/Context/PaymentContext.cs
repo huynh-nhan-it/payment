@@ -22,9 +22,18 @@ namespace PaymentModule.Context
         public virtual DbSet<SupplierEntity> Suppliers { get; set; }
         public virtual DbSet<CurrencyEntity> Currencies { get; set; }
         public virtual DbSet<AttachmentEntity> Attachments { get; set; }
-        public virtual DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+        public virtual DbSet<PaymentMethodEntity> PaymentMethods { get; set; } 
+        public virtual DbSet<OverviewEntity> Overviews { get; set; }
+        public virtual DbSet<AdditionalEntity> Additionals { get; set; }
+
+        public virtual DbSet<ContractEntity> Contracts { get; set; }
+        public virtual DbSet<FamilyEntity> Families { get; set; }
+
+        public virtual DbSet<RelationshipEntity> Relationships { get; set; }
+        public virtual DbSet<SignatureEntity> Signatures { get; set; }
 
         public virtual DbSet<DetailTableEntity> DetailTables { get; set; }
+        
 
        /* public List<RoleEntity> ExecuteRawSql(string sql)
         {
@@ -51,15 +60,49 @@ namespace PaymentModule.Context
                 .HasForeignKey<PaymentRequestEntity>(a => a.DetailRequestId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<UserEntity>()
+                .HasOne(u => u.Overview)
+                .WithOne(a => a.User)
+                .HasForeignKey<OverviewEntity>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserEntity>()
+                .HasOne(u => u.Additional)
+                .WithOne(a => a.User)
+                .HasForeignKey<AdditionalEntity>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserEntity>()
+               .HasOne(u => u.Family)
+               .WithOne(a => a.User)
+               .HasForeignKey<FamilyEntity>(a => a.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserEntity>()
+                .HasOne(u => u.Signature)
+                .WithOne(a => a.User)
+                .HasForeignKey<SignatureEntity>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Thiết lập mối quan hệ 1-n
+
+            modelBuilder.Entity<AdditionalEntity>()
+               .HasMany(u => u.contracts)
+               .WithOne()
+               .HasForeignKey(r => r.AddtionalId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FamilyEntity>()
+               .HasMany(u => u.relationships)
+               .WithOne()
+               .HasForeignKey(r => r.FamilyId)
+               .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<StatusEntity>()
                .HasMany(u => u.PaymentRequests)
                .WithOne()
                .HasForeignKey(r => r.StatusId)
                .OnDelete(DeleteBehavior.Cascade);
-
-           
 
             modelBuilder.Entity<UserEntity>()
                 .HasMany(u => u.PaymentRequests)
