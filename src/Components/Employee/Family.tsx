@@ -12,18 +12,18 @@ interface Employee {
 interface OverviewProps {
   data: Employee[];
   isEditable?: boolean;
-  setData: React.Dispatch<React.SetStateAction<Employee[]>>
+  setData: React.Dispatch<React.SetStateAction<Employee[]>>;
 }
-interface FamilyInfor{
+interface FamilyInfor {
   key: string;
-  label:string;
-  children:{
+  label: string;
+  children: {
     key: string;
     name: string;
-    infor: string|number;
+    infor: string | number;
     isEditable: boolean;
     type: string;
-  }[]
+  }[];
 }
 
 interface AdditionalProps {
@@ -37,7 +37,7 @@ const Family: React.FC<AdditionalProps> = ({ data, isEditable, setData }) => {
     value: string | number,
     parentKey: string,
     childKey: string,
-    dataIndex: keyof FamilyInfor['children'][number]
+    dataIndex: keyof FamilyInfor["children"][number]
   ) => {
     const updatedData = data.map((row) => {
       if (row.key === parentKey) {
@@ -58,56 +58,67 @@ const Family: React.FC<AdditionalProps> = ({ data, isEditable, setData }) => {
 
   return (
     <div>
-
       <Form>
-
-        {data.map((item) => (
-          (item.children.map((child) => (
-            <Form.Item
-              colon={false}
-              labelCol={{ span: 6, style: { display: "flex" } }}
-              style={{
-                padding: "4px 8px",
-                borderBottom: "solid #ccc 0.2px",
-                marginBottom: "0px",
-              }}
-              key={child.key}
-              label={child.name}
-            >
-
-              {isEditable ? (
-                child.isEditable ? (
-                  child.type === "date" ? (
-                    <DatePicker
-                      style={{ width: "100%" }}
-                      onChange={(e, datestring) =>
-                        handleInputChange(datestring, item.key, child.key, "infor")
-                      }
-                    />
+        {data.map((item: any) => {
+          return (
+            <div key={item.key}>
+              <div style={{ display: "flex" }}>{item.label}</div>
+              {item.children.map((child: any) => (
+                <Form.Item
+                  colon={false}
+                  labelCol={{ span: 6, style: { display: "flex" } }}
+                  style={{
+                    padding: "4px 8px",
+                    borderBottom: "solid #ccc 0.2px",
+                    marginBottom: "0px",
+                  }}
+                  key={child.key}
+                  label={child.name}>
+                  {isEditable ? (
+                    child.isEditable ? (
+                      child.type === "date" ? (
+                        <DatePicker
+                          style={{ width: "100%" }}
+                          onChange={(e, datestring) =>
+                            handleInputChange(
+                              datestring,
+                              item.key,
+                              child.key,
+                              "infor"
+                            )
+                          }
+                        />
+                      ) : (
+                        <Input
+                          style={{ width: "100%" }}
+                          value={child.infor}
+                          onChange={(e) =>
+                            handleInputChange(
+                              e.target.value,
+                              item.key,
+                              child.key,
+                              "infor"
+                            )
+                          }
+                        />
+                      )
+                    ) : (
+                      <Input
+                        style={{ width: "100%" }}
+                        value={child.infor}
+                        disabled={true}
+                      />
+                    )
                   ) : (
-                    <Input
-                      style={{ width: "100%" }}
-                      value={child.infor}
-                      onChange={(e) =>
-                        handleInputChange(e.target.value, item.key, child.key, "infor")
-                      }
-                    />
-                  )
-                ) : (
-                  <Input
-                    style={{ width: "100%" }}
-                    value={child.infor}
-                    disabled={true}
-                  />
-                )
-              ) : (
-                <span style={{ display: "flex", alignItems: "start" }}>
-                  {child.infor}
-                </span>
-              )}
-            </Form.Item>
-          )))
-        ))}
+                    <span style={{ display: "flex", alignItems: "start" }}>
+                      {child.infor}
+                    </span>
+                  )}
+                </Form.Item>
+              ))}
+            </div>
+          );
+        })}
       </Form>
 
       {/* {data.map((item) =>
@@ -156,9 +167,6 @@ const Family: React.FC<AdditionalProps> = ({ data, isEditable, setData }) => {
     </Form.Item>
   ))
 )} */}
-
-
-
 
       {/* <Button onClick={handleSave} >Save</Button> */}
       {/* <Table

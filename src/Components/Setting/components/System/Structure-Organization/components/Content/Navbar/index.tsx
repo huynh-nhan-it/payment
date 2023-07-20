@@ -3,6 +3,7 @@ import "../../../css/index.css";
 import { MdOutlineGroups } from "react-icons/md";
 import { Affix, Button, Input } from "antd";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const NavbarDepartment = () => {
   const Department = [
@@ -83,16 +84,13 @@ const NavbarDepartment = () => {
       key: "19",
       name: "UX UI",
     },
-    
   ];
 
-  const [dataDepartment, setDataDepartment] = useState([])
+  const [dataDepartment, setDataDepartment] = useState([]);
 
   useEffect(() => {
     axios
-      .get(
-        `http://localhost:5005/api/PaymentRequest/`
-      )
+      .get(`http://localhost:5005/api/PaymentRequest/`)
       .then((response) => {
         setDataDepartment(response.data);
       })
@@ -101,24 +99,25 @@ const NavbarDepartment = () => {
       });
   }, []);
 
-
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
-  const handleTest = () =>{
+  const handleTest = () => {
     console.log("object");
-  }
+  };
   return (
     <div className="navbar-department">
       <div className="search-department">
-      <Input placeholder="Search" />
+        <Input placeholder="Search" />
       </div>
       <div className="scrollable-container">
         <div className="background">
           <Affix target={() => container}>
             <ul>
               {Department.map((dep) => (
-                <li onClick={(dep)=>handleTest()} className="department-list" key={dep?.key}>
-                  <a className="org-department display-flex color-black" href="#">
+                <li className="department-list" key={dep?.key}>
+                  <a
+                    className="org-department display-flex color-black"
+                    href="#">
                     <span className="org-department-icon">
                       <MdOutlineGroups />
                     </span>

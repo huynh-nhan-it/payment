@@ -70,8 +70,8 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable, setData }) =>
       <Form>
         {data.map((item: any) => {
             return (
-              <>
-                <span>{item.label}</span>
+              <div key={item.key}>
+                <div style={{display:"flex"}}>{item.label}</div>
                 {
                   (item.children.map((child: any) => (
                     <Form.Item
@@ -119,7 +119,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable, setData }) =>
                     </Form.Item>
                   )))
                 }
-              </>
+              </div>
               
             )
         })
