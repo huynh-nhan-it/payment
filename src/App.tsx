@@ -15,6 +15,7 @@ import RequestDetailsLayout2 from "./Components/Request/component/CreateRequest/
 import { useState } from "react";
 import Setting from "./Components/Setting";
 import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
+import FormRequest from "./Components/PaymentRequest/FormRequest";
 const { Search } = Input;
 
 function App() {
@@ -74,8 +75,8 @@ function App() {
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<RegisterForm />}></Route>
                     <Route
-                      path="/request/create-request"
-                      element={<RequestDetailsLayout2 />}></Route>
+                      path="PaymentRequest"
+                      element={<FormRequest/>}></Route>
                   </Routes>
                 </Content>
               </Layout>
