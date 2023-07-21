@@ -34,6 +34,7 @@ builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 builder.Services.AddScoped<IDetailRequestRepository, DetailRequestRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPersonalService, PersonalService>();
 
 //Add 
 builder.Services.AddHttpContextAccessor();
