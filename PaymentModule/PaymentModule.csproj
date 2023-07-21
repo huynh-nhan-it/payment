@@ -23,8 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="data\image\avatar\" />
+    <Folder Include="data\image\signature\" />
+    <Folder Include="data\request\" />
     <Folder Include="ExcelFiles\" />
-    <Folder Include="data\" />
   </ItemGroup>
 
 </Project>

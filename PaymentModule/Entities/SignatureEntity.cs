@@ -8,8 +8,6 @@
         public UserEntity User { get; set; }
         public string QRcode { get; set; }
 
-        public string Email { get; set; }
-
         public DateTime dateTime { get; set; }
 
         public string ImagePath { get; set; }

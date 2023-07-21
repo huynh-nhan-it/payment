@@ -8,7 +8,6 @@ using Microsoft.Data.SqlClient;
 using PaymentModule.DTOs;
 using PaymentModule.Repository;
 using PaymentModule.Service;
-using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
@@ -315,7 +314,7 @@ namespace PaymentModule.Controllers
             var resultHandleAP = HandleApprovers(approvers, theId).Value as dynamic;
             var resultHandleFile = await handleFile(files, theId);
             var filesResults = resultHandleFile.Value as dynamic;
-            string filePath = Path.Combine("data", theId.ToString());
+            string filePath = Path.Combine("data/request", theId.ToString());
 
 
             if(purpose == null || department == null || paymentfor == null || supplier == null)
@@ -351,7 +350,9 @@ namespace PaymentModule.Controllers
 
             _context.SaveChanges();
             var jsonPaymentRequests = System.Text.Json.JsonSerializer.Serialize(new { PaymentRequests = _context.PaymentRequests.ToList() }, options);
-            return Ok(new {jsonPaymentRequests, detailTables});
+            string formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(jsonPaymentRequests), Formatting.Indented);
+
+            return Ok(new { success = true, error = false, formattedJson }) ;
   
         }
 

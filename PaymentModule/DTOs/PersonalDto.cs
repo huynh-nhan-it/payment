@@ -1,17 +1,17 @@
-﻿namespace PaymentModule.DTOs
+﻿using PaymentModule.Entities;
+
+namespace PaymentModule.DTOs
 {
     public class PersonalDto
     {
-        public string Rank { get; set; }
-        public string EmployeeType { get; set; }
-        public string Nation { get; set; }
-        public string Phone { get; set; }
-        public string IDCardNumber { get; set; }
-        public DateTime DateOfIDCard { get; set; }
-        public string PlaceOfIDCard { get; set; }
-        public string HealthInsurance { get; set; }
-        public DateTime StartingDate { get; set; }
+        public IFormFile Avatar { get; set; }
+        
+        public OverviewDto overview { get; set; }
 
+        public AdditionalDto additional { get; set; }
 
+        public FamilyDto family { get; set; }
+
+        public SignatureDto signature { get; set; }
     }
 }

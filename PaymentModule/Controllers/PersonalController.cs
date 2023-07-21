@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PaymentModule.Context;
+using PaymentModule.DTOs;
 
 namespace PaymentModule.Controllers
 {
@@ -24,7 +25,7 @@ namespace PaymentModule.Controllers
             _userService = userService;
         }
 
-        [HttpGet("employeeInfo")]
+        [HttpGet("EmployeeInfo")]
 
         public IActionResult GetInforEmployee()
         {
@@ -60,6 +61,14 @@ namespace PaymentModule.Controllers
 
 
             return Ok(InfoUser);
+        }
+
+        [HttpPost("EditInfoEmployee")]
+
+        public IActionResult UpdateInfoEmployee([FromForm] PersonalDto personal)
+        {
+            /*IFormFile =*/
+            return Ok();
         }
 
     }

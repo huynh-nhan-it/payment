@@ -43,7 +43,7 @@ namespace PaymentModule.Service
             {
                 var result = await ProcessFileAsync(file, Id);
                 var data = result.Value as dynamic;
-                var filePath = Path.Combine("data", Id.ToString());
+                var filePath = Path.Combine("data/request", Id.ToString());
                 var fileName = Path.Combine(filePath, file.FileName);
                 if (data != null && data.Success != null && data.Success)
                 {
@@ -81,7 +81,7 @@ namespace PaymentModule.Service
                 var error = new { Error = true, Success = false, Message = "File size should not exceed 20MB" };
                 return new ObjectResult(error) { StatusCode = 400 };
             }
-            var directoryPath = Path.Combine("data", Id.ToString());
+            var directoryPath = Path.Combine("data/request", Id.ToString());
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);

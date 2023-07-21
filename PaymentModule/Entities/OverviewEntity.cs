@@ -15,13 +15,9 @@ namespace PaymentModule.Entities
         public UserEntity User { get; set; }
 
         // Các thuộc tính khác
-        public string Email { get; set; }
         public int EmployeeNumber { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public string Sex { get; set; }
         public DateTime BirthDay { get; set; }
-        public string JobTitle { get; set; }
         public string Position { get; set; }
         public string Company { get; set; }
         public string Unit { get; set; }

@@ -116,7 +116,7 @@ namespace PaymentModule.Controllers
             _context.PaymentRequests.Add(paymentRequest);
             _context.SaveChanges();
         }
-
+/*
         [HttpGet("{RequestCode}")]
         public IActionResult GetDetailRequestByCode(string RequestCode)
         {
@@ -187,7 +187,7 @@ namespace PaymentModule.Controllers
                 }
             }
             return Ok(listPaymentRequestDetail[listPaymentRequestDetail.Count - 1]);
-        }
+        }*/
         /*[HttpPost]
         public IActionResult SubmitRequest(CreatePaymentRequestDto prd)
          {
