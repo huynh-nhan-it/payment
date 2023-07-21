@@ -11,6 +11,7 @@ using PaymentModule.Service;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PaymentModule.Controllers
 {
@@ -54,7 +55,6 @@ namespace PaymentModule.Controllers
             _connectionStringSettings = connectionStringSettings;
         }
 
-
         private async Task<ObjectResult> handleFile([FromForm] IFormFileCollection files, Guid Id)
         {
             var result = await _userService.HandleFile(files, Id);
@@ -66,8 +66,6 @@ namespace PaymentModule.Controllers
             return new ObjectResult(new { message = data.Message, success = false, error = true });
 
         }
-
-
         private ObjectResult HandleDetailRequest(DetailRequestDto request, Guid theId)
         {
            try
@@ -96,6 +94,28 @@ namespace PaymentModule.Controllers
             }
         }
 
+
+        private ObjectResult HandleTotalPayment(TotalPaymentDto request, Guid theId)
+        {
+            try
+            {
+                var totalPayment = new TotalPaymentEntity
+                {
+                    SuggestedAmount = request.SuggestedAmount,
+                    Tax = request.Tax,
+                    AdvanceAmount = request.AdvanceAmount,
+                    TotalPayment = request.TotalPayment,
+                    DetailRequestID = theId,
+                };
+
+                return new ObjectResult(new { totalPayment = totalPayment, success = true, error = false });
+            }
+            catch (Exception e)
+            {
+                return new ObjectResult(new { success = false, error = true, message = e.Message });
+            }
+        }
+
         private ObjectResult HandleDetailTable(List<DetailTableDto> Table, Guid requestId)
         {
             string error_mess = "Please enter the required information";
@@ -121,7 +141,6 @@ namespace PaymentModule.Controllers
                 
             }
             return new ObjectResult(new { detailTableEntity = detailTableEntitys, success = true, error = false});
-
         }
 
         private ObjectResult HandleApprovers(List<ApproverDto> approvers, Guid requestId)
@@ -130,12 +149,12 @@ namespace PaymentModule.Controllers
             string error = "Please enter the required information";
             try
             {
-
+                int queue = 1;
                 foreach (ApproverDto approver in approvers)
                 {
                     if (approver == null) { return new ObjectResult(new { success = false, error = true, message = error }); }
 
-                    string insertQuery = "INSERT INTO ApproverDetailRequest (ApproverId, DetailRequestId) VALUES (@ApproverId, @DetailRequestId)";
+                    string insertQuery = "INSERT INTO ApproverDetailRequest (ApproverId, DetailRequestId, Queue, Status) VALUES (@ApproverId, @DetailRequestId, @Queue, @Status)";
 
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
@@ -144,10 +163,20 @@ namespace PaymentModule.Controllers
                             // Thay thế các tham số trong câu truy vấn bằng giá trị thực tế
                             command.Parameters.AddWithValue("@DetailRequestId", requestId.ToString());
                             command.Parameters.AddWithValue("@ApproverId", (Guid)_userRepository.GetIdByEmail(approver.Email));
+                            command.Parameters.AddWithValue("@Queue", queue);
+                            if (queue == 1)
+                            {
+                                command.Parameters.AddWithValue("@Status", "Current");
+                            }
+                            else
+                            {
+                                command.Parameters.AddWithValue("@Status", "Waiting");
+                            }
                             connection.Open();
                             command.ExecuteNonQuery();
                         }
                     }
+                    queue++;
                 }
                 return new ObjectResult(new { success = true, error = false, });
             }
@@ -156,65 +185,7 @@ namespace PaymentModule.Controllers
                 return new ObjectResult(new { success = false, error = true, message = e.Message });
             }
         }
-
-        /*private ObjectResult InsertpaymentRequest(Guid requestId, string userId)
-        {
-            string connectionString = _connectionStringSettings.ConnectionString;
-            string RequestCode;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    // Mở kết nối
-                    connection.Open();
-
-                    // Tạo câu truy vấn SQL để lấy dòng cuối cùng từ bảng Employees (sắp xếp theo cột Id giảm dần)
-                    string sqlQuery = "SELECT TOP 1 RequestCode FROM PaymentRequests ORDER BY Id DESC";
-
-                    // Tạo đối tượng SqlCommand
-                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                    {
-                        // Thực thi câu truy vấn và lấy dữ liệu vào SqlDataReader
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            string resultRequestCode;
-                            if (reader.Read())
-                            {
-                                RequestCode = reader.GetString(0);
-                                resultRequestCode = _userService.GetRequestCode(RequestCode);
-                                if (resultRequestCode == "") {
-                                    return new ObjectResult(new { success = false, error = true, message = "Can't not get request code from server" });
-                                }
-                            }
-                            else
-                            {
-                                resultRequestCode = "2023OPS-PAY-000001";
-                            }
-                            var paymentRequest = new PaymentRequestEntity
-                            {
-                                Id = Guid.NewGuid(),
-                                RequestCode = resultRequestCode, //Testing...
-                                Purpose = _detailRequestRepository.GetPurposeById(requestId),
-                                StatusId = new Guid("80BCF31A-08AA-433D-879D-AB55E7730045"), //Approving
-                                UserId = new Guid(userId == "" ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9": userId), //Testing...
-                                CreateAt = DateTime.Now,
-                                DetailRequestId = requestId
-                            };
-                            _context.PaymentRequests.Add(paymentRequest);
-                            _context.SaveChanges();
-                            return new ObjectResult(new { success = true, error = false, message = "Insert payment request success" });
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return new ObjectResult(new { success = false, error = true, message = ex.ToString() });
-                }
-                
-            }
-        }*/
-
+       
         private ObjectResult InsertpaymentRequest(Guid requestId, string userId)
         {
             try
@@ -269,8 +240,15 @@ namespace PaymentModule.Controllers
             string supplier = prd.Supplier; 
             string currency = prd.Currency;
             int ponumber = prd.PONumber;
-            IFormFileCollection files = Request.Form.Files;
+            IFormFileCollection files = prd.files;
             string paymentmethod = prd.PaymentMethod;
+            
+
+            double suggestedAmount = prd.SuggestedAmount;
+            double tax = prd.Tax;
+            double advanceAmount = prd.AdvanceAmount;
+            double totalPayment = prd.TotalPayment;
+
             List<DetailTableDto> detailTables = JsonConvert.DeserializeObject<List<DetailTableDto>>(prd.DetailTable); 
             List<ApproverDto> approvers = JsonConvert.DeserializeObject<List<ApproverDto>>(prd.Approvers);
             string authorizationHeader = Request.Headers["Authorization"];
@@ -278,7 +256,6 @@ namespace PaymentModule.Controllers
             string userId = "";
             var options = new JsonSerializerOptions{ WriteIndented = true, ReferenceHandler = ReferenceHandler.Preserve};
        
-
 
             /* if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
              {
@@ -288,7 +265,6 @@ namespace PaymentModule.Controllers
                  if (userId == "") { return BadRequest(new ObjectResult(new { success = false, error = true, message = "Process get token has error" })); }
              }
              else { return BadRequest(new { success = false, error = true, message = "Token not found in header" }); }*/
-
 
 
             var detailRequestDto = new DetailRequestDto
@@ -302,6 +278,15 @@ namespace PaymentModule.Controllers
                 PaymentMethod = paymentmethod,
             };
 
+           
+
+            var totalPaymentDto = new TotalPaymentDto
+            {
+                SuggestedAmount = suggestedAmount,
+                Tax = tax,
+                AdvanceAmount = advanceAmount,
+                TotalPayment = totalPayment,
+            };
 
             var resultHandleDR = HandleDetailRequest(detailRequestDto, theId).Value as dynamic;
             if(resultHandleDR?.success)
@@ -311,13 +296,18 @@ namespace PaymentModule.Controllers
             }
 
             var resultHandDT = HandleDetailTable(detailTables, theId).Value as dynamic;
+            var resultHandTotal = HandleTotalPayment(totalPaymentDto, theId).Value as dynamic;
             var resultHandleAP = HandleApprovers(approvers, theId).Value as dynamic;
             var resultHandleFile = await handleFile(files, theId);
             var filesResults = resultHandleFile.Value as dynamic;
             string filePath = Path.Combine("data/request", theId.ToString());
 
-
-            if(purpose == null || department == null || paymentfor == null || supplier == null)
+            if (resultHandTotal?.success)
+            {
+                _context.TotalPayments.Add(resultHandTotal?.totalPayment);
+                _context.SaveChanges();
+            }
+            if (purpose == null || department == null || paymentfor == null || supplier == null)
             {
                 if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
                 return BadRequest("Please enter the required information");
@@ -329,17 +319,17 @@ namespace PaymentModule.Controllers
             if (resultHandleDR ?.error) { return BadRequest(resultHandleDR?.message); }
             if (resultHandDT ?.error) { return BadRequest(resultHandDT ?.message); }
             if (resultHandleAP ?.error) { return BadRequest(resultHandleAP?.message); }
-            if (filesResults?.error) { return BadRequest(filesResults?.message); }
+            if (resultHandTotal?.error) { return BadRequest(resultHandTotal?.message); }
 
-            foreach(DetailTableEntity table in resultHandDT.detailTableEntity)
+            foreach (DetailTableEntity table in resultHandDT.detailTableEntity)
             {
                 _context.DetailTables.Add(table);
             }
+
             foreach (AttachmentEntity attachment in filesResults?.attachments)
             {
                 _context.Attachments.Add(attachment);
             }
-
 
             var resultInsertpaymentRequest = InsertpaymentRequest(theId, userId).Value as dynamic;
             if (resultInsertpaymentRequest?.error) {
@@ -347,13 +337,12 @@ namespace PaymentModule.Controllers
                 return BadRequest(resultInsertpaymentRequest?.message); 
             }
 
-
             _context.SaveChanges();
             var jsonPaymentRequests = System.Text.Json.JsonSerializer.Serialize(new { PaymentRequests = _context.PaymentRequests.ToList() }, options);
             string formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(jsonPaymentRequests), Formatting.Indented);
 
             return Ok(new { success = true, error = false, formattedJson }) ;
-  
+
         }
 
       
@@ -395,7 +384,7 @@ namespace PaymentModule.Controllers
                     if (IsTheLastOne(approverId, requestId))
                     {
                         //cập nhật status bên payment request thành approved
-
+                        ChangePRStatus(requestId, new Guid("66617255-A3A8-4483-9008-B86F16765E6B"));
                         return Ok(new { mess = "ALL APPROVED" });
                     }
                     else
@@ -408,9 +397,9 @@ namespace PaymentModule.Controllers
                 //nếu approver chọn Rejected => set status trong payment-request => Rejected & tất cả status của requets đó trong approver-detail-table thành Rejected => kết thúc thuật toán
                 {
                     //Viết hàm cập nhật status bên payment request
-                    ChangePRStatus(approverId, new Guid("8845CC80-77F7-4F7B-B23D-CA994B8D07A4"));
+                    ChangePRStatus(requestId, new Guid("8845CC80-77F7-4F7B-B23D-CA994B8D07A4"));
                     //Viết hàm cập nhật all status bên approver-detail-table thành Rejected 
-
+                    ChangeAllStatusReject(requestId);
                     return Ok(new { mess = "ALL REJECTED" });
                 }
             }
@@ -576,5 +565,20 @@ namespace PaymentModule.Controllers
             return true;
         }
 
+        private bool ChangeAllStatusReject(Guid DetailRequestId)
+        {
+            string updateQuery = "Update ApproverDetailRequest set Status = @Status where DetailRequestId = @DetailRequestId";
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@Status", "Rejected");
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    command.ExecuteNonQuery();
+                }
+            }
+            return true;
+        } 
     }
 }

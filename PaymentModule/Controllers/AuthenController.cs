@@ -50,6 +50,7 @@ namespace PaymentModule.Controllers
                     LastName = request.lastName,
                     Email = request.email,
                     PhoneNumber = request.phoneNumber,
+                    Avatar = request.avatar,
                     JobTitle = request.jobTitle,
                 };
                 _context.Users.Add(userEntity);

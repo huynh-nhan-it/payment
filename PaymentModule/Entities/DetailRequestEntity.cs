@@ -20,6 +20,9 @@ namespace PaymentModule.Entities
         public ICollection<UserEntity> Approvers { get; set; }
         public ICollection<DetailTableEntity> DetailRequestTables { get; set; }
         public Guid PaymentMethodId { get; set; }
+
+        public TotalPaymentEntity TotalPayment { get; set; }
+        public BankEntity Bank { get; set; }
     }
 }
 

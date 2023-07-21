@@ -12,7 +12,7 @@ using PaymentModule.Context;
 namespace PaymentModule.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-    [Migration("20230721035316_initdb")]
+    [Migration("20230721052412_initdb")]
     partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,15 +26,21 @@ namespace PaymentModule.Migrations
 
             modelBuilder.Entity("ApproverDetailRequest", b =>
                 {
-                    b.Property<Guid>("ApproverId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("DetailRequestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ApproverId", "DetailRequestId");
+                    b.Property<Guid>("ApproverId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("DetailRequestId");
+                    b.Property<int>("Queue")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("DetailRequestId", "ApproverId", "Queue", "Status");
+
+                    b.HasIndex("ApproverId");
 
                     b.ToTable("ApproverDetailRequest");
                 });
@@ -206,6 +212,38 @@ namespace PaymentModule.Migrations
                     b.HasIndex("DetailRequestId");
 
                     b.ToTable("Attachments");
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.BankEntity", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Beneficiary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DetailRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SupplierID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailRequestId")
+                        .IsUnique()
+                        .HasFilter("[DetailRequestId] IS NOT NULL");
+
+                    b.HasIndex("SupplierID");
+
+                    b.ToTable("Banks");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.ContractEntity", b =>
@@ -664,6 +702,35 @@ namespace PaymentModule.Migrations
                     b.ToTable("Suppliers");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.TotalPaymentEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("AdvanceAmount")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("DetailRequestID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("SuggestedAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Tax")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalPayment")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailRequestID")
+                        .IsUnique();
+
+                    b.ToTable("TotalPayments");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -761,6 +828,21 @@ namespace PaymentModule.Migrations
                         .HasForeignKey("DetailRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.BankEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.DetailRequestEntity", "DetailRequest")
+                        .WithOne("Bank")
+                        .HasForeignKey("PaymentModule.Entities.BankEntity", "DetailRequestId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PaymentModule.Entities.SupplierEntity", null)
+                        .WithMany("Banks")
+                        .HasForeignKey("SupplierID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("DetailRequest");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.ContractEntity", b =>
@@ -879,6 +961,17 @@ namespace PaymentModule.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.TotalPaymentEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.DetailRequestEntity", "DetailRequest")
+                        .WithOne("TotalPayment")
+                        .HasForeignKey("PaymentModule.Entities.TotalPaymentEntity", "DetailRequestID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DetailRequest");
+                });
+
             modelBuilder.Entity("UserRole", b =>
                 {
                     b.HasOne("PaymentModule.Entities.RoleEntity", null)
@@ -915,9 +1008,15 @@ namespace PaymentModule.Migrations
                 {
                     b.Navigation("Attachments");
 
+                    b.Navigation("Bank")
+                        .IsRequired();
+
                     b.Navigation("DetailRequestTables");
 
                     b.Navigation("PaymentRequest")
+                        .IsRequired();
+
+                    b.Navigation("TotalPayment")
                         .IsRequired();
                 });
 
@@ -938,6 +1037,8 @@ namespace PaymentModule.Migrations
 
             modelBuilder.Entity("PaymentModule.Entities.SupplierEntity", b =>
                 {
+                    b.Navigation("Banks");
+
                     b.Navigation("DetailRequests");
                 });
 

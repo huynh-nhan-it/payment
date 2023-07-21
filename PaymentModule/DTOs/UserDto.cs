@@ -8,6 +8,7 @@
         public string password { get; set; } = string.Empty;
         public string confirmPassword { get; set; } = string.Empty;
         public string phoneNumber { get; set; }  = string.Empty;
+        public string avatar { get; set; } = string.Empty;
         public string jobTitle { get; set; } = string.Empty; 
     }
 }

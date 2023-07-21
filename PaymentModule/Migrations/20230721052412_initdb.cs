@@ -319,12 +319,14 @@ namespace PaymentModule.Migrations
                 name: "ApproverDetailRequest",
                 columns: table => new
                 {
+                    DetailRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApproverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DetailRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Queue = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApproverDetailRequest", x => new { x.ApproverId, x.DetailRequestId });
+                    table.PrimaryKey("PK_ApproverDetailRequest", x => new { x.DetailRequestId, x.ApproverId, x.Queue, x.Status });
                     table.ForeignKey(
                         name: "FK_ApproverDetailRequest_DetailRequests_DetailRequestId",
                         column: x => x.DetailRequestId,
@@ -355,6 +357,34 @@ namespace PaymentModule.Migrations
                         name: "FK_Attachments_DetailRequests_DetailRequestId",
                         column: x => x.DetailRequestId,
                         principalTable: "DetailRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Banks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Beneficiary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SupplierID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DetailRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Banks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Banks_DetailRequests_DetailRequestId",
+                        column: x => x.DetailRequestId,
+                        principalTable: "DetailRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Banks_Suppliers_SupplierID",
+                        column: x => x.SupplierID,
+                        principalTable: "Suppliers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -426,6 +456,28 @@ namespace PaymentModule.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TotalPayments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SuggestedAmount = table.Column<double>(type: "float", nullable: false),
+                    Tax = table.Column<double>(type: "float", nullable: false),
+                    AdvanceAmount = table.Column<double>(type: "float", nullable: false),
+                    TotalPayment = table.Column<double>(type: "float", nullable: false),
+                    DetailRequestID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TotalPayments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TotalPayments_DetailRequests_DetailRequestID",
+                        column: x => x.DetailRequestID,
+                        principalTable: "DetailRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contracts",
                 columns: table => new
                 {
@@ -485,14 +537,26 @@ namespace PaymentModule.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApproverDetailRequest_DetailRequestId",
+                name: "IX_ApproverDetailRequest_ApproverId",
                 table: "ApproverDetailRequest",
-                column: "DetailRequestId");
+                column: "ApproverId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attachments_DetailRequestId",
                 table: "Attachments",
                 column: "DetailRequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Banks_DetailRequestId",
+                table: "Banks",
+                column: "DetailRequestId",
+                unique: true,
+                filter: "[DetailRequestId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Banks_SupplierID",
+                table: "Banks",
+                column: "SupplierID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contracts_AddtionalId",
@@ -569,6 +633,12 @@ namespace PaymentModule.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_TotalPayments_DetailRequestID",
+                table: "TotalPayments",
+                column: "DetailRequestID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_UserId",
                 table: "UserRole",
                 column: "UserId");
@@ -584,6 +654,9 @@ namespace PaymentModule.Migrations
 
             migrationBuilder.DropTable(
                 name: "Attachments");
+
+            migrationBuilder.DropTable(
+                name: "Banks");
 
             migrationBuilder.DropTable(
                 name: "Contracts");
@@ -604,13 +677,13 @@ namespace PaymentModule.Migrations
                 name: "Signatures");
 
             migrationBuilder.DropTable(
+                name: "TotalPayments");
+
+            migrationBuilder.DropTable(
                 name: "UserRole");
 
             migrationBuilder.DropTable(
                 name: "Additionals");
-
-            migrationBuilder.DropTable(
-                name: "DetailRequests");
 
             migrationBuilder.DropTable(
                 name: "Statuses");
@@ -619,7 +692,13 @@ namespace PaymentModule.Migrations
                 name: "Families");
 
             migrationBuilder.DropTable(
+                name: "DetailRequests");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Currencies");
@@ -632,9 +711,6 @@ namespace PaymentModule.Migrations
 
             migrationBuilder.DropTable(
                 name: "Suppliers");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

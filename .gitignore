@@ -24,3 +24,4 @@ logs/
 # Các thư mục cấu hình IDE
 .idea/
 .vscode/
+.Migrations/
