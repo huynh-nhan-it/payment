@@ -1,12 +1,14 @@
 import { DeleteTwoTone } from "@ant-design/icons";
-import { Button, Select } from "antd";
+import { Button, Layout, Select, theme } from "antd";
 import React from "react";
 import { useState } from "react";
 import './RequestDetails.css'
-
+const { Content } = Layout;
 const ApproverRequest: React.FC = () => {
     const [approvers, setApprovers] = useState([{ name: 'Approver 1', role: '' }]);
-
+    const {
+      token: { colorBgContainer },
+    } = theme.useToken();
   const addApprover = () => {
     const newApprover = {
       name: `Approver ${approvers.length + 1}`,
@@ -33,7 +35,10 @@ const ApproverRequest: React.FC = () => {
   ];
 
   return(
-    <div className="content-left">
+    <Layout hasSider>
+      <Layout >
+        <Content className='content-center' >
+    <div className="content-left" style={{background: colorBgContainer}}>
       <p>Send to approvers</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', textAlign:'left' }}>
         {approvers.map((approver, index) => (
@@ -51,6 +56,9 @@ const ApproverRequest: React.FC = () => {
       </div >
       <Button type = "primary"style={{ margin:'10px', display: 'flex', flexDirection: 'row', padding: 20, alignItems: 'center' }} onClick={addApprover}>+ Add Approver</Button>
     </div>
+    </Content>
+    </Layout>
+    </Layout>
   );
 };
 export default ApproverRequest;

@@ -1,57 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FormRequest from './FormRequest';
 import TableRequest from './TableRequest';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Item from 'antd/es/descriptions/Item.js';
+import AttachmentRequest from './AttachmentRequest';
+import ApproverRequest from './ApproverRequest';
 
 const ParentComponent = () => {
-  const [request, setRequest] = useState({
-    formData: {
-      purpose: '',
-      department: '',
-      paymentFor: '',
-      supplier: '',
-      currency: '',
-      poPrNumber: '',
-    },
-    paymentMethod: { paymentMethod: '' },
-  });
-  
-  const handleFormSubmit = (data: any) => {
-    setRequest((prevData) => ({
-      ...prevData,
-      formData: data,
-    }));
-  };
-  
-  const handleTableDataChange = (data: any) => {
-    setRequest((prevData) => ({
-      ...prevData,
-      paymentMethod: data,
-    }));
-  };
-
-  const handleSubmit = () => {
-    console.log(request)
-    // Gửi dữ liệu formData và tableData lên API bằng Axios
-    axios.post('http://localhost:5005/api/DetailRequest', request)
-      .then(response => {
-        // Xử lý kết quả sau khi gửi thành công
-      })
-      .catch(error => {
-        // Xử lý lỗi trong quá trình gửi
-      });
-  };
 
   return (
     <div>
       <FormRequest  />
-      <TableRequest onChange={handleTableDataChange} />
-      <button onClick={() => {
-        handleSubmit()
-      }}>Submit</button>
-    </div>
+      <TableRequest onChange={function (data: { paymentMethod: string; }): void {
+        throw new Error('Function not implemented.');
+      } } />
+      <AttachmentRequest/>
+      <ApproverRequest/>
+    </div>  
   );
 };
 

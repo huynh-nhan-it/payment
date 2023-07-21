@@ -16,6 +16,7 @@ import { useState } from "react";
 import Setting from "./Components/Setting";
 import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
 import FormRequest from "./Components/PaymentRequest/FormRequest";
+import SubmitRequest from "./Components/PaymentRequest/SubmitRequest";
 const { Search } = Input;
 
 function App() {
@@ -76,7 +77,7 @@ function App() {
                     <Route path="register" element={<RegisterForm />}></Route>
                     <Route
                       path="PaymentRequest"
-                      element={<FormRequest/>}></Route>
+                      element={<SubmitRequest/>}></Route>
                   </Routes>
                 </Content>
               </Layout>

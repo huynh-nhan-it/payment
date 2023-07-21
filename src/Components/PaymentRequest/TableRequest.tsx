@@ -121,7 +121,7 @@ interface Item {
   type PaymentMethodData = {
     paymentMethod :string;
   };
-  const TableRequest: React.FC<PaymentRequestProps> = ({onChange}) => {
+  const TableRequest: React.FC<PaymentRequestProps> = () => {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<Item[]>([
       {
@@ -416,7 +416,7 @@ interface Item {
     const handlePaymentMethodChange = (value: string) => {
           
       if (value !== 'Cash') {
-        onChange({ paymentMethod: value });
+        // onChange({ paymentMethod: value });
 
       }
       if (value === 'bank_transfer') {
