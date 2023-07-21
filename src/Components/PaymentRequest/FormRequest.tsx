@@ -56,7 +56,7 @@ const FormRequest: React.FC = () => {
     <Layout hasSider>
       <Layout >
         <Content className='content-center'>
-          <div style={{ padding: 20, textAlign: 'center', background: colorBgContainer }}>
+          <div style={{ paddingTop: 64, textAlign: 'center', background: colorBgContainer }}>
             <h1 style={{ fontSize: 28 }}>PAYMENT REQUEST</h1>
             <div className='row'>
               <div className='font_text'>

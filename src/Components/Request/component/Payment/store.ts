@@ -1,7 +1,7 @@
 // store.ts
 
-import { createStore, combineReducers } from 'redux';
-import filterReducer from './reducers/filterReducer';
+import { createStore, combineReducers } from "redux";
+import filterReducer from "./reducers/filterReducer";
 
 // Khởi tạo state gốc
 const rootReducer = combineReducers({

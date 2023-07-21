@@ -10,10 +10,12 @@ import { Link } from "react-router-dom";
 // import moment from 'moment';
 
 const { Header } = Layout;
-
-const HeaderPayment: React.FC = () => {
+interface HeaderProps {
+  exportData: () => void;
+}
+const HeaderPayment: React.FC<HeaderProps> = ({exportData}) => {
   return (
-    <Header
+    <Header 
       className="header-payment"
       style={{
         backgroundColor: "#F5F6FA",
@@ -21,7 +23,7 @@ const HeaderPayment: React.FC = () => {
       }}>
       <div className="payment-request">Payment Request</div>
       <div className="right-header">
-        <div className="export-file padding-10 bg-header-payment color-header-payment">
+        <div className="export-file padding-10 bg-header-payment color-header-payment" onClick={exportData}>
           {" "}
           <TbArrowBarToRight />
           <span className="padding-left-6 padding-right-6">Export Excel</span>
@@ -32,7 +34,7 @@ const HeaderPayment: React.FC = () => {
 
         <div className="create-new padding-10 bg-create-new color-white">
           {" "}
-         <Link to={"/request/create-request"}> + Create New</Link>
+         <Link style={{color:"#fff"}} to={"/request/create-request"}> + Create New</Link>
         </div>
       </div>
     </Header>

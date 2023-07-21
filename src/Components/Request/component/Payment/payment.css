@@ -1,93 +1,104 @@
-.header-payment{
+.header-payment {
     display: flex;
     justify-content: space-between;
     line-height: unset;
 }
 
-.export-file{
+.export-file {
     display: inline-flex;
     align-items: center;
 }
-.right-header{
+
+.export-file:hover {
+    cursor: pointer;
+}
+
+.right-header {
     display: flex;
 }
 
-.padding-10{
+.padding-10 {
     margin: 10px;
     padding: 10px;
     border: #DFE8F1 solid 1px;
 }
 
 
-.bg-header-payment{
+.bg-header-payment {
     background-color: #fff;
 }
 
-.bg-create-new{
+.bg-create-new {
     background-color: #5FB86C;
 }
 
-.color-header-payment{
+.color-header-payment {
     color: #8894A1;
 }
 
-.color-white{
+.color-white {
     color: #fff;
 }
 
-.plus-payment-new{
+.plus-payment-new {
     padding-right: 10px;
     font-size: 16px;
 }
 
-.filter{
+.filter {
     display: inline-flex;
     align-items: center;
     padding-left: 10px;
+    color: #8894A1;
+
 }
 
+.filter:hover {}
+
 .export-file svg,
-.filter svg{
+.filter svg {
     color: #5FB86C;
     font-size: 16px;
 }
-.padding-left-6{
+
+.padding-left-6 {
     padding-left: 6px;
 }
 
-.padding-right-6{
+.padding-right-6 {
     padding-right: 6px;
 }
 
-.payment-request{
+.payment-request {
     font-family: "Segoe UI";
     text-transform: uppercase;
     font-weight: bold;
     font-size: 20px;
 }
 
-.margin-bottom-8{
+.margin-bottom-8 {
     margin-bottom: 8px;
 }
 
-.width-100{
+.width-100 {
     width: 100%;
 }
 
-.padding-bottom-12{
+.padding-bottom-12 {
     padding-bottom: 12px;
 }
 
-.clear-payment{
+.clear-payment {
     float: right;
     background-color: #fff;
     color: #5FB86C;
 }
-.apply-payment{
+
+.apply-payment {
     float: right;
     background-color: #5FB86C;
 }
 
-.height-100{
+.height-100 {
     height: 100%;
 }

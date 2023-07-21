@@ -1,8 +1,8 @@
 import React from "react";
 import { Layout } from "antd";
 
-import { IoReturnDownBackSharp } from "react-icons/io5";
 import { AiOutlineSave } from "react-icons/ai";
+import { TiArrowBackOutline } from "react-icons/ti";
 const { Header } = Layout;
 
 interface Employee {
@@ -10,56 +10,63 @@ interface Employee {
   name: string;
   infor: string;
 }
-interface AdditionalInfor{
+interface AdditionalInfor {
   key: string;
   label: string;
   children: {
     key: string;
     name: string;
-    infor: string|number;
+    infor: string | number;
     isEditable: boolean;
     type: string;
-  }[]
+  }[];
 }
-interface FamilyInfor{
+interface FamilyInfor {
   key: string;
-  label:string;
-  children:{
+  label: string;
+  children: {
     key: string;
     name: string;
-    infor: string|number;
+    infor: string | number;
     isEditable: boolean;
     type: string;
-  }[]
+  }[];
 }
 
 interface HeaderEmployeeProps {
   isEditable: boolean;
-  data:[Employee[], AdditionalInfor[], FamilyInfor[]];
-  setEditable: React.Dispatch<React.SetStateAction<boolean>>
+  data: [Employee[], AdditionalInfor[], FamilyInfor[]];
+  setEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
-const HeaderEmployee: React.FC<HeaderEmployeeProps> = ({ isEditable, data, setEditable }) => {
-
-
-  const handleClickSave = () =>{
+const HeaderEmployee: React.FC<HeaderEmployeeProps> = ({
+  isEditable,
+  data,
+  setEditable,
+}) => {
+  const handleClickSave = () => {
     // console.log(isSave);
     console.log(data);
-    setEditable(false)
-  }
+    setEditable(false);
+  };
   return (
-    <Header
-      className="header-employee"
-      style={{
-        display: "flex",
-        backgroundColor: "#F5F6FA",
-        alignItems: "center",
-      }}>
-      <div onClick={handleClickSave}>{isEditable && <AiOutlineSave />}</div>
-      <IoReturnDownBackSharp />
-      <div className="return-employee">Return</div>
-    </Header>
+    <div>
+      <Header
+        className="header-employee"
+        style={{
+          display: "flex",
+          backgroundColor: "#F5F6FA",
+          alignItems: "center",
+        }}>
+        <div onClick={handleClickSave}>{isEditable && <AiOutlineSave />}</div>
+        <div className="return-employee">
+          <a href="/setting" className="text-header">
+            <TiArrowBackOutline />
+            Return
+          </a>
+        </div>
+      </Header>
+    </div>
   );
 };
 

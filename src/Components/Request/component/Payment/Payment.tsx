@@ -6,6 +6,8 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { ConnectedProps, connect } from "react-redux";
 import { RootState } from "./store";
+import HeaderPayment from "./Header";
+import * as XLSX from "xlsx";
 
 interface PaymentRequestList {
   requestCode: string;
@@ -14,6 +16,7 @@ interface PaymentRequestList {
   createdDate: string;
   status: string;
 }
+
 interface DataListProps extends ConnectedProps<typeof connector> {
   // Thêm các props khác nếu cần
 }
@@ -26,7 +29,6 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   const [createDateTo, setCreateDateTo] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(false)
   // console.log(filteredData);
 
   useEffect(() => {
@@ -82,13 +84,20 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
       dataIndex: "createdDate",
       render: (text: string, record: PaymentRequestList) => {
         const formattedDate = formatDate(text);
+        const statusColors: any = {
+          Approved: "#4BA747",
+          Draft: "#2F85EF",
+          Rejected: "#FF0000",
+          Approving: "#FFA500",
+        };
+        const backgroundColor = statusColors[record.status] || "#000000"; // Default color if status not found
+
         return (
           <span
             style={{
               padding: "6px",
               color: "#fff",
-              backgroundColor:
-                record.status === "Approved" ? "#4BA747" : "#2F85EF",
+              backgroundColor: backgroundColor,
             }}>
             {formattedDate}
           </span>
@@ -97,12 +106,19 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     },
   ];
 
+  const handleExportExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, "data.xlsx");
+  };
+
   const handleRowClick = (requestCode: string) => {
     navigate(`/request/payment/view/${requestCode}`);
   };
-  // const {requestCode} = useParams();
   return (
-    <div>
+    <>
+      <HeaderPayment exportData={handleExportExcel}></HeaderPayment>
       <Table
         columns={columns}
         dataSource={data}
@@ -111,7 +127,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
         })}
         rowKey="requestCode"
       />
-    </div>
+    </>
   );
 };
 
