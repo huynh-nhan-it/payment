@@ -186,8 +186,20 @@ namespace PaymentModule.Context
                         j.HasKey("DetailRequestId", "ApproverId", "Queue", "Status");
                     }
                 );
-        
 
+            modelBuilder.Entity<DepartmentEntity>()
+             .HasMany(u => u.Users)
+             .WithMany(r => r.Departments)
+             .UsingEntity<Dictionary<string, object>>(
+                 "DepartmentUser",
+                 j => j.HasOne<UserEntity>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade),
+                 j => j.HasOne<DepartmentEntity>().WithMany().HasForeignKey("DepartmentId").OnDelete(DeleteBehavior.Cascade),
+                 j =>
+                 {
+                     j.Property<string>("Position").HasColumnType("varchar(255)");
+                     j.HasKey("DepartmentId", "UserId", "Position");
+                 }
+             );
         }
     }
 }

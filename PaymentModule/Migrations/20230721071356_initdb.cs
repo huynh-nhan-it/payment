@@ -27,7 +27,11 @@ namespace PaymentModule.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UnderDepartment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,6 +209,31 @@ namespace PaymentModule.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DepartmentUser",
+                columns: table => new
+                {
+                    DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Position = table.Column<string>(type: "varchar(255)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DepartmentUser", x => new { x.DepartmentId, x.UserId, x.Position });
+                    table.ForeignKey(
+                        name: "FK_DepartmentUser_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DepartmentUser_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -564,6 +593,11 @@ namespace PaymentModule.Migrations
                 column: "AddtionalId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DepartmentUser_UserId",
+                table: "DepartmentUser",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DetailRequests_CurrencyId",
                 table: "DetailRequests",
                 column: "CurrencyId");
@@ -660,6 +694,9 @@ namespace PaymentModule.Migrations
 
             migrationBuilder.DropTable(
                 name: "Contracts");
+
+            migrationBuilder.DropTable(
+                name: "DepartmentUser");
 
             migrationBuilder.DropTable(
                 name: "DetailTables");

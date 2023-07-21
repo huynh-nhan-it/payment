@@ -30,5 +30,6 @@ namespace PaymentModule.Entities
         public FamilyEntity Family { get; set; }
         
         public SignatureEntity Signature { get; set; }
+        public ICollection<DepartmentEntity> Departments { get; set; }
     }
 }

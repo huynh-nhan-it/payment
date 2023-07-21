@@ -12,7 +12,7 @@ using PaymentModule.Context;
 namespace PaymentModule.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-    [Migration("20230721052412_initdb")]
+    [Migration("20230721071356_initdb")]
     partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,24 @@ namespace PaymentModule.Migrations
                     b.HasIndex("ApproverId");
 
                     b.ToTable("ApproverDetailRequest");
+                });
+
+            modelBuilder.Entity("DepartmentUser", b =>
+                {
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Position")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("DepartmentId", "UserId", "Position");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DepartmentUser");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.AccountEntity", b =>
@@ -312,7 +330,23 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnderDepartment")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -795,6 +829,21 @@ namespace PaymentModule.Migrations
                     b.HasOne("PaymentModule.Entities.DetailRequestEntity", null)
                         .WithMany()
                         .HasForeignKey("DetailRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DepartmentUser", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.DepartmentEntity", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PaymentModule.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
