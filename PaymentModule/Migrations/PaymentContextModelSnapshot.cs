@@ -142,10 +142,6 @@ namespace PaymentModule.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PlaceOfIDCard")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

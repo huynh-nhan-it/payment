@@ -63,11 +63,15 @@ namespace PaymentModule.Controllers
             return Ok(InfoUser);
         }
 
-        [HttpPost("EditInfoEmployee")]
+        [HttpPut("EditInfoEmployee")]
 
         public IActionResult UpdateInfoEmployee([FromForm] PersonalDto personal)
         {
-            /*IFormFile =*/
+            IFormFile Avatar = personal.Avatar;
+            string EmployeeNumber = personal.overview.Rank;
+            string EmployeeType = personal.overview.EmployeeType;
+            string Nation = personal.additional.Nation;
+            string Phone = personal.additional.Phone;
             return Ok();
         }
 

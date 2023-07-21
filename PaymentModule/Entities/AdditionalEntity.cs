@@ -11,7 +11,6 @@ namespace PaymentModule.Entities
         public Guid UserId { get; set; }
         public UserEntity User { get; set; }
         public string Nation { get; set; }
-        public string Phone { get; set; }
         public string IDCardNumber { get; set; }
         public DateTime DateOfIDCard { get; set; }
         public string PlaceOfIDCard { get; set; }

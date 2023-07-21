@@ -170,7 +170,6 @@ namespace PaymentModule.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IDCardNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfIDCard = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PlaceOfIDCard = table.Column<string>(type: "nvarchar(max)", nullable: false),

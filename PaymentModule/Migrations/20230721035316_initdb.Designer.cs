@@ -12,7 +12,7 @@ using PaymentModule.Context;
 namespace PaymentModule.Migrations
 {
     [DbContext(typeof(PaymentContext))]
-    [Migration("20230720172514_initdb")]
+    [Migration("20230721035316_initdb")]
     partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,10 +141,6 @@ namespace PaymentModule.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PersonalEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
