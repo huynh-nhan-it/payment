@@ -10,7 +10,7 @@ import ApproverRequest from './ApproverRequest';
 const ParentComponent = () => {
 
   return (
-    <div>
+    <div style={{paddingTop: 64}} >
       <FormRequest  />
       <TableRequest onChange={function (data: { paymentMethod: string; }): void {
         throw new Error('Function not implemented.');

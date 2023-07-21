@@ -143,3 +143,20 @@
 .org-department-name{
     margin-left: 16px;
 }
+
+.details-department{
+    text-align: left;
+}
+
+.title-details{
+    font-weight: bold;
+    width: 120px;
+}
+
+.content-details{
+    padding-left: 30px;
+}
+
+.line-list{
+    padding: 8px;
+}

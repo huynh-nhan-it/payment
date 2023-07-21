@@ -173,21 +173,9 @@ const FormRequest: React.FC = () => {
                       placeholder="PO/PR number"
                     />
                   </FormItem>
-                  <FormItem
-                    label='paymentmethod'
-                    name='paymentMethod'
-                    rules={[{ required: true }]}
-                    labelCol={{ span: 24 }} 
-                    wrapperCol={{ span: 24 }}
-                  >
-                    <Input
-                      style={{ width: 200 }}
-                      placeholder="PO/PR number"
-                    />
-                  </FormItem>
                   </Col>
                   </Row>
-                  <Button onClick={() => form.submit()}>Submit</Button>
+                  {/* <Button onClick={() => form.submit()}>Submit</Button> */}
                 </Form>
               </div>
             </div>
