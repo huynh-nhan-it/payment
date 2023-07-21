@@ -364,5 +364,217 @@ namespace PaymentModule.Controllers
             return Ok(new { name = myName });
         }
 
+
+        [HttpPost("accept-or-not")]
+        public IActionResult ApproverAction(AcceptRequestDto accept)
+        {
+            Guid approverId = accept.ApproverId; //viết hàm check approverID xem có tồn tại hay không
+
+            Guid requestId = accept.RequestId; //viết hàm check requestID xem có tồn tại hay không
+
+            //viết hàm check xem ApproverId có quyền duyệt RequestId đó trong bảng approver-detail-table hay không
+
+            string status = accept.Action;
+
+            //viết hàm lấy ID của thằng Approver tiếp theo 
+
+
+            if (CheckRightsOfApprover(approverId, requestId) == true)
+            {
+                if (status.Contains("Approved"))
+                {
+                    //đổi trạng thái trong approver-detail-table => Approved
+                    ChangeState(approverId, requestId, "ApproverDetailRequest", status);
+
+                    /* kiểm tra xem nó có phải thằng cuối cùng hay không
+
+                       + nếu phải thì set status trong payment-request => Approved => kết thúc thuật toán
+
+                       + nếu không phải thì đổi trạng thái Current trong approver-detail-table cho thằng appover tiếp theo*/
+
+                    if (IsTheLastOne(approverId, requestId))
+                    {
+                        //cập nhật status bên payment request thành approved
+
+                        return Ok(new { mess = "ALL APPROVED" });
+                    }
+                    else
+                    {
+                        ChangeState(GetTheNextApproverID(approverId, requestId), requestId, "ApproverDetailRequest", "Current");
+                        return Ok();
+                    }
+                }
+                else if (status.Contains("Rejected"))
+                //nếu approver chọn Rejected => set status trong payment-request => Rejected & tất cả status của requets đó trong approver-detail-table thành Rejected => kết thúc thuật toán
+                {
+                    //Viết hàm cập nhật status bên payment request
+                    ChangePRStatus(approverId, new Guid("8845CC80-77F7-4F7B-B23D-CA994B8D07A4"));
+                    //Viết hàm cập nhật all status bên approver-detail-table thành Rejected 
+
+                    return Ok(new { mess = "ALL REJECTED" });
+                }
+            }
+            else
+            {
+                return Ok(new { mess = "NOT YOUR TURN" });
+            }
+            return Ok();
+        }
+
+        //Lấy id của approver tiếp theo
+        private Guid GetTheNextApproverID(Guid ApproverId, Guid DetailRequestId)
+        {
+            string selectQuery = "Select * From ApproverDetailRequest Where ApproverId = @ApproverId and DetailRequestId = @DetailRequestId";
+
+            string selectNextApproverId = "Select * From ApproverDetailRequest Where DetailRequestId = @DetailRequestId and Queue = @Queue";
+
+            int theNextApproverQueue = 0;
+            Guid TheNextApproverID = new Guid();
+
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@ApproverId", ApproverId);
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            theNextApproverQueue = (int)reader["Queue"] + 1;
+                        }
+                    }
+                }
+
+                using (SqlCommand command = new SqlCommand(selectNextApproverId, connection))
+                {
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    command.Parameters.AddWithValue("@Queue", theNextApproverQueue);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            TheNextApproverID = (Guid)reader["ApproverId"];
+                        }
+                    }
+                }
+                return TheNextApproverID;
+            }
+        }
+
+        //Kiểm tra có phải thằng cuối cùng hay không
+        private bool IsTheLastOne(Guid ApproverId, Guid DetailRequestId)
+        {
+            string selectQuery = "select count(*) as mySum from ApproverDetailRequest where DetailRequestId = @DetailRequestId";
+            int sumOf = 0;
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            sumOf = (int)reader["mySum"];
+                        }
+                    }
+                }
+            }
+
+            if (GetQueueById(ApproverId, DetailRequestId) == sumOf)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //Lấy ra thứ tự của nó
+        private int GetQueueById(Guid ApproverId, Guid DetailRequestId)
+        {
+            string selectQuery = "Select * From ApproverDetailRequest Where ApproverId = @ApproverId and DetailRequestId = @DetailRequestId";
+            int myQueue = 0;
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@ApproverId", ApproverId);
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            myQueue = (int)reader["Queue"];
+                        }
+                    }
+                }
+            }
+            return myQueue;
+        }
+
+        //Change status     
+        private bool ChangeState(Guid ApproverId, Guid DetailRequestId, string tableName, string Status)
+        {
+            string updateQuery = $"Update [{tableName}] set Status = @Status where DetailRequestId = @DetailRequestId and ApproverId = @ApproverId";
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@Status", Status);
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    command.Parameters.AddWithValue("@ApproverId", ApproverId);
+                    command.ExecuteNonQuery();
+                }
+            }
+            return true;
+        }
+
+        //Kiểm tra approver có quyền duyệt hay không
+        private bool CheckRightsOfApprover(Guid ApproverId, Guid DetailRequestId)
+        {
+            string selectQuery = "select * from ApproverDetailRequest where DetailRequestId = @DetailRequestId and ApproverId = @ApproverId";
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    command.Parameters.AddWithValue("@ApproverId", ApproverId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader["Status"].Equals("Current") == true)
+                            {
+                                return true;
+                            }
+                        }
+
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool ChangePRStatus(Guid detailRequestId, Guid StatusId)
+        {
+            var paymentRequest = _context.PaymentRequests.SingleOrDefault(pr => pr.DetailRequestId.Equals(detailRequestId));
+            if (paymentRequest != null)
+            {
+                paymentRequest.StatusId = StatusId;
+            }
+            _context.SaveChanges();
+            return true;
+        }
+
     }
 }

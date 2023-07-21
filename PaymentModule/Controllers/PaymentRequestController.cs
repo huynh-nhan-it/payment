@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Data.SqlClient;
 using PaymentModule.Context;
 using PaymentModule.Entities;
 using PaymentModule.Models;
@@ -15,11 +16,14 @@ namespace PaymentModule.Controllers
         private readonly PaymentContext _context;
         private readonly IStatusRepository _statusRepository;
         private readonly IUserRepository _userRepository;
-        public PaymentRequestController(PaymentContext paymentContext, IStatusRepository statusRepository, IUserRepository userRepository)
+        private readonly ConnectionStringSettings _connectionStringSettings;
+
+        public PaymentRequestController(PaymentContext paymentContext, IStatusRepository statusRepository, IUserRepository userRepository, ConnectionStringSettings connectionStringSettings)
         {
             _statusRepository = statusRepository;
             _userRepository = userRepository;
             _context = paymentContext;
+            _connectionStringSettings = connectionStringSettings;
         }
 
         [HttpGet]
@@ -132,5 +136,60 @@ namespace PaymentModule.Controllers
             return File(bytes, contettype, Path.Combine(StoredFilePath));
 
         }
+
+        [HttpGet("SendToMe")]
+        public IActionResult GetSendToMeRequest(Guid myId)
+        {
+            string selectQuery = "Select * From ApproverDetailRequest Where ApproverId = @myId";
+            List<Guid> myApproRequest = new List<Guid>();
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@myId", myId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            myApproRequest.Add((Guid)reader["DetailrequestId"]);
+                        }
+                    }
+                }
+            }
+
+            List<PaymentRequestModel> paymentRequestList = new List<PaymentRequestModel>();
+            foreach (Guid detailId in myApproRequest)
+            {
+                var PREntity = _context.PaymentRequests.SingleOrDefault(pr => pr.DetailRequestId.Equals(detailId));
+                var paymentRequestModel = new PaymentRequestModel
+                {
+                    RequestCode = PREntity.RequestCode,
+                    Purpose = PREntity.Purpose,
+                    CreatedBy = _userRepository.GetFullNameById(PREntity.UserId),
+                    CreatedDate = PREntity.CreateAt,
+                    Status = _statusRepository.GetStatusById(PREntity.StatusId),
+                };
+                paymentRequestList.Add(paymentRequestModel);
+            }
+            return Ok(paymentRequestList);
+        }
+
+        [HttpGet("SendToOthers")]
+        public IActionResult GetSendToOthersRequest(Guid myId)
+        {
+
+            var paymentRequestList = _context.PaymentRequests.Where(pr => pr.UserId.Equals(myId)).ToList().Select(PREntity => new PaymentRequestModel
+            {
+                RequestCode = PREntity.RequestCode,
+                Purpose = PREntity.Purpose,
+                CreatedBy = _userRepository.GetFullNameById(PREntity.UserId),
+                CreatedDate = PREntity.CreateAt,
+                Status = _statusRepository.GetStatusById(PREntity.StatusId),
+            });
+            return Ok(paymentRequestList.ToList());
+        }
+
+
     }
 }
