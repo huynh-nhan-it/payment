@@ -5,6 +5,7 @@ using PaymentModule.Context;
 using PaymentModule.DTOs;
 using PaymentModule.Entities;
 using PaymentModule.Models;
+using PaymentModule.Services.Implements;
 using PaymentModule.Services.IServices;
 
 namespace PaymentModule.Controllers
@@ -15,14 +16,18 @@ namespace PaymentModule.Controllers
     {
         private PaymentContext _context;
         private IDepartmentService _departmentService;
+        private IDepartmentBearService _departmentBearService;
+
         private IUserService _userService;
         private static ConnectionStringSettings _connectionStringSettings;
         public DepartmentController(PaymentContext paymentContext, 
             IDepartmentService departmentService,
+            IDepartmentBearService departmentBearService,
             IUserService userService,
             ConnectionStringSettings connectionStringSettings) {
             _context = paymentContext;
             _departmentService = departmentService;
+            _departmentBearService = departmentBearService;
             _userService = userService;
             _connectionStringSettings = connectionStringSettings;
         }
@@ -75,6 +80,19 @@ namespace PaymentModule.Controllers
             }
         }
 
+        [HttpGet("department-bear-list")]
+        public IActionResult GetAllDepartmentBearList()
+        {
+            try
+            {
+                return Ok(_departmentBearService.GetAllDepartmentBear());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         [HttpPost("add-department")]
         public IActionResult AddDepartment(DepartmentDto request)
         {
@@ -111,6 +129,6 @@ namespace PaymentModule.Controllers
                 return BadRequest(ex.Message);
             }
         }
-    
+
     }
 }

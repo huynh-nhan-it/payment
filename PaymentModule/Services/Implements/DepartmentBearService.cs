@@ -10,6 +10,29 @@ namespace PaymentModule.Services.Implements
         {
             _context = context;
         }
+
+        List<string> IDepartmentBearService.GetAllDepartmentBear()
+        {
+            List<string> departmentBearList = new List<string>();
+            foreach(var dbEnti in _context.DepartmentBears.ToList())
+            {
+                var departmentBear = dbEnti.CostCenter + " - " + dbEnti.Department;
+                departmentBearList.Add(departmentBear);
+            }
+            return departmentBearList;
+        }
+
+        string IDepartmentBearService.GetDepartmentBearById(Guid departmentBearid)
+        {
+            string departmentBearName = "";
+            var departmentBearEnti = _context.DepartmentBears.SingleOrDefault(db => db.Id.Equals(departmentBearid));
+            if(departmentBearEnti != null)
+            {
+                departmentBearName = departmentBearEnti.CostCenter + " - " + departmentBearEnti.Department;
+            }
+            return departmentBearName;
+        }
+
         Guid IDepartmentBearService.GetIdByDepartmentBear(string departmentBear)
         {
             Guid departmentBearId = new Guid();
@@ -20,5 +43,7 @@ namespace PaymentModule.Services.Implements
             }
             return departmentBearId;
         }
+
+
     }
 }
