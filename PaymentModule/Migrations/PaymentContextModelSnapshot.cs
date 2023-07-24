@@ -262,6 +262,37 @@ namespace PaymentModule.Migrations
                     b.ToTable("Banks");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.CommentEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DetailRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DetailRequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.ContractEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -309,10 +340,6 @@ namespace PaymentModule.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ExchangeRate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -320,6 +347,25 @@ namespace PaymentModule.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currencies");
+                });
+
+            modelBuilder.Entity("PaymentModule.Entities.DepartmentBearEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CostCenter")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DepartmentBears");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.DepartmentEntity", b =>
@@ -365,6 +411,9 @@ namespace PaymentModule.Migrations
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<double?>("ExchangeRate")
+                        .HasColumnType("float");
+
                     b.Property<int>("PONumber")
                         .HasColumnType("int");
 
@@ -404,7 +453,7 @@ namespace PaymentModule.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("DepartmentTableId")
+                    b.Property<Guid?>("DepartmentBearId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DetailRequestId")
@@ -430,7 +479,7 @@ namespace PaymentModule.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentTableId");
+                    b.HasIndex("DepartmentBearId");
 
                     b.HasIndex("DetailRequestId");
 
@@ -892,6 +941,21 @@ namespace PaymentModule.Migrations
                     b.Navigation("DetailRequest");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.CommentEntity", b =>
+                {
+                    b.HasOne("PaymentModule.Entities.DetailRequestEntity", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("DetailRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PaymentModule.Entities.UserEntity", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.ContractEntity", b =>
                 {
                     b.HasOne("PaymentModule.Entities.AdditionalEntity", null)
@@ -930,11 +994,10 @@ namespace PaymentModule.Migrations
 
             modelBuilder.Entity("PaymentModule.Entities.DetailTableEntity", b =>
                 {
-                    b.HasOne("PaymentModule.Entities.DepartmentEntity", null)
+                    b.HasOne("PaymentModule.Entities.DepartmentBearEntity", null)
                         .WithMany("DetailTables")
-                        .HasForeignKey("DepartmentTableId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentBearId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PaymentModule.Entities.DetailRequestEntity", null)
                         .WithMany("DetailRequestTables")
@@ -1044,11 +1107,14 @@ namespace PaymentModule.Migrations
                     b.Navigation("DetailRequests");
                 });
 
+            modelBuilder.Entity("PaymentModule.Entities.DepartmentBearEntity", b =>
+                {
+                    b.Navigation("DetailTables");
+                });
+
             modelBuilder.Entity("PaymentModule.Entities.DepartmentEntity", b =>
                 {
                     b.Navigation("DetailRequests");
-
-                    b.Navigation("DetailTables");
                 });
 
             modelBuilder.Entity("PaymentModule.Entities.DetailRequestEntity", b =>
@@ -1057,6 +1123,8 @@ namespace PaymentModule.Migrations
 
                     b.Navigation("Bank")
                         .IsRequired();
+
+                    b.Navigation("Comments");
 
                     b.Navigation("DetailRequestTables");
 
@@ -1093,6 +1161,8 @@ namespace PaymentModule.Migrations
                 {
                     b.Navigation("Additional")
                         .IsRequired();
+
+                    b.Navigation("Comments");
 
                     b.Navigation("Family")
                         .IsRequired();

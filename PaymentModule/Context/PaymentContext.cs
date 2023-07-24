@@ -33,10 +33,8 @@ namespace PaymentModule.Context
         public virtual DbSet<BankEntity> Banks { get; set; }
         public virtual DbSet<TotalPaymentEntity> TotalPayments { get; set; }
 
-        /* public List<RoleEntity> ExecuteRawSql(string sql)
-         {
-             return RoleEntity.Fro
-         }*/
+        public virtual DbSet<DepartmentBearEntity> DepartmentBears { get; set; }
+        public virtual DbSet<CommentEntity> Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Thiết lập mối quan hệ 1-1
@@ -114,6 +112,12 @@ namespace PaymentModule.Context
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<UserEntity>()
+                .HasMany(u => u.Comments)
+                .WithOne()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<DepartmentEntity>()
                .HasMany(u => u.DetailRequests)
                .WithOne()
@@ -143,15 +147,15 @@ namespace PaymentModule.Context
                .WithOne()
                .HasForeignKey(r => r.PaymentMethodId)
                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<DepartmentEntity>()
-              .HasMany(u => u.DetailTables)
-              .WithOne()
-              .HasForeignKey(r => r.DepartmentTableId)
-              .OnDelete(DeleteBehavior.Restrict);
-
+    
             modelBuilder.Entity<DetailRequestEntity>()
                .HasMany(u => u.DetailRequestTables)
+               .WithOne()
+               .HasForeignKey(r => r.DetailRequestId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DetailRequestEntity>()
+               .HasMany(u => u.Comments)
                .WithOne()
                .HasForeignKey(r => r.DetailRequestId)
                .OnDelete(DeleteBehavior.Cascade);
@@ -160,6 +164,12 @@ namespace PaymentModule.Context
                .HasMany(u => u.Banks)
                .WithOne()
                .HasForeignKey(r => r.SupplierID)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DepartmentBearEntity>()
+               .HasMany(u => u.DetailTables)
+               .WithOne()
+               .HasForeignKey(r => r.DepartmentBearId)
                .OnDelete(DeleteBehavior.Cascade);
 
             //Thiết lập mối quan hệ n-n 

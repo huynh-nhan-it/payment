@@ -5,7 +5,7 @@ using Microsoft.Data.SqlClient;
 using PaymentModule.Context;
 using PaymentModule.Entities;
 using PaymentModule.Models;
-using PaymentModule.Repository;
+using PaymentModule.Services.IServices;
 
 namespace PaymentModule.Controllers
 {
@@ -14,11 +14,11 @@ namespace PaymentModule.Controllers
     public class PaymentRequestController : ControllerBase
     {
         private readonly PaymentContext _context;
-        private readonly IStatusRepository _statusRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IStatusService _statusRepository;
+        private readonly IUserService _userRepository;
         private readonly ConnectionStringSettings _connectionStringSettings;
 
-        public PaymentRequestController(PaymentContext paymentContext, IStatusRepository statusRepository, IUserRepository userRepository, ConnectionStringSettings connectionStringSettings)
+        public PaymentRequestController(PaymentContext paymentContext, IStatusService statusRepository, IUserService userRepository, ConnectionStringSettings connectionStringSettings)
         {
             _statusRepository = statusRepository;
             _userRepository = userRepository;
@@ -45,7 +45,7 @@ namespace PaymentModule.Controllers
 
                 if (!string.IsNullOrEmpty(Creater))
                 {
-                    Guid CreaterId = (Guid) _userRepository.GetIdByFullName(Creater);
+                    Guid CreaterId = _userRepository.GetId(Creater);
                     paymentRequests = paymentRequests.Where(paymentRequest => paymentRequest.UserId.Equals(CreaterId));
                 }
 
@@ -73,7 +73,7 @@ namespace PaymentModule.Controllers
                 {
                     RequestCode = PREntity.RequestCode,
                     Purpose = PREntity.Purpose,
-                    CreatedBy = _userRepository.GetFullNameById(PREntity.UserId),
+                    CreatedBy = _userRepository.GetUserModelById(PREntity.UserId).FullName,
                     CreatedDate = PREntity.CreateAt,
                     Status = _statusRepository.GetStatusById(PREntity.StatusId),
                 });
@@ -99,7 +99,7 @@ namespace PaymentModule.Controllers
                 {
                     RequestCode = paymentRequest.RequestCode,
                     Purpose = paymentRequest.Purpose,
-                    CreatedBy = _userRepository.GetFullNameById(paymentRequest.UserId),
+                    CreatedBy = _userRepository.GetUserModelById(paymentRequest.UserId).FullName,
                     CreatedDate = paymentRequest.CreateAt,
                     Status = _statusRepository.GetStatusById(paymentRequest.StatusId),
                 };
@@ -166,7 +166,7 @@ namespace PaymentModule.Controllers
                 {
                     RequestCode = PREntity.RequestCode,
                     Purpose = PREntity.Purpose,
-                    CreatedBy = _userRepository.GetFullNameById(PREntity.UserId),
+                    CreatedBy = _userRepository.GetUserModelById(PREntity.UserId).FullName,
                     CreatedDate = PREntity.CreateAt,
                     Status = _statusRepository.GetStatusById(PREntity.StatusId),
                 };
@@ -183,7 +183,7 @@ namespace PaymentModule.Controllers
             {
                 RequestCode = PREntity.RequestCode,
                 Purpose = PREntity.Purpose,
-                CreatedBy = _userRepository.GetFullNameById(PREntity.UserId),
+                CreatedBy = _userRepository.GetUserModelById(PREntity.UserId).FullName,
                 CreatedDate = PREntity.CreateAt,
                 Status = _statusRepository.GetStatusById(PREntity.StatusId),
             });

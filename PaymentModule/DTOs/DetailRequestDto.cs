@@ -7,6 +7,7 @@
         public string PaymentFor { get; set; }
         public string SupplierName { get; set; }
         public string Currency { get; set; }
+        public string? ExchangeRate { get; set; }
         public int PONumber { get; set; }
         public string PaymentMethod { get; set; }
         /*public List<DetailTableDto> DetailTables { get; set; }*/

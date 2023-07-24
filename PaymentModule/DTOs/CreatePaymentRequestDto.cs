@@ -7,6 +7,7 @@
         public string PaymentFor { get; set; }
         public string Supplier { get; set; }
         public string Currency { get; set; }
+        public string? ExchangeRate { get; set; }
         public int PONumber { get; set; }
         public string DetailTable { get; set; }
         public string PaymentMethod { get; set; }
@@ -14,7 +15,7 @@
         public double Tax { get; set; }
         public double AdvanceAmount { get; set; }
         public double TotalPayment { get; set; }
-        public IFormFileCollection files { get; set; }
+        public IFormFileCollection? files { get; set; }
         public string Approvers { get; set; }
 
     }

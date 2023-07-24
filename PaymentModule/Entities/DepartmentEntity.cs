@@ -10,7 +10,6 @@ namespace PaymentModule.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public ICollection<DetailRequestEntity> DetailRequests { get; set; }
-        public ICollection<DetailTableEntity> DetailTables { get; set; }
         public string Description { get; set; }
         public string UnderDepartment { get; set; }
         public string Contact { get; set; }

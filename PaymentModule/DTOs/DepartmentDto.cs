@@ -1,4 +1,5 @@
 ﻿using PaymentModule.Entities;
+using PaymentModule.Models;
 
 namespace PaymentModule.DTOs
 {
@@ -8,8 +9,8 @@ namespace PaymentModule.DTOs
         public string Description { get; set; }
         public string Contact { get; set; }
         public ApproverDto Manager { get; set; }
-        public List<ApproverDto>? Supervisors { get; set; }
-        public List<ApproverDto>? Employees { get; set; }
+        public List<ApproverModel>? Supervisors { get; set; }
+        public List<ApproverModel>? Employees { get; set; }
         public string UnderDepartment { get; set; }
         public string Code { get; set; }
        

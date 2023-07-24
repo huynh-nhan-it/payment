@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PaymentModule.Context;
 
 using PaymentModule.Models;
-using PaymentModule.Repository;
+using PaymentModule.Services.IServices;
 
 namespace PaymentModule.Controllers
 {
@@ -14,27 +14,26 @@ namespace PaymentModule.Controllers
     public class DetailRequestController : ControllerBase
     {
         public PaymentContext _context;
-        public IDepartmentRepository _departmentRepository;
-        public ISupplierRepository _supplierRepository;
-        public ICurrencyRepository _currencyRepository;
-        public IPaymentMethodRepository _paymentMethodRepository;
-        public IDetailRequestRepository _detailRequestRepository;
-        public IStatusRepository _statusRepository;
-        private IUserRepository _userRepository;
+        public IDepartmentService _departmentRepository;
+        public ISupplierService _supplierRepository;
+        public ICurrencyService _currencyRepository;
+        public IPaymentMethodService _paymentMethodRepository;
+        public IDetailRequestService _detailRequestRepository;
+        public IStatusService _statusRepository;
+        private IUserService _userRepository;
         private readonly IConfiguration _configuration;
         private readonly ConnectionStringSettings _connectionStringSettings;
 
-
         public DetailRequestController(PaymentContext context,
-            IDepartmentRepository departmentRepository,
-            ISupplierRepository supplierRepository,
-            ICurrencyRepository currencyRepository,
-            IPaymentMethodRepository paymentMethodRepository,
-            IUserRepository userRepository,
-            IDetailRequestRepository detailRequestRepository,
+            IDepartmentService departmentRepository,
+            ISupplierService supplierRepository,
+            ICurrencyService currencyRepository,
+            IPaymentMethodService paymentMethodRepository,
+            IUserService userRepository,
+            IDetailRequestService detailRequestRepository,
             IConfiguration configuration,
             ConnectionStringSettings connectionStringSettings,
-            IStatusRepository statusRepository)
+            IStatusService statusRepository)
         {
             _context = context;
             _departmentRepository = departmentRepository;
@@ -53,10 +52,10 @@ namespace PaymentModule.Controllers
         {
 
             string connectionString = _connectionStringSettings.ConnectionString;
-            string selectQuery = "SELECT DISTINCT  pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, \r\ndr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.PONumber, \r\ndt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentTableId, dt.Note,\r\npm.Id as PmId,\r\nadr.ApproverId\r\nFROM DetailRequests AS dr \r\nINNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId\r\nINNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid \r\nINNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id\r\nINNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId\r\nwhere pr.RequestCode = @RequestCode";
+            string selectQuery = "SELECT DISTINCT pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, \r\ndr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.PONumber, \r\ndt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentTableId, dt.Note,\r\npm.Id as PmId,\r\nadr.ApproverId\r\nFROM DetailRequests AS dr \r\nINNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId\r\nINNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid \r\nINNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id\r\nINNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId\r\nwhere pr.RequestCode = @RequestCode";
             List<PaymentRequestDetail> listPaymentRequestDetail = new List<PaymentRequestDetail>();
             List<DetailTableModel> listDetailTable = new List<DetailTableModel>();
-            List<ApproverModel> ApproverList = new List<ApproverModel>();
+            List<ApproverModel> ApproverList = new List<ApproverModel>(); //trả ra model, kiểm tra đầu vào dựa va
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(selectQuery, connection))
@@ -83,15 +82,15 @@ namespace PaymentModule.Controllers
                             {
                                 listDetailTable.Add(a);
                             }
-
-                            if (ApproverList.SingleOrDefault(ap => ap.Id.Equals((Guid)reader["ApproverId"])) == null)
+                            string approverEmail = _userRepository.GetUserModelById((Guid)reader["ApproverId"]).Email;
+                            var app = ApproverList.SingleOrDefault(ap => ap.Email.Equals(approverEmail) == true);
+                            if (app == null)
                             {
                                 var approver = new ApproverModel
                                 {
-                                    Id = (Guid)reader["ApproverId"],
-                                    FullName = _userRepository.GetFullNameById((Guid)reader["ApproverId"]),
-                                    Email = _userRepository.GetEmailById((Guid)reader["ApproverId"]),
-                                    JobTitle = _userRepository.GetJobTitleById((Guid)reader["ApproverId"])
+                                    FullName = _userRepository.GetUserModelById((Guid)reader["ApproverId"]).FullName,
+                                    Email = _userRepository.GetUserModelById((Guid)reader["ApproverId"]).Email,
+                                    JobTitle = _userRepository.GetUserModelById((Guid)reader["ApproverId"]).JobTitle
                                 };
                                 ApproverList.Add(approver);
                             }
@@ -100,7 +99,7 @@ namespace PaymentModule.Controllers
                             {
                                 RequestCode = (string)reader["RequestCode"],
 
-                                UserName = _userRepository.GetFullNameById((Guid)reader["UserId"]),
+                                UserName = _userRepository.GetUserModelById((Guid)reader["UserId"]).FullName,
                                 CreateAt = (DateTime)reader["CreateAt"],
                                 Status = _statusRepository.GetStatusById((Guid)reader["StatusId"]),
                                 Purpose = (string)reader["Purpose"],

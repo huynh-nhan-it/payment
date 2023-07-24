@@ -7,7 +7,7 @@ using PaymentModule.Context;
 using PaymentModule.DTOs;
 using PaymentModule.Entities;
 using PaymentModule.Models;
-using PaymentModule.Repository;
+using PaymentModule.Services.IServices;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -23,8 +23,8 @@ namespace PaymentModule.Controllers
         public static List<AccountModel> accounts = new List<AccountModel>();
         private readonly PaymentContext _context;
         private readonly IConfiguration _config;
-        private readonly IAccountRepository _accountRepository;
-        public AuthenController(IConfiguration configuration, IAccountRepository accountRepository, PaymentContext context)
+        private readonly IAccountService _accountRepository;
+        public AuthenController(IConfiguration configuration, IAccountService accountRepository, PaymentContext context)
         {
             _context = context;
             _config = configuration;

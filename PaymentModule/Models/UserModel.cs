@@ -1,13 +1,20 @@
 ﻿namespace PaymentModule.Models
 {
     public class UserModel
-    {
-        public string firstName { get; set; } = string.Empty;
-        public string lastName { get; set; } = string.Empty;
-        public string email { get; set; } = string.Empty;
-        public string password { get; set; } = string.Empty;
-        public string phoneNumber { get; set; } = string.Empty;
+    {       
+        public string FullName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string Avatar { get; set; } = string.Empty;
+        public string JobTitle { get; set; } = string.Empty;
 
-
+        public UserModel()
+        {
+            FullName = "unknown";
+            Email = "unknown";
+            PhoneNumber = "unknown";
+            Avatar = "unknown";
+            JobTitle = "unknown";
+        }
     }
 }

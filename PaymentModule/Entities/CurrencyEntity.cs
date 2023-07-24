@@ -9,7 +9,6 @@ namespace PaymentModule.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string ExchangeRate { get; set; }
         public ICollection<DetailRequestEntity> DetailRequests { get; set; }
 
     }

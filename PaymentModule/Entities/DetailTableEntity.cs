@@ -14,7 +14,7 @@ namespace PaymentModule.Entities
         public double Amount { get; set; }
         public int InvNo { get; set; }
         public string Industry { get; set; }
-        public Guid DepartmentTableId { get; set; }
+        public Guid? DepartmentBearId { get; set; }
         public string Note { get; set; }
         public Guid DetailRequestId { get; set; }
        

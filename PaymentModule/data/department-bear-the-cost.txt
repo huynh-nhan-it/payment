@@ -1,0 +1,126 @@
+TI04	Công nghệ thông tin
+TI04	Công nghệ thông tin (ERP)
+TI01	Kế Toán Hoạch Định Tài Chính
+TI02	Kế Toán Hoạch Định Tài Chính
+HR08	Kế Toán Hoạch Định Tài Chính
+TI01	Kế Toán Quản Trị Khối Cung Ứng
+TI02	Kế Toán Quản Trị Khối Cung Ứng
+TI02	Kế Toán Tài Chính
+TI01	Kế Toán Tài Chính
+SD01	Logistic - Chung
+MA02	MKT - Beer
+MB01	MKT - Beverages
+MB02	MKT - Beverages
+MB07	MKT - Beverages
+MT03	MKT - CI
+MF03	MKT - Convenience foods
+MT01	MKT - General
+MT02	MKT - General
+MT04	MKT - General
+MG01	MKT - HPC
+MF04	MKT - Processed Meats
+MF02	MKT - Seasoning
+OT02	MKT - Seasoning
+KC06	Nam Đế
+SD05	Phòng An Ninh
+SD10	Phòng An Ninh
+HR03	Phòng An Ninh
+SD02	Phòng An Ninh
+HR08	Phòng Bán Hàng Hi-Fresh
+A000	Phòng Bán Hàng Hi-Fresh
+KF01	Phòng Bán Hàng Truyền Thống
+KF03	Phòng Bán Hàng Truyền Thống
+KF04	Phòng Bán Hàng Truyền Thống
+KF05	Phòng Bán Hàng Truyền Thống
+KF06	Phòng Bán Hàng Truyền Thống
+KF10	Phòng Bán Hàng Truyền Thống
+KA03	Phòng Bán Hàng Truyền Thống - Ngành Beer & Depot
+KA04	Phòng Bán Hàng Truyền Thống - Ngành Beer & Depot
+KA05	Phòng Bán Hàng Truyền Thống - Ngành Beer & Depot
+KA06	Phòng Bán Hàng Truyền Thống - Ngành Beer & Depot
+KB03	Phòng Bán Hàng Truyền Thống - Ngành Giải Khát
+KB04	Phòng Bán Hàng Truyền Thống - Ngành Giải Khát
+KB05	Phòng Bán Hàng Truyền Thống - Ngành Giải Khát
+KB06	Phòng Bán Hàng Truyền Thống - Ngành Giải Khát
+HR02	Phòng hành chánh
+KO01	Phòng Hỗ Trợ Kinh Doanh
+HR08	Phòng kế hoạch
+SP01	Phòng kế hoạch
+KE01	Phòng Kinh Doanh Quốc Tế
+HR08	Phòng mua hàng
+SS01	Phòng mua hàng
+HR01	Phòng Nhân Sự
+HR04	Phòng Pháp Chế - Legal
+HR08	Phòng Pháp Chế - Legal
+KC02	Phòng Phát triển Khách Hàng
+KC03	Phòng Phát triển Khách Hàng
+KC04	Phòng Phát triển Khách Hàng
+KC05	Phòng Phát triển Khách Hàng
+KT01	Phòng Tiếp Thị Thương Mại
+RD02	R&D - Development
+RD03	R&D - Development
+RD04	R&D - Development
+RD06	R&D - Development
+HR08	R&D - Development
+RD06	R&D - Operations
+RD07	R&D - Operations
+RD04	R&D - Operations
+RD05	R&D - Packaging
+FP24	Sản xuất – Premix
+SD07	Trung Tâm Phân Phối Bình Thuận
+SD04	Trung Tâm Phân Phối Đà Nẵng
+SD06	Trung Tâm Phân Phối Hải Dương
+SD12	Trung Tâm Phân Phối Hậu Giang
+SD05	Trung Tâm Phân Phối Hưng Yên
+SD10	Trung Tâm Phân Phối Nghệ An
+SD16	Trung Tâm Phân Phối Quang Hanh
+SD02	Trung Tâm Phân Phối Sóng Thần
+SD17	Trung Tâm Phân Phối Suối Mơ
+SD03	Trung Tâm Phân Phối Tân Bình
+SD08	Trung tâm phân phối Tân Uyên
+FE03	Bảo Trì - Convenient Food
+FE01	Bảo Trì - Convenient Food
+FE02	Bảo Trì - Convenient Food
+FP02	Bảo Trì - Convenient Food
+FP03	Bảo Trì - Convenient Food
+FE01	Bảo Trì - Seasoning
+FE05	Bảo Trì - Seasoning
+FQ01	Chất Lượng - Chung
+FQ01	Chất Lượng - Convenient Food
+FQ02	Chất Lượng - Convenient Food
+FQ11	Chất Lượng - Liquid Beverege
+FQ05	Chất Lượng - Seasoning
+FQ02	KTCN - Convenient Food
+FQ03	KTCN - Convenient Food
+FT01	KTCN - Convenient Food
+FQ01	KTCN - Convenient Food
+FT01	KTCN - Liquid Beverege
+FQ01	KTCN - Liquid Beverege
+FQ11	KTCN - Liquid Beverege
+FQ05	KTCN - Seasoning
+FP09	KTCN - Seasoning
+FQ01	KTCN - Seasoning
+FT01	KTCN - Seasoning
+FL01	Lab - MSI
+DA01	Phòng Dự Án
+TI02	Phòng Kế Toán Tài Chính
+FP23	Sản Xuất - Chili
+FP09	Sản Xuất - Fish Sauce
+FP08	Sản Xuất - Fish Sauce
+FP22	Sản Xuất - Fish Sauce
+FP02	Sản Xuất - Noodle
+FP03	Sản Xuất - Noodle
+SW02	Sản Xuất - Noodle
+FP07	Sản Xuất - Noodle
+FP04	Sản Xuất - Noodle Aid
+FP06	Sản Xuất - Noodle Aid
+FP05	Sản Xuất - Noodle Aid
+FP15	Sản Xuất - PET
+FP22	Sản Xuất - Phân Giải Nước Tương
+FP07	Sản Xuất - Phở
+FP03	Sản Xuất - Phở
+FP07	Sản Xuất Hạt Nêm - Cháo
+FP17	Sản Xuất Hạt Nêm - Cháo
+FS01	SHE & TPM
+FE01	Utility
+SW01	Warehouse

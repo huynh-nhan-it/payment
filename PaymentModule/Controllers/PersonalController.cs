@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentModule.Service;
+using PaymentModule.Services;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +11,7 @@ using PaymentModule.Entities;
 using System.Reflection.Metadata;
 using System.Net.WebSockets;
 using Microsoft.Extensions.Options;
+using PaymentModule.Services.IServices;
 
 namespace PaymentModule.Controllers
 {
