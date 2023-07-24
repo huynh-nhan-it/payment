@@ -10,6 +10,31 @@ interface Employee {
   name: string;
   infor: string;
 }
+interface OverviewInfor {
+  $id: string;
+  Id: string;
+  UserId: string;
+  User: {
+    $ref: string;
+  };
+  EmployeeNumber: number;
+  Sex: string;
+  BirthDay: string;
+  Position: string;
+  Company: string;
+  Unit: string;
+  FunctionEmployee: string;
+  Department: string;
+  SectionsTeams: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  CostCenter: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
+}
 interface AdditionalInfor {
   key: string;
   label: string;
@@ -35,7 +60,8 @@ interface FamilyInfor {
 
 interface HeaderEmployeeProps {
   isEditable: boolean;
-  data: [Employee[], AdditionalInfor[], FamilyInfor[]];
+  data: OverviewInfor;
+  // data: [Employee[], AdditionalInfor[], FamilyInfor[]];
   setEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

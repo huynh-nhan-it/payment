@@ -7,6 +7,7 @@ const StructureOrganization = () => {
     <div style={{ paddingTop: 64 }}>
       <HeaderOrganize />
       <NavbarDepartment/>
+      
     </div>
   );
 };

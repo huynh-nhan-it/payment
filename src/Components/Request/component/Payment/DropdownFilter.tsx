@@ -57,9 +57,11 @@ const DropdownFilter: React.FC<FilterFormProps> = ({
   const handleFormClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Stop event propagation
   };
- // Convert createdDateFrom to a Dayjs object
- const dayjsDateFrom = createdDateFrom ? dayjs(createdDateFrom, 'YYYY-MM-DD') : null;
- const dayjsDateTo = createdDateTo ? dayjs(createdDateTo, 'YYYY-MM-DD') : null;
+  // Convert createdDateFrom to a Dayjs object
+  const dayjsDateFrom = createdDateFrom
+    ? dayjs(createdDateFrom, "YYYY-MM-DD")
+    : null;
+  const dayjsDateTo = createdDateTo ? dayjs(createdDateTo, "YYYY-MM-DD") : null;
 
   const menu = (
     <Menu style={{ right: "-26px", top: "10px" }}>
@@ -126,16 +128,20 @@ const DropdownFilter: React.FC<FilterFormProps> = ({
             labelCol={{ span: 24 }}
             className="margin-bottom-8">
             <Select value={createdBy} onChange={(e) => setCreateBy(e)}>
-              <Select.Option key={1} value="demo">
+              {/* <Select.Option key={1} value="demo">
                 Demo
               </Select.Option>
               <Select.Option key={2} value="demo1">
                 Demo1
+              </Select.Option> */}
+
+              <Select.Option key={1} value="demo">
+                Demo
               </Select.Option>
             </Select>
           </Form.Item>
           <Form.Item
-            label="Select"
+            label="Status"
             labelCol={{ span: 24 }}
             className="margin-bottom-8">
             <Select value={status} onChange={(e) => setStatus(e)}>
@@ -154,7 +160,7 @@ const DropdownFilter: React.FC<FilterFormProps> = ({
 
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
-      <a style={{color:"#8894A1"}} onClick={toggleFormVisibility}>
+      <a style={{ color: "#8894A1" }} onClick={toggleFormVisibility}>
         <Space>Filter</Space>
         <RiArrowDownSFill />{" "}
       </a>
