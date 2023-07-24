@@ -82,7 +82,6 @@ namespace PaymentModule.Controllers
                 overviewToUpdate.Rank = overview.Rank;
                 overviewToUpdate.EmployeeType = overview.EmployeeType;
                 _context.Overviews.Update(overviewToUpdate);
-                _context.SaveChanges();
                 return new ObjectResult(new { overviewToUpdate, success = true, error = false, message = "Cập nhật thông tin Overview thành công" }); 
             }
             return new ObjectResult(new { success = false, error = true, message = "Cập nhật thông tin overview thất bại" }) ; 
@@ -92,13 +91,13 @@ namespace PaymentModule.Controllers
         {
             var additionalToUpdate = _context.Additionals.FirstOrDefault(a => a.UserId.Equals(Id));
             var user = _context.Users.FirstOrDefault(u => u.Id.Equals(Id));
-            ICollection<ContractDto> contracts = JsonConvert.DeserializeObject<List<ContractDto>>(additional.Contracts);
+            ICollection<ContractDto> contracts = JsonConvert.DeserializeObject<List<ContractDto>>(additional.Contracts == null ? "[]" : additional.Contracts);
             ICollection<ContractEntity> contractEntities = new List<ContractEntity>();
 
             if (additionalToUpdate != null && user != null)
             {
                 additionalToUpdate.Nation = additional.Nation;
-                user.PhoneNumber = additional.Phone;
+                user.PhoneNumber = additional.Phone == null ? user.PhoneNumber : additional.Phone;
                 additionalToUpdate.IDCardNumber = additional.IDCardNumber;
                 additionalToUpdate.DateOfIDCard = additional.DateOfIDCard;
                 additionalToUpdate.PlaceOfIDCard = additional.PlaceOfIDCard;
@@ -123,6 +122,7 @@ namespace PaymentModule.Controllers
                 {
                     ContractEntity contractEntity = new ContractEntity
                     {
+                        AddtionalId = additionalToUpdate.Id,
                         ContractType = contract.ContractType,
                         FromDate = contract.FromDate,
                         ToDate = contract.ToDate,
@@ -137,7 +137,7 @@ namespace PaymentModule.Controllers
 
                 _context.Users.Update(user);
                 _context.Additionals.Update(additionalToUpdate);
-                _context.SaveChanges();
+
                 return new ObjectResult(new { additionalToUpdate, success = true, error = false, message = "Cập nhật thông tin Additional thành công" });
             }
             return new ObjectResult(new { success = false, error = true, message = "Cập nhật thông tin Additional thất bại" });
@@ -146,7 +146,7 @@ namespace PaymentModule.Controllers
         private ObjectResult HandleFamily(FamilyDto family, Guid Id)
         {
             var FamilyToUpdate = _context.Families.FirstOrDefault(f => f.UserId.Equals(Id));
-            ICollection<RelationshipDTO> relationships = JsonConvert.DeserializeObject<List<RelationshipDTO>>(family.relationships);
+            ICollection<RelationshipDTO> relationships = JsonConvert.DeserializeObject<List<RelationshipDTO>>(family.relationships == null ? "[]" : family.relationships);
             ICollection<RelationshipEntity> relationshipEntities = new List<RelationshipEntity>();
 
             if (FamilyToUpdate != null)
@@ -175,7 +175,6 @@ namespace PaymentModule.Controllers
                 }
                 FamilyToUpdate.relationships = relationshipEntities;
                 _context.Families.Update(FamilyToUpdate);
-                _context.SaveChanges();
                 return new ObjectResult(new { FamilyToUpdate, success = true, error = false, message = "Cập nhật thông tin Family thành công" });
             }
             return new ObjectResult(new { success = false, error = true, message = "Cập nhật thông tin Family thất bại" });
@@ -184,7 +183,7 @@ namespace PaymentModule.Controllers
 
         private async Task<ObjectResult> HandleSignature(SignatureDto signature, Guid Id)
         {
-            var HandleImagePath = await _personalService.HandleFile(signature.ImageSignature, Id, "signature");
+            var HandleImagePath = await _personalService.HandleFile(signature.ImageSignature, Id, "Signature");
             var result = HandleImagePath.Value as dynamic;
 
             if (result?.error) {
@@ -196,11 +195,10 @@ namespace PaymentModule.Controllers
             if (SignatureToUpdate != null)
             {
                 SignatureToUpdate.QRcode = signature.QRcode;
-                SignatureToUpdate.dateTime = signature.dateTime;
-                SignatureToUpdate.ImagePath = result?.fileNamePath;
+                SignatureToUpdate.dateTime = DateTime.Now;
+                SignatureToUpdate.ImagePath = result.fileNamePath == null ? SignatureToUpdate.ImagePath : result.fileNamePath;
 
-                _context.Signatures.Add(SignatureToUpdate);
-                _context.SaveChanges();
+                _context.Signatures.Update(SignatureToUpdate);
                 return new ObjectResult(new { SignatureToUpdate, success = true, error = false, message = "Cập nhật thông tin Signature thành công" });
             }
             return new ObjectResult(new { success = false, error = true, message = "Cập nhật thông tin Signature thất bại" });
@@ -220,9 +218,9 @@ namespace PaymentModule.Controllers
             string Nation = personal.additional.Nation;
             string Phone = personal.additional.Phone;
             string IDCardNumber = personal.additional.IDCardNumber;
-            DateTime DateOfIdCard = personal.additional.DateOfIDCard;
+            DateTime DateOfIdCard = personal.additional.DateOfIDCard == null ? DateTime.Now : (DateTime)personal.additional.DateOfIDCard;
             string PlaceOfIDCard = personal.additional.PlaceOfIDCard;
-            DateTime StartingDate = personal.additional.StartingDate;
+            DateTime StartingDate = personal.additional.StartingDate == null ? DateTime.Now : (DateTime)personal.additional.StartingDate;
             string Note = personal.additional.Note;
             string AcademicLevel = personal.additional.AcademicLevel;
             string SpecializedQualification = personal.additional.SpecializedQualification;
@@ -232,6 +230,7 @@ namespace PaymentModule.Controllers
             string BankName = personal.additional.BankName;
             string BranchNumber = personal.additional.BranchNumber;
             string BankBranchName = personal.additional.BankBranchName;
+            string BankAccountNumber = personal.additional.BankAccountNumber;
             string BankAccountName = personal.additional.BankAccountName;
             string Street = personal.additional.Street;
             string BuildingOrFlatNumber = personal.additional.BuildingOrFlatNumber;
@@ -255,7 +254,6 @@ namespace PaymentModule.Controllers
             string relationships = personal.family.relationships;
 
             string QRcode = personal.signature.QRcode;
-            DateTime dateTime = personal.signature.dateTime;
             IFormFile ImageSignature = personal.signature.ImageSignature;
 
 
@@ -282,6 +280,7 @@ namespace PaymentModule.Controllers
                 BankName = BankName,
                 BranchNumber = BranchNumber,
                 BankBranchName = BankBranchName,
+                BankAccountNumber = BankAccountNumber,
                 BankAccountName = BankAccountName,
                 Street = Street,
                 BuildingOrFlatNumber = BuildingOrFlatNumber,
@@ -310,7 +309,6 @@ namespace PaymentModule.Controllers
             SignatureDto signature = new SignatureDto
             {
                 QRcode = QRcode,
-                dateTime = dateTime,
                 ImageSignature = ImageSignature,
             };
 
@@ -365,7 +363,7 @@ namespace PaymentModule.Controllers
                 return BadRequest(new {err});
             }
 
-            user.Avatar = resultHandleAvatar.fileNamePath;
+            user.Avatar = resultHandleAvatar.fileNamePath == null ? user.Avatar : resultHandleAvatar.fileNamePath;
             user.Overview = resultHandleOverview.overviewToUpdate;
             user.Additional = resultHandleAdditional.additionalToUpdate;
             user.Family = resultHandleFamily.FamilyToUpdate;

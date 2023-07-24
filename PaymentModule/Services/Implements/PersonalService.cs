@@ -14,6 +14,13 @@ namespace PaymentModule.Services.Implements
             ObjectResult result = new ObjectResult(new { });
             string fileNamePath;
             string directoryPath;
+
+            if (file == null)
+            {
+                result.Value = new { success = true, error = false, fileNamePath = "" };
+                return result;
+            }
+
             if (!file.ContentType.StartsWith("image/"))
             {
                 result.Value = new { success = false, error = true, message = "Tệp tin không phải là ảnh." };
@@ -32,24 +39,28 @@ namespace PaymentModule.Services.Implements
                 {
                     case "Avatar":
                         directoryPath = Path.Combine("data/image/avatar", userId.ToString());
-                        if (!Directory.Exists(directoryPath)) { Directory.CreateDirectory(directoryPath); }
+                        if (Directory.Exists(directoryPath)) {
+                            Directory.Delete(directoryPath, true);
+                        }
+                        Directory.CreateDirectory(directoryPath);
                         fileNamePath = Path.Combine(directoryPath, file.FileName);
                         using (var fileStream = new FileStream(fileNamePath, FileMode.Create))
                         {
                             await file.CopyToAsync(fileStream);
                         }
-                        result.Value = new { success = true, error = false, fileNamePath };
+                        result.Value = new { success = true, error = false, fileNamePath = fileNamePath.Replace("\\", "/") };
                         break;
 
                     case "Signature":
                         directoryPath = Path.Combine("data/image/signature", userId.ToString());
-                        if (!Directory.Exists(directoryPath)) { Directory.CreateDirectory(directoryPath); }
+                        if (Directory.Exists(directoryPath)) { Directory.Delete(directoryPath, true); }
+                        Directory.CreateDirectory(directoryPath);
                         fileNamePath = Path.Combine(directoryPath, file.FileName);
                         using (var fileStream = new FileStream(fileNamePath, FileMode.Create))
                         {
                             await file.CopyToAsync(fileStream);
                         }
-                        result.Value = new { success = true, error = false, fileNamePath };
+                        result.Value = new { success = true, error = false, fileNamePath = fileNamePath.Replace("\\", "/") };
                         break;
                     default:
                         result.Value = new { success = false, error = true, message = "Không thể định dạng kiểu hỗ trợ" };

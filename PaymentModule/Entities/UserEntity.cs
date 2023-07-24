@@ -25,11 +25,11 @@ namespace PaymentModule.Entities
         public ICollection<DetailRequestEntity> DetailRequests { get; set; }
         public string JobTitle { get; set; }
 
-        public OverviewEntity Overview { get; set; }
-        public AdditionalEntity Additional { get; set; }
-        public FamilyEntity Family { get; set; }
+        public OverviewEntity ?Overview { get; set; }
+        public AdditionalEntity ?Additional { get; set; }
+        public FamilyEntity ?Family { get; set; }
         
-        public SignatureEntity Signature { get; set; }
+        public SignatureEntity ?Signature { get; set; }
         public ICollection<DepartmentEntity> Departments { get; set; }
         public ICollection<CommentEntity> Comments { get; set; }
     }

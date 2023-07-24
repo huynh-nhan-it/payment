@@ -6,10 +6,10 @@
 
         public Guid UserId { get; set; }
         public UserEntity User { get; set; }
-        public string QRcode { get; set; }
+        public string? QRcode { get; set; }
 
-        public DateTime dateTime { get; set; }
+        public DateTime? dateTime { get; set; }
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
     }
 }
