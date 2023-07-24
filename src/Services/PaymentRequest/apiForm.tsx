@@ -5,7 +5,7 @@ import axios from 'axios';
 // Hàm gọi API để lấy dữ liệu Supplier
 export const getSuppliers = async () => {
   try {
-    const response = await axios.get('http://localhost:5005/api/Supplier');
+    const response = await axios.get('http://localhost:5005/api/Supplier/supplier-name-list');
     return response.data;
   } catch (error) {
     console.error(error);
@@ -16,7 +16,7 @@ export const getSuppliers = async () => {
 // Hàm gọi API để lấy dữ liệu Currency
 export const getCurrencies = async () => {
   try {
-    const response = await axios.get('http://localhost:5005/api/Currency');
+    const response = await axios.get('http://localhost:5005/api/Currency/currency-list');
     return response.data;
   } catch (error) {
     console.error(error);
@@ -27,7 +27,7 @@ export const getCurrencies = async () => {
 // Hàm gọi API để lấy dữ liệu Department
 export const getDepartments = async () => {
   try {
-    const response = await axios.get('http://localhost:5005/api/Department');
+    const response = await axios.get('http://localhost:5005/api/Department/department-name-list');
     return response.data;
   } catch (error) {
     console.error(error);
