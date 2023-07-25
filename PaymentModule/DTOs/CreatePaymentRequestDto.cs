@@ -7,7 +7,7 @@
         public string PaymentFor { get; set; }
         public string Supplier { get; set; }
         public string Currency { get; set; }
-        public string? ExchangeRate { get; set; }
+        public double? ExchangeRate { get; set; }
         public int PONumber { get; set; }
         public string DetailTable { get; set; }
         public string PaymentMethod { get; set; }

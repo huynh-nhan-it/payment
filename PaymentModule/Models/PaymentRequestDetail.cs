@@ -11,6 +11,7 @@
         public string PaymentFor { get; set; }
         public string Supplier { get; set; }
         public string Currency { get; set; }
+        public double? ExchangeRate { get; set; }
         public int PONumber { get; set; }
         public List<DetailTableModel> TableDetailRequest { get; set; }
         public string Method { get; set; }

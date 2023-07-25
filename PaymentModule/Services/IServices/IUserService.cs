@@ -11,6 +11,7 @@ namespace PaymentModule.Services.IServices
         public string GetRequestCode(string requestCode);
         public string DecodeToken(string token, string secretKey);
         public List<ApproverModel> GetAllApprover();
-        public ApproverModel GetApproverById(Guid id);  
+        public ApproverModel GetApproverById(Guid id);
+        public bool CheckExistByEmail(string email);
     }
 }

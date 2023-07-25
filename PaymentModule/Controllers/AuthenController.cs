@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PaymentModule.Context;
@@ -24,11 +25,16 @@ namespace PaymentModule.Controllers
         private readonly PaymentContext _context;
         private readonly IConfiguration _config;
         private readonly IAccountService _accountRepository;
-        public AuthenController(IConfiguration configuration, IAccountService accountRepository, PaymentContext context)
+        private readonly IUserService _userService;
+        private readonly ConnectionStringSettings _connectionStringSettings;
+
+        public AuthenController(IConfiguration configuration, IAccountService accountRepository, PaymentContext context , IUserService userService, ConnectionStringSettings connectionStringSettings)
         {
             _context = context;
             _config = configuration;
             _accountRepository = accountRepository;
+            _userService = userService;
+            _connectionStringSettings = connectionStringSettings;
         }
 
         [HttpGet, Authorize(Roles = "Admin")]
@@ -46,9 +52,15 @@ namespace PaymentModule.Controllers
         [HttpPost("Register")]
         public IActionResult Register(UserDto request)
         {
+            string email = request.email;
+            if(_userService.CheckExistByEmail(email))
+            {
+                return Ok("Email đã tồn tại");
+            }
             if (request.password == request.confirmPassword)
             {
                 Guid theId = Guid.NewGuid();
+                Guid AccountId = Guid.NewGuid();
                 var userEntity = new UserEntity
                 {
                     Id = theId,
@@ -57,6 +69,7 @@ namespace PaymentModule.Controllers
                     Email = request.email,
                     PhoneNumber = request.phoneNumber,
                     Avatar = request.avatar,
+                    AccountId = AccountId,
                     JobTitle = request.jobTitle,
                 };
                 _context.Users.Add(userEntity);
@@ -66,6 +79,7 @@ namespace PaymentModule.Controllers
 
                 var accountEntity = new AccountEntity
                 {
+                    Id = AccountId,
                     Email = request.email,
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt,
@@ -74,6 +88,9 @@ namespace PaymentModule.Controllers
 
                 _context.Accounts.Add(accountEntity);
                 _context.SaveChanges();
+
+                Guid StaffId = new Guid("20C3348C-AF49-4E8F-9FCD-0B0E0B295A28");
+                SetRoleForUser(theId, StaffId);
                 return Ok(new {mess = "Success"});
             }
             else
@@ -100,7 +117,7 @@ namespace PaymentModule.Controllers
             }
             if (!VerifyPassword(request.password, myAccount.PasswordHash, myAccount.PasswordSalt)) 
             {
-                return BadRequest("INCORRECT PASSWORD");
+                return Ok("INCORRECT PASSWORD");
             }
 
             string token = CreateToken(myAccount);
@@ -181,6 +198,23 @@ namespace PaymentModule.Controllers
             acc.refreshToken = newRefreshToken.Token;
             acc.tokenCreated = newRefreshToken.Created;
             acc.tokenExpires = newRefreshToken.Expires;
+        }
+
+        private void SetRoleForUser(Guid UserId, Guid RoleId)
+        {
+            string insertQuery = "insert into UserRole(RoleId, UserId) values (@RoleId, @UserId)";
+
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                {
+                    // Thay thế các tham số trong câu truy vấn bằng giá trị thực tế
+                    command.Parameters.AddWithValue("@RoleId", RoleId);
+                    command.Parameters.AddWithValue("@UserId", UserId);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

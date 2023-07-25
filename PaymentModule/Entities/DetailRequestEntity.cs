@@ -11,7 +11,7 @@ namespace PaymentModule.Entities
         public Guid Id { get; set; }
         public string Purpose { get; set; }
         public string PaymentFor { get; set; }
-        public double? ExchangeRate { get; set; }
+        public double ExchangeRate { get; set; }
         public int PONumber { get; set; }
         public PaymentRequestEntity PaymentRequest { get; set; }
         public Guid DepartmentId { get; set; }

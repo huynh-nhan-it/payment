@@ -4,7 +4,6 @@
     {
         public Guid? GetIdBySupplierName(string supplierName);
         public string GetSupplierNameById(Guid supplierId);
-
         public List<string> GetSupplierList();
     }
 }

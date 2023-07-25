@@ -98,6 +98,11 @@ namespace PaymentModule.Controllers
                                 };
                                 ApproverList.Add(approver);
                             }
+                            double exRate = 0d;
+                            if (reader["ExchangeRate"] != null && !DBNull.Value.Equals(reader["ExchangeRate"]))
+                            {
+                                exRate = (double)reader["ExchangeRate"];
+                            }
 
                             var b = new PaymentRequestDetail
                             {
@@ -111,6 +116,7 @@ namespace PaymentModule.Controllers
                                 PaymentFor = (string)reader["PaymentFor"],
                                 Supplier = _supplierService.GetSupplierNameById((Guid)reader["SupplierId"]), //
                                 Currency = _currencyService.GetCurrencyNameById((Guid)reader["CurrencyId"]), //
+                                ExchangeRate = exRate,
                                 PONumber = (int)reader["PONumber"],
                                 TableDetailRequest = listDetailTable,
                                 Method = _paymentMethodService.GetPaymentMethodById((Guid)reader["PmId"]), //

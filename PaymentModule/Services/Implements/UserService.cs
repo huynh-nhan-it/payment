@@ -189,5 +189,15 @@ namespace PaymentModule.Services.Implements
                 return new ApproverModel();
             }
         }
+
+        bool IUserService.CheckExistByEmail(string email)
+        {
+            var user = _context.Users.SingleOrDefault(u => u.Email.Equals(email));
+            if(user != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

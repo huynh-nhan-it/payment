@@ -15,5 +15,6 @@ namespace PaymentModule.Entities
         public string Contact { get; set; }
         public string Code { get; set; }
         public ICollection<UserEntity> Users { get; set; }
+        public bool? IsDeteted { get; set; } = true;
     }
 }

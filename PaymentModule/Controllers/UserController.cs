@@ -86,6 +86,7 @@ namespace PaymentModule.Controllers
                     DepartmentId = departmentId.HasValue ? departmentId.Value : Guid.Empty,
                     SupplierId = supplierId.HasValue ? supplierId.Value : Guid.Empty,
                     CurrencyId = curencyId.HasValue ? curencyId.Value : Guid.Empty,
+                    ExchangeRate = request.ExchangeRate.HasValue ? request.ExchangeRate.Value : 0d,
                     PaymentMethodId = paymentId.HasValue ? paymentId.Value : Guid.Empty
                 };
 
@@ -106,7 +107,7 @@ namespace PaymentModule.Controllers
             string paymentfor = prd.PaymentFor;
             string supplier = prd.Supplier; 
             string currency = prd.Currency;
-            string exchange = prd.ExchangeRate;
+            double? exchange = prd.ExchangeRate.HasValue ? prd.ExchangeRate.Value : 0d;
             int ponumber = prd.PONumber;
             IFormFileCollection files = prd.files;
             string paymentmethod = prd.PaymentMethod;
@@ -157,7 +158,7 @@ namespace PaymentModule.Controllers
 
             var resultHandleDR = HandleDetailRequest(detailRequestDto, theId).Value as dynamic;
             if(resultHandleDR?.success)
-            {
+            { 
                 _context.DetailRequests.Add(resultHandleDR?.detailRequest);
                 _context.SaveChanges();
             }
@@ -166,7 +167,7 @@ namespace PaymentModule.Controllers
             var resultHandTotal = _detailRequestService.HandleTotalPayment(totalPaymentDto, theId).Value as dynamic;
             var resultHandleAP = _detailRequestService.HandleApprovers(approvers, theId).Value as dynamic;
             var resultHandleFile = await handleFile(files, theId);
-            var filesResults = resultHandleFile.Value as dynamic;
+            var filesResults = resultHandleFile.Value as dynamic;  
             string filePath = Path.Combine("data/request", theId.ToString());
 
             if (resultHandTotal?.success)
