@@ -210,6 +210,8 @@ namespace PaymentModule.Context
                      j.HasKey("DepartmentId", "UserId", "Position");
                  }
              );
+
+            modelBuilder.Entity<DepartmentEntity>().Property(de => de.IsDeteted).HasDefaultValue(true);
         }
     }
 }
