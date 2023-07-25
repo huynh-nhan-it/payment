@@ -105,8 +105,10 @@ namespace PaymentModule.Controllers
                             if (i == 0)
                             {
                                 firstName = fullname[i];
+                            } else
+                            {
+                                lastName += fullname[i] + " ";
                             }
-                            lastName += fullname[i] + " ";
                         }
 
                         string phoneNumber = "0" + GenerateRandomPhoneNumber();
