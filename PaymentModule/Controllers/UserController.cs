@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PaymentModule.Services.IServices;
 using PaymentModule.Services.Implements;
+using Microsoft.EntityFrameworkCore;
 
 namespace PaymentModule.Controllers
 {
@@ -101,6 +102,58 @@ namespace PaymentModule.Controllers
         [HttpPost("create-request")]
         public async Task<IActionResult> createRequest([FromForm] CreatePaymentRequestDto prd)
         {
+            var RequestId = prd.RequestId;
+            string RequestCode = "";
+            Guid PaymentRequestId = Guid.NewGuid();
+            if (!string.IsNullOrWhiteSpace(RequestId))
+            {
+                string DirPath = Path.Combine("data/request", RequestId);
+                if (Directory.Exists(DirPath)) { Directory.Delete(DirPath, true); }
+                var PaymentRequest = _context.PaymentRequests.FirstOrDefault(pr => pr.Id.ToString() == RequestId);
+                if (PaymentRequest != null)
+                {
+                    PaymentRequestId = new Guid(RequestId);
+                    RequestCode = PaymentRequest.RequestCode;
+                    var DetailRequest = _context.DetailRequests.Include(dr => dr.Attachments)
+                                               .Include(dr => dr.DetailRequestTables)
+                                               .Include(dr => dr.Comments)
+                                               .Include(dr => dr.Approvers)
+                                               .Include(dr => dr.TotalPayment)
+                                               .Include(dr => dr.Bank)
+                                               .FirstOrDefault(dr => dr.Id.Equals(PaymentRequest.DetailRequestId));
+
+                    if (DetailRequest != null)
+                    {
+                        // Xóa các bản ghi liên quan từ các bảng con
+                        _context.RemoveRange(DetailRequest.Attachments);
+                        _context.RemoveRange(DetailRequest.DetailRequestTables);
+                        _context.RemoveRange(DetailRequest.Comments);
+
+                        // Xóa các bản ghi liên quan từ bảng n-n
+                        foreach (var approver in DetailRequest.Approvers.ToList())
+                        {
+                            DetailRequest.Approvers.Remove(approver);
+                        }
+
+                        // Xóa các bản ghi liên quan từ bảng 1-1 (nếu có)
+                        if (DetailRequest.TotalPayment != null)
+                        {
+                            _context.TotalPayments.Remove(DetailRequest.TotalPayment);
+                        }
+
+                        if (DetailRequest.Bank != null)
+                        {
+                            _context.Banks.Remove(DetailRequest.Bank);
+                        }
+
+                        // Cuối cùng, xóa bản ghi từ bảng DetailRequestEntity
+                        _context.PaymentRequests.Remove(PaymentRequest);
+                        _context.DetailRequests.Remove(DetailRequest);
+                        _context.SaveChanges();
+
+                    }
+                }
+            }
             Guid theId = Guid.NewGuid();
             string purpose = prd.Purpose;
             string department = prd.Department;
@@ -111,15 +164,15 @@ namespace PaymentModule.Controllers
             int ponumber = prd.PONumber;
             IFormFileCollection files = prd.files;
             string paymentmethod = prd.PaymentMethod;
-            
+            string typeSave = prd.typeSave;
 
             double suggestedAmount = prd.SuggestedAmount;
             double tax = prd.Tax;
             double advanceAmount = prd.AdvanceAmount;
             double totalPayment = prd.TotalPayment;
 
-            List<DetailTableDto> detailTables = JsonConvert.DeserializeObject<List<DetailTableDto>>(prd.DetailTable); 
-            List<ApproverDto> approvers = JsonConvert.DeserializeObject<List<ApproverDto>>(prd.Approvers);
+            List<DetailTableDto> detailTables = JsonConvert.DeserializeObject<List<DetailTableDto>>((prd.DetailTable == "" || prd.DetailTable == null) ? "[]": prd.DetailTable); 
+            List<ApproverDto> approvers = JsonConvert.DeserializeObject<List<ApproverDto>>((prd.Approvers == "" || prd.Approvers == null) ? "[]" : prd.Approvers);
             string authorizationHeader = Request.Headers["Authorization"];
             string token = "";
             string userId = "";
@@ -175,7 +228,7 @@ namespace PaymentModule.Controllers
                 _context.TotalPayments.Add(resultHandTotal?.totalPayment);
                 _context.SaveChanges();
             }
-            if (purpose == null || department == null || paymentfor == null || supplier == null)
+            if (string.IsNullOrWhiteSpace(purpose) || string.IsNullOrWhiteSpace(department) || string.IsNullOrWhiteSpace(paymentfor) || string.IsNullOrWhiteSpace(supplier))
             {
                 if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
                 return BadRequest("Please enter the required information");
@@ -199,7 +252,7 @@ namespace PaymentModule.Controllers
                 _context.Attachments.Add(attachment);
             }
 
-            var resultInsertpaymentRequest = _paymentRequestService.InsertpaymentRequest(theId, userId).Value as dynamic;
+            var resultInsertpaymentRequest = _paymentRequestService.InsertpaymentRequest(theId, userId, typeSave, RequestCode, PaymentRequestId).Value as dynamic;
             if (resultInsertpaymentRequest?.error) {
                 if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
                 return BadRequest(resultInsertpaymentRequest?.message); 
@@ -438,6 +491,28 @@ namespace PaymentModule.Controllers
                 }
             }
             return true;
-        } 
+        }
+
+        [HttpDelete("delete-request")]
+
+        public IActionResult deleteRequest(Guid RequestId)
+        {
+            var Request = _context.PaymentRequests.FirstOrDefault(p => p.Id.Equals(RequestId));
+            if (Request != null)
+            {
+                try
+                {
+                    Request.isDelete = false;
+                    _context.PaymentRequests.Update(Request);
+                    return Ok(new { success = true, error = false, message = "Delete Request successful" });
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { success = false, error = true, message = e.Message });
+                }
+            }
+            return BadRequest(new { success = false, error = true, message = "Does not exist request" });
+        }
+       
     }
 }

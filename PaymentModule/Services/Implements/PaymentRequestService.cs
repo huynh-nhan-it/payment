@@ -18,11 +18,12 @@ namespace PaymentModule.Services.Implements
             _userService = userService;
             _detailRequestService = detailRequestService;
         }   
-        ObjectResult IPaymentRequestService.InsertpaymentRequest(Guid requestId, string userId)
+        ObjectResult IPaymentRequestService.InsertpaymentRequest(Guid requestId, string userId, string type, string RequestCode, Guid paymentRequestId)
         {
             try
             {
-                string resultRequestCode;
+                string resultRequestCode = RequestCode == "" ? "" : RequestCode;
+                bool isDaft = type == "create-request" ? false : true;
                 var lastPaymentRequest = _context.PaymentRequests
                     .OrderByDescending(pr => pr.Id)
                     .FirstOrDefault();
@@ -42,11 +43,13 @@ namespace PaymentModule.Services.Implements
 
                 var paymentRequest = new PaymentRequestEntity
                 {
+                    Id = paymentRequestId,
                     RequestCode = resultRequestCode, //Testing...
                     Purpose = _detailRequestService.GetPurposeById(requestId),
-                    StatusId = new Guid("80BCF31A-08AA-433D-879D-AB55E7730045"), //Approving
+                    StatusId = isDaft ? new Guid("D86CF51D-17FA-43BB-BFC5-369EE3034B35") : new Guid("80BCF31A-08AA-433D-879D-AB55E7730045") , //Approving
                     UserId = new Guid(string.IsNullOrEmpty(userId) ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : userId), //Testing...
                     CreateAt = DateTime.Now,
+                    isDelete = false,
                     DetailRequestId = requestId
                 };
 

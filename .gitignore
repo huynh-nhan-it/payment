@@ -1,8 +1,8 @@
 # Thư mục và tệp tin được bỏ qua
 bin/
 obj/
-Migrations/
 packages/
+Migrations/
 *.user
 *.suo
 .vs/
