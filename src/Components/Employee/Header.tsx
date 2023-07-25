@@ -5,11 +5,6 @@ import { AiOutlineSave } from "react-icons/ai";
 import { TiArrowBackOutline } from "react-icons/ti";
 const { Header } = Layout;
 
-interface Employee {
-  key: string;
-  name: string;
-  infor: string;
-}
 interface OverviewInfor {
   $id: string;
   Id: string;
@@ -35,32 +30,127 @@ interface OverviewInfor {
   EmployeeType: string;
   Rights: string;
 }
+
+
 interface AdditionalInfor {
-  key: string;
-  label: string;
-  children: {
-    key: string;
-    name: string;
-    infor: string | number;
-    isEditable: boolean;
-    type: string;
-  }[];
-}
-interface FamilyInfor {
-  key: string;
-  label: string;
-  children: {
-    key: string;
-    name: string;
-    infor: string | number;
-    isEditable: boolean;
-    type: string;
-  }[];
+  $id: string;
+  Id: string;
+  UserId: string;
+  User: {
+    $ref: string;
+  };
+  Nation: string;
+  IDCardNumber: string;
+  DateOfIDCard: string;
+  PlaceOfIDCard: string;
+  HealthInsurance: string;
+  StartingDate: string;
+  StartingDateOfficial: string;
+  LeavingDate: string;
+  StartDateMaternityLeave: string;
+  Note: string;
+  AcademicLevel: string;
+  SpecializedQualification: string;
+  BusinessPhone: string;
+  HomePhone: string;
+  PersonalEmail: string;
+  BankName: string;
+  BranchNumber: string;
+  BankBranchName: string;
+  BankAccountNumber: string;
+  BankAccountName: string;
+  Street: string;
+  BuildingOrFlatNumber: string;
+  City: string;
+  ProvinceOrState: string;
+  PostalCode: string;
+  Country: string;
+  contracts: {
+    $id: string;
+    $values: Contract[];
+  };
 }
 
+interface Contract {
+  $id: string;
+  Id: string;
+  AddtionalId: string;
+  ContractType: string;
+  FromDate: string;
+  ToDate: string;
+  SigningDate: string;
+  Subject: string;
+  Department: string;
+  Note: string;
+}
+
+interface Family {
+  $id: string;
+  Id: string;
+  UserId: string;
+  User: {
+    $ref: string;
+  };
+  MartialStatus: string;
+  ContactName: string;
+  Relationship: string;
+  Phone: string;
+  Street: string;
+  BuildingOrFlatNumber: string;
+  City: string;
+  ProvinceOrState: string;
+  PostalCode: string;
+  Country: string;
+  relationships: {
+    $id: string;
+    $values: Relationship[];
+  };
+}
+
+interface Relationship {
+  $id: string;
+  Id: string;
+  FamilyId: string;
+  ContactName: string;
+  BirthDay: string;
+  Relationship: string;
+  Note: string;
+}
+
+interface Signature {
+  $id: string;
+  Id: string;
+  UserId: string;
+  User: {
+    $ref: string;
+  };
+  QRcode: string;
+  dateTime: string;
+  ImagePath: string;
+}
+interface UserInfo {
+  $id: string;
+  Id: string;
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  PhoneNumber: string;
+  Avatar: string;
+  AccountId: string;
+  MyAccount: any;
+  Roles: any;
+  PaymentRequests: any;
+  DetailRequests: any;
+  JobTitle: string;
+  Overview: OverviewInfor;
+  Additional: AdditionalInfor;
+  Family: Family;
+  Signature: Signature;
+  Departments: any;
+}
 interface HeaderEmployeeProps {
   isEditable: boolean;
-  data: OverviewInfor;
+  data: UserInfo;
   // data: [Employee[], AdditionalInfor[], FamilyInfor[]];
   setEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -82,6 +172,7 @@ const HeaderEmployee: React.FC<HeaderEmployeeProps> = ({
         style={{
           display: "flex",
           backgroundColor: "#F5F6FA",
+          marginTop: "64px",
           alignItems: "center",
         }}>
         <div onClick={handleClickSave}>{isEditable && <AiOutlineSave />}</div>

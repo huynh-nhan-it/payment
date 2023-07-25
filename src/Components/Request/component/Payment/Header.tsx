@@ -19,20 +19,22 @@ interface HeaderProps {
 
 const HeaderPayment: React.FC<HeaderProps> = ({exportData}) => {
 
-  const [dataExcel, setDataExcel] = useState();
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // const [dataExcel, setDataExcel] = useState();
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   
-  const fetchData = async () => {
-    try {
-      const data = await getDataExcel();
-      console.log(data);
-      setDataExcel(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const data = await getDataExcel();
+  //     console.log(data);
+  //     setDataExcel(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+
   return (
     <Header 
       className="header-payment"
@@ -53,7 +55,7 @@ const HeaderPayment: React.FC<HeaderProps> = ({exportData}) => {
 
         <div className="create-new padding-10 bg-create-new color-white">
           {" "}
-         <Link style={{color:"#fff"}} to={"/request/create-request"}> + Create New</Link>
+         <Link style={{color:"#fff"}} to={"/request/payment/new"}> + Create New</Link>
         </div>
       </div>
     </Header>

@@ -3,81 +3,70 @@ import "./employee.css";
 import { DatePicker, Form, Input, Table } from "antd";
 import FormItem from "antd/es/form/FormItem";
 interface Address {
-  Street: string;
-  "Building / flatnumber": string;
-  City: string;
-  "Province / state": string;
-  "Postal code": string;
+  Street: string | undefined;
+  "Building / flatnumber": string | undefined;
+  City: string | undefined;
+  "Province / state": string | undefined;
+  "Postal code": string | undefined;
   // Các trường dữ liệu khác nếu có
 }
 
 interface BankAccount {
-  "Bank Name": string;
-  "Branch number": string;
-  "Bank brach name": string;
-  "Bank account number ": string;
-  "Bank Account Name": string;
+  "Bank Name": string | undefined;
+  "Branch number": string | undefined;
+  "Bank brach name": string | undefined;
+  "Bank account number": string | undefined;
+  "Bank Account Name": string | undefined;
   // Các trường dữ liệu khác nếu có
 }
 
 interface ContactInfo {
-  "Business phone": string;
-  "Home phone": string;
-  "Personal email": string;
+  "Business phone": string | undefined;
+  "Home phone": string | undefined;
+  "Personal email": string | undefined;
   // Các trường dữ liệu khác nếu có
 }
 
 interface Data {
-  Nation: string;
-  Phone: string;
-  "ID card number": string;
-  "Date of ID Card": string;
-  "Place of ID card": string;
+  Nation: string | undefined;
+  Phone: string | undefined;
+  "ID card number": string | undefined;
+  "Date of ID Card": string | undefined;
+  "Place of ID card": string | undefined;
+  "Health insurance": string | undefined;
+  "Starting date": string | undefined;
+  "Starting date offical": string | undefined;
+  "Leaving date": string | undefined;
+  "Start Date Maternity Leave": string | undefined;
+  Note: string | undefined;
   // Các trường dữ liệu khác nếu có
 }
 
 interface Literacy {
-  "Academic level": string;
-  "Specialized qualification": string;
+  "Academic level": string | undefined;
+  "Specialized qualification": string | undefined;
   // Các trường dữ liệu khác nếu có
 }
 
-interface AdditionalInfor{
-  Address:Address;
-  BankAccount:BankAccount;
-  ContactInfo:ContactInfo;
-  Literacy:Literacy;
-  Data:Data;
+interface AdditionalInfor {
+  Address: Address;
+  "Bank account": BankAccount;
+  "Contact Info": ContactInfo;
+  Literacy: Literacy;
+  Data: Data;
 }
-
-interface MyObject {
-  [key: string]: any;
-}
-
-interface Section {
-  [sectionTitle: string]: AdditionalInfor;
-}
-
 
 interface AdditionalProps {
-  data: MyObject;
+  data: AdditionalInfor;
   isEditable?: boolean;
 }
-// interface AdditionalProps {
-//   data: ;
-//   isEditable: boolean;
-//   setData: React.Dispatch<React.SetStateAction<AdditionalInfor[]>>;
-// }
-
 const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
   const formItems = Object.entries(data).map(([key, value]) => ({
     label: key,
     value: value,
   }));
 
-  console.log(formItems.map(fit => 
-    fit.value
-  ));
+  console.log(formItems.map((fit) => fit.value));
 
   console.log(data);
 
@@ -117,7 +106,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
 
   return (
     <div>
-      <Form>
+      {/* <Form> */}
         {/* {formItems.map((item: any) => {
             return (
               <div key={item.key}>
@@ -176,7 +165,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
           
         } */}
 
-        {formItems.map((item) =>
+        {/* {formItems.map((item) =>
           item.label === "User" ||
           item.label === "$id" ||
           item.label === "Id" ||
@@ -203,12 +192,11 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
                 />
               ) : (
                 <span style={{ display: "flex", alignItems: "start" }}>
-                  {/* {item.value} */}
                 </span>
               )}
             </Form.Item>
           )
-        )}
+        )} */}
         {/* {data.map((item) => (
           // <span>{item.label}</span>
           (item.children.map((child) => (
@@ -257,8 +245,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
             </Form.Item>
           )))
         ))} */}
-      </Form>
-
+      {/* </Form> */}
 
       {Object.entries(data).map(([sectionTitle, sectionData]) => (
         <div key={sectionTitle} style={{ marginBottom: 20 }}>
@@ -268,21 +255,51 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
               <Form.Item
                 label={key}
                 colon={false}
-                labelCol={{ span: 6, style: { display: 'flex' } }}
+                labelCol={{ span: 6, style: { display: "flex" } }}
                 style={{
-                  padding: '4px 8px',
-                  borderBottom: 'solid #ccc 0.2px',
-                  marginBottom: '0px',
+                  padding: "4px 8px",
+                  borderBottom: "solid #ccc 0.2px",
+                  marginBottom: "0px",
                 }}
-                key={key}
-              >
-                <Input
+                key={key}>
+                {/* <Input
                   style={{ width: '100%' }}
                   // value=""
-                  value={value} // Bind the value to the input
-                  // You can add onChange event handler here if you need to update the value
-                  // onChange={(e) => handleInputChange(e.target.value, key, sectionTitle)}
-                />
+                  value={value as string | undefined} 
+                /> */}
+
+                {isEditable ? (
+                  key === "Starting date offical" ||
+                  key === "Leaving date" ||
+                  key === "Start Date Maternity Leave" ? (
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      // value={value as string | undefined}
+                      disabled={true}
+                      // value={item.value}
+                      // onChange={(e) =>
+                      //   handleInputChange(e.target.value, item.key, "infor")
+                      // }
+                    />
+                  ) : key === "Date of ID Card" ? (
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      // onChange={(e, datestring) =>
+                      //   handleInputChange(datestring, item.key, child.key, "infor")
+                      // }
+                    />
+                  ) : (
+                    <Input
+                      style={{ width: "100%" }}
+                      value={value as string | undefined}
+                    />
+                  )
+                ) : (
+                  <span style={{ display: "flex", alignItems: "start" }}>
+                    {/* {item.value} */}
+                    {value as string | undefined}
+                  </span>
+                )}
               </Form.Item>
             ))}
           </Form>

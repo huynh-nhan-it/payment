@@ -183,6 +183,7 @@ import { BsFillCameraFill } from "react-icons/bs";
 import { AiOutlineCamera } from "react-icons/ai";
 import Avatar from "./Avatar";
 import { getEmployeeInfor } from "../../Services/User/getAccount";
+// import { Data } from "./Data";
 interface OverviewInfor {
   $id: string;
   Id: string;
@@ -208,6 +209,7 @@ interface OverviewInfor {
   EmployeeType: string;
   Rights: string;
 }
+
 
 interface AdditionalInfor {
   $id: string;
@@ -306,13 +308,7 @@ interface Signature {
   ImagePath: string;
 }
 
-interface Data {
-  [key: string]: string;
-}
 
-interface Section {
-  [sectionTitle: string]: Data;
-}
 
 interface UserInfo {
   $id: string;
@@ -338,7 +334,7 @@ interface UserInfo {
 const InforUser = () => {
   const [dataOverview, setDataOverview] = useState<{}>({});
   const [dataTest, setDataTest] = useState({});
-  const [dataFamily, setDataFamily] = useState<Family>();
+  const [dataFamily, setDataFamily] = useState<{}>({});
   const [dataAdditional, setDataAdditional] = useState<{}>({});
   const [dataEmployee, setDataEmployee] = useState<UserInfo>();
   useEffect(() => {
@@ -353,6 +349,7 @@ const InforUser = () => {
         setDataEmployee(data.userInfo);
         setDataOverview(data.userInfo.Overview);
         setDataAdditional(data.userInfo.Additional);
+        setDataFamily(data.userInfo.Family);
       }
       // console.log(dataEmployee);
 
@@ -398,11 +395,11 @@ const InforUser = () => {
       "Personal email": dataEmployee?.Additional.PersonalEmail,
     },
     "Bank account": {
-      "Bank Name": dataEmployee?.Additional.BusinessPhone,
-      "Branch number": dataEmployee?.Additional.HomePhone,
-      "Bank brach name": dataEmployee?.Additional.PersonalEmail,
-      "Bank account number	": dataEmployee?.Additional.PersonalEmail,
-      "Bank Account Name": dataEmployee?.Additional.PersonalEmail,
+      "Bank Name": dataEmployee?.Additional.BankName,
+      "Branch number": dataEmployee?.Additional.BankAccountNumber,
+      "Bank brach name": dataEmployee?.Additional.BankBranchName,
+      "Bank account number": dataEmployee?.Additional.BankAccountNumber,
+      "Bank Account Name": dataEmployee?.Additional.BankAccountName,
     },
     Address: {
       Street: dataEmployee?.Additional.Street,
@@ -414,11 +411,33 @@ const InforUser = () => {
     },
   };
 
+const dataFamilyInfor = {
+  MartialStatus: {
+    MartialStatus: dataEmployee?.Family.MartialStatus
+  },
+  "Emergency Contact": {
+    "Contact name": dataEmployee?.Family.ContactName,
+    "Relationship": dataEmployee?.Family.Relationship,
+    "Phone": dataEmployee?.Family.Phone,
+  },
+  "Permanent Address": {
+    "Street": dataEmployee?.Family.Street,
+    "Building / flatnumber": dataEmployee?.Family.BuildingOrFlatNumber,
+    "City": dataEmployee?.Family.City,
+    "Province / state": dataEmployee?.Family.ProvinceOrState,
+    "Postal code": dataEmployee?.Family.PostalCode,
+    "Country": dataEmployee?.Family.Country,
+  }
+
+}
+
+console.log(dataFamilyInfor);
   const onChange = (key: string) => {
     console.log(key);
   };
   const [editable, setEditable] = useState(false);
 
+  // console.log(dataAdditionalInfor);
   const items: TabsProps["items"] = [
     {
       key: "1",
@@ -436,15 +455,15 @@ const InforUser = () => {
         />
       ),
     },
-    // {
-    //   key: '3',
-    //   label: `Family`,
-    //   children: <Family
-    //     data={dataFamily}
-    //     setData={setDataFamily}
-    //     isEditable={editable}
-    //   />,
-    // },
+    {
+      key: '3',
+      label: `Family`,
+      children: <Family
+        data={dataFamilyInfor}
+        setData={setDataFamily}
+        isEditable={editable}
+      />,
+    },
     {
       key: "4",
       label: `Properties`,
@@ -466,7 +485,7 @@ const InforUser = () => {
   return (
     <div>
       {/* , Additional[], Family[] */}
-      {/* <HeaderEmployee setEditable={setEditable} data={data as OverviewInfor} isEditable={editable} /> */}
+      <HeaderEmployee setEditable={setEditable} data={dataEmployee as UserInfo} isEditable={editable} />
       <div className="employee-avatar-name-edit">
         <h2 className="name-employee">
           {editable && (

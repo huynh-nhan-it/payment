@@ -26,7 +26,7 @@ function App() {
   } = theme.useToken();
 
   const [email, setEmail] = useState("");
-  
+
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
     if (storedToken) {
@@ -37,7 +37,7 @@ function App() {
         decoded[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
         ];
-        // console.log(decoded);
+      // console.log(decoded);
 
       setEmail(emailAddress);
     }
@@ -54,7 +54,7 @@ function App() {
       {/* <ProtectedRoutes /> */}
       <BrowserRouter>
         <Routes>
-          <Route
+          {/* <Route
             path="/"
             element={email ? <ApiCall /> : <Navigate to="/login" />}
           />
@@ -65,60 +65,22 @@ function App() {
           <Route
             path="/"
             element={!email ? <Navigate to="/login" /> : <Navigate to="/" />}
-          />
-          {/* <Route path="/" element={<ApiCall />} /> */}
+          /> */}
         </Routes>
         {email && (
-          <Layout>
-            <HeaderRequest />
-            <Content>
-              <Layout>
-                <Sider
-                  className="sider-request"
-                  style={{
-                    background: colorBgContainer,
-                    padding: "64px 0",
-                    position: "fixed",
-                    height: "100%",
-                    borderRight: "solid #ccc 0.1px",
-                  }}
-                  // collapsedWidth="0"
-                  collapsible
-                  collapsed={collapsed}
-                  onCollapse={(value) => setCollapsed(value)}>
-                  <Search
-                    placeholder="input search text"
-                    // onSearch={onSearch}
-                    style={{
-                      width: 200,
-                    }}
-                  />
-                  <NavbarRequest />
-                </Sider>
-                <Content
-                  style={{ paddingLeft: collapsed ? "0" : "200px" }}
-                  className="content-request">
-                  <Routes>
-                    <Route path="setting" element={<Setting />}></Route>
-                    <Route
-                      path="setting/system/department"
-                      element={<StructureOrganization />}></Route>
-                    <Route
-                      path="request/payment/view/:requestCode"
-                      element={<ViewPayment></ViewPayment>}></Route>
-                    <Route path="request/payment" element={<Request />} />
-                    <Route
-                      path="setting/system/employee"
-                      element={<Employee />}
-                    />
-                    <Route
-                      path="PaymentRequest"
-                      element={<SubmitRequest />}></Route>
-                  </Routes>
-                </Content>
-              </Layout>
-            </Content>
-          </Layout>
+          <Routes>
+            <Route path="/" element={<ApiCall />} />
+            <Route path="setting" element={<Setting />}></Route>
+            <Route
+              path="setting/system/department"
+              element={<StructureOrganization />}></Route>
+            <Route
+              path="request/payment/view/:requestCode"
+              element={<ViewPayment></ViewPayment>}></Route>
+            <Route path="request/payment" element={<Request />} />
+            <Route path="setting/system/employee" element={<Employee />} />
+            <Route path="request/payment/new" element={<SubmitRequest />}></Route>
+          </Routes>
         )}
 
         {/* <Routes>

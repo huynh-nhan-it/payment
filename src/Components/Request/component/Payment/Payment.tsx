@@ -30,6 +30,11 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   const [createdBy, setCreatedBy] = useState("");
   const [status, setStatus] = useState("");
   // console.log(filteredData);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    fetchData(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     setPurpose(filteredData.purpose);
@@ -40,19 +45,34 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     setStatus(filteredData.status);
   });
 
-  // console.log(filteredData.createdDateFrom);
-  useEffect(() => {
+  const fetchData = (page: any) => {
     axios
-      .get(
-        `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}`
-      )
+    .get(
+      `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${page}`
+    )
+      // .get(`http://localhost:5005/api/PaymentRequest/?page=${page}`)
       .then((response) => {
         setData(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [data]);
+  };
+
+  console.log(data);
+  // console.log(filteredData.createdDateFrom);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}`
+  //     )
+  //     .then((response) => {
+  //       setData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, [data]);
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -126,7 +146,12 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
           onClick: () => handleRowClick(record.requestCode),
         })}
         rowKey="requestCode"
-        pagination={{pageSize: 2}}
+        pagination={{
+          pageSize: 2,
+          current: currentPage,
+          total: 50, // Replace with the total number of records from the API
+          onChange: (page) => setCurrentPage(page),
+        }}
         scroll={{ x: "max-content" }}
       />
     </>
