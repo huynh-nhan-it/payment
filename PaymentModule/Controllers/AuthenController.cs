@@ -37,6 +37,12 @@ namespace PaymentModule.Controllers
             return Ok(_accountRepository.GetMyAccount());
         }
 
+        [HttpPost("Insert-Fake-Data")]
+        public IActionResult FakeDataUser(List<UserDto> DataFakeList)
+        {
+            return Ok();
+        }
+
         [HttpPost("Register")]
         public IActionResult Register(UserDto request)
         {

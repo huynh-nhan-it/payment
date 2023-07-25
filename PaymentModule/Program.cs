@@ -34,8 +34,8 @@ builder.Services.AddScoped<IDepartmentBearService, DepartmentBearService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+builder.Services.AddScoped<IPaymentRequestService, PaymentRequestService>();
 builder.Services.AddScoped<IDetailRequestService, DetailRequestService>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPersonalService, PersonalService>();
 
 //Add 

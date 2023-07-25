@@ -18,11 +18,12 @@ namespace PaymentModule.Services.Implements
         private object ParentId;
 
 
-        public DetailRequestService(PaymentContext context, IUserService userService, IDepartmentBearService departmentBearService)
+        public DetailRequestService(PaymentContext context, ConnectionStringSettings connectionStringSettings, IUserService userService, IDepartmentBearService departmentBearService)
         {
             _context = context;
             _userService = userService;
             _departmentBearService = departmentBearService;
+            _connectionStringSettings =     connectionStringSettings;
         }
 
         List<CommentModel> IDetailRequestService.GetCommentList(Guid DetailRequestId)
@@ -161,12 +162,18 @@ namespace PaymentModule.Services.Implements
         {
             string error_mess = "Please enter the required information";
             ICollection<DetailTableEntity> detailTableEntitys = new List<DetailTableEntity>();
+            var departmentBearId = new Guid();
             foreach (DetailTableDto colunm in Table)
             {
                 if (colunm.Amount < 0 || colunm.PaymentContent == null)
                 {
                     return new ObjectResult(new { success = false, error = true, message = error_mess });
                 }
+
+                if(!string.IsNullOrEmpty(colunm.DepartmentBear))
+                {
+                    departmentBearId = _departmentBearService.GetIdByDepartmentBear(colunm.DepartmentBear);
+                } 
                 var detailTableEntity = new DetailTableEntity
                 {
                     InvDate = colunm.InvDate,
@@ -174,7 +181,7 @@ namespace PaymentModule.Services.Implements
                     Amount = colunm.Amount,
                     InvNo = colunm.InvNo,
                     Industry = colunm.Industry,
-                    DepartmentBearId = _departmentBearService.GetIdByDepartmentBear(colunm.DepartmentBear),
+                    DepartmentBearId = departmentBearId,
                     Note = colunm.Note,
                     DetailRequestId = requestId,
                 };
