@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "../../../css/index.css";
 import { MdOutlineGroups } from "react-icons/md";
-import { Affix, Button, Col, Form, Input, List, Row, Tabs } from "antd";
-import axios from "axios";
+import { Affix, Col, Input, List, Row, Tabs } from "antd";
 import { getDepartments } from "../../../../../../../../Services/PaymentRequest/apiForm";
+import { getDepartmentUsers } from "../../../../../../../../Services/Organizations/apiDepartmentUsers";
+
 const NavbarDepartment = () => {
-  const [departmentData, setDepartmentData] = useState<{ id: string; name: string }[]>([]);
+
+  interface User {
+    fullName: string;
+    email: string;
+    jobTitle: string;
+  }
+  const [departmentData, setDepartmentData] = useState<string[]>([]);
+  const [manager, setManager] = useState<User | null>(null);
+  const [supervisor, setSupervisor] = useState<User[]>();
+  const [employees, setEmployees] = useState<User[]>();
+
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -15,19 +27,46 @@ const NavbarDepartment = () => {
     
     const departmentResponse = await getDepartments();
 
-   
+    
     setDepartmentData(departmentResponse);
   } catch (error) {
     console.error(error);
   }
 };
 
-const [selectedDepartment, setSelectedDepartment] = useState<any | null>(null);
+const [nameDepartment, setNameDepartment] = useState<any | null>(null);
+const [descriptionDepartment, setDecriptionDepartment] = useState<any | null>(null);
+const [underDepartment, setUnderDepartmen] = useState<any | null>(null);
+const [contactDepartment, setContactDepartmen] = useState<any | null>(null);
+const [codeDepartment, setCodeDepartmen] = useState<any | null>(null);
 
-  const handleDepartmentClick = (department: any) => {
-    setSelectedDepartment(department);
-    console.log(department)
+
+  const handleDepartmentClick = async (department: any) => {
+    setNameDepartment(department);
+    
+
+
+    try {
+      // Gọi hàm getDepartmentUsers để lấy danh sách người dùng của phòng ban
+      const data = await getDepartmentUsers(department);
+      setDecriptionDepartment(data.description);
+      setUnderDepartmen(data.underDepartment);
+      setContactDepartmen(data.contact);
+      setCodeDepartmen(data.code);
+      // Điều gì đó với danh sách người dùng đã nhận được từ API
+      setManager(data.manager);
+      setSupervisor(data.supervisors);
+      setEmployees(data.employees);
+      
+
+
+    } catch (error) {
+      console.error(error);
+    }
+
+    
   };
+  console.log(manager);
   
 
 
@@ -47,14 +86,14 @@ const [selectedDepartment, setSelectedDepartment] = useState<any | null>(null);
           <Affix target={() => container}>
             <ul>
               {departmentData.map((dep) => (
-                <li onClick={() => handleDepartmentClick(dep.name)}
+                <li onClick={() => handleDepartmentClick(dep)}
                 className="department-list"
-                key={dep?.name}>
+                key={dep}>
                   <a className="org-department display-flex color-black" href="#">
                     <span className="org-department-icon">
                       <MdOutlineGroups />
                     </span>
-                    <p className="org-department-name">{dep?.name}</p>
+                    <p className="org-department-name">{dep}</p>
                   </a>
                 </li>
               ))}
@@ -66,9 +105,9 @@ const [selectedDepartment, setSelectedDepartment] = useState<any | null>(null);
     </Col>
     <Col span={16}>
       <div style={{paddingTop: 64}} className="details-department">
-        {selectedDepartment && (
+        {nameDepartment && (
           <>
-            <h2 style={{textAlign:"left", fontSize: 40}}>{selectedDepartment}</h2>
+            <h2 style={{textAlign:"left", fontSize: 40}}>{nameDepartment}</h2>
               <Tabs defaultActiveKey="1">
                 <Tabs.TabPane tab="Information" key="1">
                   <List>
@@ -79,10 +118,7 @@ const [selectedDepartment, setSelectedDepartment] = useState<any | null>(null);
                         Description
                       </td>
                       <td className="content-details">
-                      Chức năng
-a) Tham mưu và giúp Giám đốc Sở thực hiện quản lý nhà nước về công nghệ thông tin-điện tử (CNTT-ĐT).
-b) Tạo môi trường pháp lý, thể chế, chính sách, điều hành phối hợp, đào tạo, hợp tác quốc tế, thúc đẩy và hỗ trợ cho CNTT-ĐT phát triển.
-c) Hỗ trợ doanh nghiệp, đặc biệt là các doanh nghiệp vừa và nhỏ, tham gia đầu tư, cung cấp sản phẩm, dịch vụ, phát triển thị trường và cùng tham gia với Chính quyền thành phố trong các hoạt động xây dựng và thực hiện các chính sách phát triển CNT
+                      <p>{descriptionDepartment}</p>
                       </td>
                   </tr>               
                   }
@@ -95,7 +131,7 @@ c) Hỗ trợ doanh nghiệp, đặc biệt là các doanh nghiệp vừa và nh
                         Under the department	
                       </td>
                       <td className="content-details">
-                        OPUS Company
+                      <p>{underDepartment}</p>
                       </td>
                     </tr>
                   }
@@ -107,10 +143,8 @@ c) Hỗ trợ doanh nghiệp, đặc biệt là các doanh nghiệp vừa và nh
                         Contact Info	
                       </td>
                       <td className="content-details">
-                      - Tổ chức thực hiện các chương trình tuyên truyền, phổ biến, nâng cao nhận thức phát triển và ứng dụng CNTT-ĐT;
-- Tổ chức, phối hợp với các đơn vị có liên quan (trường, viện, cơ quan quan nghiên cứu) nghiên cứu, thử nghiệm, ứng dụng các tiến bộ khoa học, công nghệ trong lĩnh vực CNTT-ĐT;
-- Tham mưu Giám đốc Sở và phối hợp với các phòng ban trong các hoạt động hợp tác với các tỉnh/thành trong lĩnh vực CNTT-ĐT;
-- Tham gia các hoạt động hợp tác quốc tế, phối hợp tổ chức các hội nghị hội thảo trong
+                      <p>{contactDepartment}</p>
+
                       </td>
                     </tr>
                   }
@@ -122,25 +156,51 @@ c) Hỗ trợ doanh nghiệp, đặc biệt là các doanh nghiệp vừa và nh
                         Code
                       </td>
                       <td className="content-details">
-                        IT
+                      <p>{codeDepartment}</p>
                       </td>
                     </tr>
                   }
                   </List.Item>
                   </List>
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="Manager" key="2">
-                  {/* Hiển thị danh sách các Manager của department */}
+                </Tabs.TabPane>                                
+                <Tabs.TabPane tab="Manager" key="2">                                
+                  {manager &&(
+                    <List>
+                      <List.Item>
+                        <p>{manager.fullName}</p>
+                        <p>{manager.email}</p>
+                        <p>{manager.jobTitle}</p>
+                      </List.Item>
+                    </List>
+                  )}
+                                  
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Supervisor" key="3">
-                  {/* Hiển thị danh sách các Supervisor của department */}
+                  <List>
+                  {supervisor?.map((user) => (
+                    <List.Item>
+                    <p>{user.fullName}</p>
+                    <p>{user.email}</p>
+                    <p>{user.jobTitle}</p>
+                    </List.Item>
+                  ))}
+                  </List>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Employee" key="4">
-                  {/* Hiển thị danh sách các Employee của department */}
+                <List>
+                  {employees?.map((user) => (
+                    <List.Item>
+                    <p>{user.fullName}</p>
+                    <p>{user.email}</p>
+                    <p>{user.jobTitle}</p>
+                    </List.Item>
+                  ))}
+                  </List>
                 </Tabs.TabPane>
               </Tabs>
           </>
           )}
+          
       </div>
     </Col>
   </Row>

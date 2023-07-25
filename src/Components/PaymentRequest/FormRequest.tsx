@@ -6,7 +6,7 @@ import { getSuppliers, getCurrencies, getDepartments, postPaymentRequest } from 
 
 const { Content } = Layout;
 const FormItem = Form.Item;
-
+const { Option } = Select;
 
 const FormRequest: React.FC = () => {
   const {
@@ -15,9 +15,9 @@ const FormRequest: React.FC = () => {
   
   const [form] = Form.useForm();
   //test api
-  const [supplierData, setSupplierData] = useState<{ id: string; name: string }[]>([]);
-  const [currencyData, setCurrencyData] = useState<{ id: string; name: string }[]>([]);
-  const [departmentData, setDepartmentData] = useState<{ id: string; name: string }[]>([]);
+  const [supplierData, setSupplierData] = useState<string[]>([]);
+  const [currencyData, setCurrencyData] = useState<string[]>([]);
+  const [departmentData, setDepartmentData] = useState<string[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -92,13 +92,12 @@ const FormRequest: React.FC = () => {
                     <Select
                       style={{ width: 200 }}
                       key="department"
-                      options={departmentData.map((item) => (
-                        {
-                          value: item.name,
-                          label: item.name
-                        }
-                      ))}
                     >
+                      {departmentData.map((departmentName) => (
+                        <Option key={departmentName} value={departmentName}>
+                          {departmentName}
+                        </Option>
+                      ))}
                     </Select>
                   </Form.Item>
                   </Col>
@@ -128,14 +127,13 @@ const FormRequest: React.FC = () => {
                   >
                     <Select
                       style={{ width: 200 }}
-                      key="supplier"
-                      options={supplierData.map((item) => (
-                        {
-                          value: item.name,
-                          label: item.name
-                        }
-                      ))}
+                      key="supplier"                      
                     >
+                      {supplierData.map((supplierName) => (
+                        <Option key={supplierName} value={supplierName}>
+                          {supplierName}
+                        </Option>
+                      ))}
                     </Select>
                   </Form.Item>
                   </Col>
@@ -149,14 +147,13 @@ const FormRequest: React.FC = () => {
                   >
                     <Select
                       style={{ width: 200 }}
-                      key="currency"
-                      options={currencyData.map((item) => (
-                        {
-                          value: item.name,
-                          label: item.name
-                        }
-                      ))}
+                      key="currency"                      
                     >
+                      {currencyData.map((currencyName) => (
+                        <Option key={currencyName} value={currencyName}>
+                          {currencyName}
+                        </Option>
+                      ))}
                     </Select>
                   </Form.Item>
                   </Col>
