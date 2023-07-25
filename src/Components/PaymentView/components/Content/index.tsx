@@ -37,6 +37,7 @@ interface PaymentRequest {
   supplier: string;
   currency: string;
   poNumber: number;
+  exchangeRate: number;
   tableDetailRequest: TableDetailRequest[];
   method: string;
   approverIds: Approver[];
@@ -47,9 +48,7 @@ const ViewContent: React.FC = () => {
   const [detail, setDetail] = useState<PaymentRequest | null>(null);
   useEffect(() => {
     axios
-      .get(
-        `http://localhost:5005/api/DetailRequest/${requestCode}`
-      )
+      .get(`http://localhost:5005/api/DetailRequest/${requestCode}`)
       .then((response) => {
         setDetail(response.data);
       })
@@ -151,6 +150,15 @@ const ViewContent: React.FC = () => {
               <Text>{detail?.currency}</Text>
             </div>
           </Col>
+          {detail?.currency !== "VND" && (
+            <Col className="col-info-request">
+              <div>
+                <Text strong>Exchange rate</Text>
+                <br />
+                <Text>{detail?.exchangeRate}</Text>
+              </div>
+            </Col>
+          )}
           <Col className="col-info-request">
             <div>
               <Text strong> PO/PR number</Text>

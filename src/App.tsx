@@ -43,7 +43,7 @@ function App() {
     }
   }, [email]);
 
-  console.log(email);
+  // console.log(email);
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -54,6 +54,14 @@ function App() {
       {/* <ProtectedRoutes /> */}
       <BrowserRouter>
         <Routes>
+          <Route
+            path="/login"
+            element={!email ? <Login /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/"
+            element={email ? <ApiCall /> : <Navigate to="/login" />}
+          />
           {/* <Route
             path="/"
             element={email ? <ApiCall /> : <Navigate to="/login" />}
@@ -69,7 +77,6 @@ function App() {
         </Routes>
         {email && (
           <Routes>
-            <Route path="/" element={<ApiCall />} />
             <Route path="setting" element={<Setting />}></Route>
             <Route
               path="setting/system/department"
@@ -79,10 +86,11 @@ function App() {
               element={<ViewPayment></ViewPayment>}></Route>
             <Route path="request/payment" element={<Request />} />
             <Route path="setting/system/employee" element={<Employee />} />
-            <Route path="request/payment/new" element={<SubmitRequest />}></Route>
+            <Route
+              path="request/payment/new"
+              element={<SubmitRequest />}></Route>
           </Routes>
         )}
-
         {/* <Routes>
           <Route
             path="/login"

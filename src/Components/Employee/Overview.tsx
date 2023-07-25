@@ -184,7 +184,7 @@ import { Breakpoint, Button, Col, Form, Input, Row, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import jsonData from "./api.json";
 import { json } from "react-router-dom";
-import { getEmployeeInfor } from "../../Services/User/getAccount";
+import { GetEmployeeInfor } from "../../Services/User/getAccount";
 
 interface Employee {
   key: string;

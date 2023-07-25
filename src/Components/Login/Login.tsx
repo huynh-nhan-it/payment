@@ -9,7 +9,13 @@ interface LoginFormValues {
   password: string;
 }
 
+
 const Login: React.FC = () => {
+  function isJWTToken(str: string): boolean {
+    const jwtRegex = /^[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$/;
+    return jwtRegex.test(str);
+  }
+  
   const [token, setToken] = useState("");
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,9 +27,12 @@ const Login: React.FC = () => {
         // Handle successful login here, e.g., store the token in Local Storage
         console.log("Login successful!");
         setToken(response.data);
-
+        console.log(response.data);
+        console.log(isJWTToken(response.data));
+        if(isJWTToken(response.data)){
+          localStorage.setItem("authToken", response.data);
+        }
         // Save token in Local Storage
-        localStorage.setItem("authToken", response.data);
       })
       .catch((error) => {
         // Handle login error here
@@ -65,13 +74,20 @@ const Login: React.FC = () => {
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: "100px",
-        height: "100%",
-        width: "500px",
+        height: "100vh",
+        width: "100vw",
         backgroundColor: "#fff",
-        border: "solid #ccc 0.1px",
       }}>
-      <Form<LoginFormValues> onFinish={onFinish}>
+      <Form<LoginFormValues>
+        style={{
+          width: "400px",
+          height: "400px",
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          border: "solid #ccc 0.1px",
+        }}
+        onFinish={onFinish}>
         <Form.Item
           name="email"
           label="email"
@@ -85,12 +101,7 @@ const Login: React.FC = () => {
           rules={[{ required: true, message: "Please enter your password" }]}>
           <Input.Password />
         </Form.Item>
-        <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{ offset: 8, span: 16 }}>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
+
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Login

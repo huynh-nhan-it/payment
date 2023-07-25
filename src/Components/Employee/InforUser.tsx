@@ -182,7 +182,7 @@ import jsonData from "./api.json";
 import { BsFillCameraFill } from "react-icons/bs";
 import { AiOutlineCamera } from "react-icons/ai";
 import Avatar from "./Avatar";
-import { getEmployeeInfor } from "../../Services/User/getAccount";
+import { GetEmployeeInfor } from "../../Services/User/getAccount";
 // import { Data } from "./Data";
 interface OverviewInfor {
   $id: string;
@@ -344,7 +344,7 @@ const InforUser = () => {
 
   const fetchData = async () => {
     try {
-      const data = await getEmployeeInfor();
+      const data = await GetEmployeeInfor();
       if (data) {
         setDataEmployee(data.userInfo);
         setDataOverview(data.userInfo.Overview);
