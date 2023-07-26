@@ -16,6 +16,7 @@ import Setting from "./Components/Setting";
 import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
 import SubmitRequest from "./Components/PaymentRequest/SubmitRequest";
 import jwt_decode from "jwt-decode";
+import Register from "./Components/Login/Register";
 
 const { Search } = Input;
 
@@ -56,6 +57,10 @@ function App() {
           <Route
             path="/login"
             element={!email ? <Login /> : <Navigate to="/" />}
+          />
+           <Route
+            path="/register"
+            element={ <Register/>}
           />
           <Route
             path="/"

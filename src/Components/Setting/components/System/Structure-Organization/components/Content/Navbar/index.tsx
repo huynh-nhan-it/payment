@@ -55,9 +55,9 @@ const NavbarDepartment = () => {
     } catch (error) {
       console.error(error);
     }
+    console.log(department);
   };
   console.log(manager);
-
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   return (

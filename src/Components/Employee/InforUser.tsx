@@ -180,9 +180,11 @@ import Signature from "./Signature";
 
 import jsonData from "./api.json";
 import { BsFillCameraFill } from "react-icons/bs";
-import { AiOutlineCamera } from "react-icons/ai";
+import { AiOutlineCamera, AiOutlineSave } from "react-icons/ai";
 import Avatar from "./Avatar";
-import { GetEmployeeInfor } from "../../Services/User/getAccount";
+import request, { GetEmployeeInfor } from "../../Services/User/getAccount";
+import { Header } from "antd/es/layout/layout";
+import { TiArrowBackOutline } from "react-icons/ti";
 // import { Data } from "./Data";
 interface OverviewInfor {
   $id: string;
@@ -209,7 +211,6 @@ interface OverviewInfor {
   EmployeeType: string;
   Rights: string;
 }
-
 
 interface AdditionalInfor {
   $id: string;
@@ -308,8 +309,6 @@ interface Signature {
   ImagePath: string;
 }
 
-
-
 interface UserInfo {
   $id: string;
   Id: string;
@@ -331,35 +330,75 @@ interface UserInfo {
   Departments: any;
 }
 
+interface UserInfoEdit {
+  Overview: {
+    EmployeeType: string;
+    Rank: string;
+  };
+  Additional: {
+    Nation: string;
+    IDCardNumber: string;
+    DateOfIDCard: string;
+    PlaceOfIDCard: string;
+    HealthInsurance: string;
+    StartingDate: string;
+    Note: string;
+    AcademicLevel: string;
+    SpecializedQualification: string;
+    BusinessPhone: string;
+    HomePhone: string;
+    PersonalEmail: string;
+    BankName: string;
+    BranchNumber: string;
+    BankBranchName: string;
+    BankAccountNumber: string;
+    BankAccountName: string;
+    Street: string;
+    BuildingOrFlatNumber: string;
+    City: string;
+    ProvinceOrState: string;
+    PostalCode: string;
+    Country: string;
+  };
+  Family:{
+    MartialStatus: string;
+    ContactName: string;
+    Relationship: string;
+    Phone: string;
+    Street: string;
+    BuildingOrFlatNumber: string;
+    City: string;
+    ProvinceOrState: string;
+    PostalCode: string;
+    Country: string;
+  }
+}
 const InforUser = () => {
-  const [dataOverview, setDataOverview] = useState<{}>({});
+  const [dataOverview, setDataOverview] = useState<Record<string, string>>({});
   const [dataTest, setDataTest] = useState({});
   const [dataFamily, setDataFamily] = useState<{}>({});
   const [dataAdditional, setDataAdditional] = useState<{}>({});
   const [dataEmployee, setDataEmployee] = useState<UserInfo>();
+
+  const id = localStorage.getItem("id");
+
   useEffect(() => {
-    fetchData();
-    // console.log(dataEmployee);
+    const getUserInfor = async () => {
+      const endpoint = "/Personal/EmployeeInfo?Id=" + id;
+      const response = await request.get(endpoint).then((res) => {
+        // console.log(res.data);
+        setDataEmployee(res.data.userInfo);
+        setDataOverview(res.data.userInfo.Overview);
+        setDataAdditional(res.data.userInfo.Additional);
+        setDataFamily(res.data.userInfo.Family);
+      });
+    };
+
+    getUserInfor();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const data = await GetEmployeeInfor();
-      if (data) {
-        setDataEmployee(data.userInfo);
-        setDataOverview(data.userInfo.Overview);
-        setDataAdditional(data.userInfo.Additional);
-        setDataFamily(data.userInfo.Family);
-      }
-      // console.log(dataEmployee);
+  // http://localhost:5005/api/Personal/EditInfoEmployee?Id=
 
-      // setDataOverview(data)
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  console.log(dataAdditional);
   const newDataOverview = {
     "First-name": dataEmployee?.FirstName,
     "Last-name": dataEmployee?.LastName,
@@ -411,38 +450,54 @@ const InforUser = () => {
     },
   };
 
-const dataFamilyInfor = {
-  MartialStatus: {
-    MartialStatus: dataEmployee?.Family.MartialStatus
-  },
-  "Emergency Contact": {
-    "Contact name": dataEmployee?.Family.ContactName,
-    "Relationship": dataEmployee?.Family.Relationship,
-    "Phone": dataEmployee?.Family.Phone,
-  },
-  "Permanent Address": {
-    "Street": dataEmployee?.Family.Street,
-    "Building / flatnumber": dataEmployee?.Family.BuildingOrFlatNumber,
-    "City": dataEmployee?.Family.City,
-    "Province / state": dataEmployee?.Family.ProvinceOrState,
-    "Postal code": dataEmployee?.Family.PostalCode,
-    "Country": dataEmployee?.Family.Country,
-  }
+  const dataFamilyInfor = {
+    MartialStatus: {
+      MartialStatus: dataEmployee?.Family.MartialStatus,
+    },
+    "Emergency Contact": {
+      "Contact name": dataEmployee?.Family.ContactName,
+      Relationship: dataEmployee?.Family.Relationship,
+      Phone: dataEmployee?.Family.Phone,
+    },
+    "Permanent Address": {
+      Street: dataEmployee?.Family.Street,
+      "Building / flatnumber": dataEmployee?.Family.BuildingOrFlatNumber,
+      City: dataEmployee?.Family.City,
+      "Province / state": dataEmployee?.Family.ProvinceOrState,
+      "Postal code": dataEmployee?.Family.PostalCode,
+      Country: dataEmployee?.Family.Country,
+    },
+  };
 
-}
-
-console.log(dataFamilyInfor);
+ 
+  // console.log(dataFamilyInfor);
   const onChange = (key: string) => {
     console.log(key);
   };
   const [editable, setEditable] = useState(false);
 
+  // console.log(dataOverview['Rank']);
+  // const dataOverviewUpdate = dataOverview["Rank"];
+  // const dataEmployeeTypeUpdate = dataOverview["EmployeeType"];
+  // console.log(dataOverviewUpdate, dataEmployeeTypeUpdate);
+  const dataEditUserInfo = {
+    Overview: {
+      EmployeeType: dataOverview["EmployeeType"],
+      Rank: dataOverview["Rank"]
+    }
+  }
   // console.log(dataAdditionalInfor);
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: `Overview`,
-      children: <Overview data={mergedObject} isEditable={editable} />,
+      children: (
+        <Overview
+          data={mergedObject}
+          isEditable={editable}
+          setData={setDataOverview}
+        />
+      ),
     },
     {
       key: "2",
@@ -456,13 +511,15 @@ console.log(dataFamilyInfor);
       ),
     },
     {
-      key: '3',
+      key: "3",
       label: `Family`,
-      children: <Family
-        data={dataFamilyInfor}
-        setData={setDataFamily}
-        isEditable={editable}
-      />,
+      children: (
+        <Family
+          data={dataFamilyInfor}
+          setData={setDataFamily}
+          isEditable={editable}
+        />
+      ),
     },
     {
       key: "4",
@@ -482,10 +539,46 @@ console.log(dataFamilyInfor);
   const handleUpdateAvatar = () => {
     console.log("avata");
   };
+  const handleClickSave = () => {
+    // console.log(isSave);
+    // console.log(data);
+    setEditable(false);
+    const EditUserInfo = async () => {
+      const endpoint = "/Personal/EditInfoEmployee?Id=" + id;
+      const response = await request.put(endpoint,dataEditUserInfo).then((res) => {
+        console.log(res.data);
+      });
+    };
+
+    EditUserInfo();
+  };
+  // http://localhost:5005/api/Personal/EditInfoEmployee?Id=07A2FE81-BBD7-47C0-8095-668596515EFB
+  
+  // http://localhost:5005/api/Personal/EditInfoEmployee?Id=07a2fe81-bbd7-47c0-8095-668596515efb
   return (
     <div>
       {/* , Additional[], Family[] */}
-      <HeaderEmployee setEditable={setEditable} data={dataEmployee as UserInfo} isEditable={editable} />
+      {/* <HeaderEmployee
+        setEditable={setEditable}
+        data={dataEmployee as UserInfo}
+        isEditable={editable}
+      /> */}
+      <Header
+        className="header-employee"
+        style={{
+          display: "flex",
+          backgroundColor: "#F5F6FA",
+          marginTop: "64px",
+          alignItems: "center",
+        }}>
+        <div onClick={handleClickSave}>{editable && <AiOutlineSave />}</div>
+        <div className="return-employee">
+          <a href="/setting" className="text-header">
+            <TiArrowBackOutline />
+            Return
+          </a>
+        </div>
+      </Header>
       <div className="employee-avatar-name-edit">
         <h2 className="name-employee">
           {editable && (

@@ -23,6 +23,8 @@ import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import Search from "antd/es/input/Search";
 import NavbarRequest from "./NavbarRequest";
+import { Provider } from "react-redux";
+import store from "./component/Payment/store";
 const Request: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -30,6 +32,8 @@ const Request: React.FC = () => {
   } = theme.useToken();
   return (
     <div>
+      <Provider store={store}>
+      
       <Layout>
         <HeaderRequest />
         <Content>
@@ -43,7 +47,7 @@ const Request: React.FC = () => {
                 height: "100%",
                 borderRight: "solid #ccc 0.1px",
               }}
-              // collapsedWidth="0"
+              collapsedWidth="0"
               collapsible
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}>
@@ -64,6 +68,7 @@ const Request: React.FC = () => {
           </Layout>
         </Content>
       </Layout>
+    </Provider>
     </div>
   );
 };

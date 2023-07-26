@@ -336,31 +336,6 @@ interface UserInfo {
   Signature: Signature;
   Departments: any;
 }
-// interface OverviewInfor {
-//   $id: string;
-//   Id: string;
-//   UserId: string;
-//   User: {
-//     $ref: string;
-//   };
-//   EmployeeNumber: number;
-//   Sex: string;
-//   BirthDay: string;
-//   Position: string;
-//   Company: string;
-//   Unit: string;
-//   FunctionEmployee: string;
-//   Department: string;
-//   SectionsTeams: string;
-//   Groups: string;
-//   OfficeLocation: string;
-//   LineManager: string;
-//   BelongToDepartments: string;
-//   CostCenter: string;
-//   Rank: string;
-//   EmployeeType: string;
-//   Rights: string;
-// }
 interface MyObject {
   [key: string]: any;
 }
@@ -368,39 +343,66 @@ interface MyObject {
 interface OverviewProps {
   data:MyObject;
   isEditable?: boolean;
+  setData: React.Dispatch<React.SetStateAction<MyObject>>;
 }
 
-const Overview: React.FC<OverviewProps> = ({ data, isEditable }) => {
-  console.log(data);
-  // const jsonData = JSON.stringify(data);
-  // console.log(data.userInfo?.Overview);
-  // const dataOverview: MyObject = data.userInfo?.Overview
-  // console.log(data?.Overview);
+const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
+
   const formItems = Object.entries(data).map(([key, value]) => ({
     label: key,
     value: value,
   }));
 
-  // const entriesArray = Object.entries(data);
-  // console.log(data);
-  // const flatArray = Object.values(data);
-  // console.log(flatArray);
+  const [dataOverviewEdit, setDataOverviewEdit] = useState({})
+  const [dataRank, setDataRank] = useState({})
+  const [dataEmployeeType, setDataEmployeeType] = useState<{}>()
+  const handleInputChange = (
+    value: string | number,
+    label: string,
+    // dataIndex: keyof OverviewProps
+  ) => {
 
-  // const handleInputChange = (
-  //   value: string | number,
-  //   key: string,
-  //   dataIndex: keyof OverviewProps
-  // ) => {
-  //   const updatedData = data.map((row) => {
-  //     if (row.key === key) {
-  //       // console.log(dataIndex);
-  //       return { ...row, [dataIndex]: value };
-  //     }
-  //     return row;
-  //   });
-  //   setData(updatedData);
-  // };
+    const updatedData: MyObject = { ...data };
+    
+    // Tìm thuộc tính có label trùng với label nhận được và cập nhật giá trị mới
+    updatedData[label] = value;
+
+    // Cập nhật state với dữ liệu mới
+    setData(updatedData);
+    // setDataOverviewEdit()
+
+    // const updatedData: any= formItems.map((row:any) => {
+    //   // console.log(row, value, label);
+    //   if (row.label === label) {
+    //     // console.log(dataIndex);
+    //     // console.log(value);
+    //     return { ...row, value: value };
+    //   }
+    //   console.log(row);
+    //   return row;
+    // });
+    // // setData(updatedData)
+    // setDataOverview(updatedData)
+    // console.log(data);
+    // console.log(dataIndex);
+    // console.log(value);
+    // console.log(label);
+    // console.log(data);
+    // console.log(updatedData[label]);
+    // if(updatedData["Rank"]||updatedData["EmployeeType"]){
+
+    //   setDataRank(updatedData["Rank"])
+    //   setDataEmployeeType(updatedData["EmployeeType"])
+    //   setDataOverviewEdit({dataRank, dataEmployeeType})
+    // }
+    // console.log(dataOverviewEdit);
+  };
+
+  // console.log(data["Rank"]);
+  // console.log(data["EmployeeType"]);
+
   // console.log(data);
+
 
   // const columns = [
   //   {
@@ -439,6 +441,7 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable }) => {
 
   return (
     <div>
+
       {/* <Button onClick={handleSave} >Save</Button> */}
       <Form>
         {/* <Form> */}
@@ -462,10 +465,10 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable }) => {
                 ? (
                   <Input
                     style={{ width: "100%" }}
-                    value={item.value}
-                    // onChange={(e) =>
-                    //   handleInputChange(e.target.value, item.key, "infor")
-                    // }
+                    defaultValue={item.value}
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, item.label)
+                    }
                   />
                 ) : (
                   <Input
@@ -517,6 +520,7 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable }) => {
           </Form.Item>
         ))} */}
       </Form>
+
       {/* <Table
         columns={columns}
         dataSource={data}
