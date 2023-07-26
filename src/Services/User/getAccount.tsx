@@ -41,11 +41,13 @@ export const GetEmployeeInfor = async () => {
   }
 };
 
+
+
 const API_URL = 'http://localhost:5005/api/';
 
 const getToken = () => {
     try {
-        return String(localStorage.getItem('Token'));
+        return String(localStorage.getItem('authToken'));
     } catch (error) {
         return '';
     }
@@ -60,8 +62,6 @@ const request = axios.create({
         Authorization: `Bearer ${token}`
     },
 });
-
-
 
 export const get = async (endpoint: string, options = {}) => {
     const token = getToken();

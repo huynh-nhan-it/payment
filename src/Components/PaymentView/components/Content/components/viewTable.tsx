@@ -3,6 +3,7 @@ import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import request from "../../../../../Services/User/getAccount";
 
 interface DataType {
   id: string;
@@ -50,79 +51,76 @@ interface PaymentRequest {
 
 const ViewTable: React.FC = () => {
   const [detailTable, setDetailTable] = useState<PaymentRequest | null>(null);
-  const {requestCode} = useParams()
+  const { requestCode } = useParams();
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:5005/api/DetailRequest/${requestCode}`
-      )
-      .then((response) => {
-        setDetailTable(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
+    const getDetailRequest = async () => {
+      const endpoint = "/DetailRequest/" + requestCode;
+      const response = await request.get(endpoint).then((res) => {
+        // console.log(res.data);
+        setDetailTable(res.data);
       });
-  }, [requestCode]);
+    };
+    getDetailRequest();
+  }, []);
   const columns: ColumnsType<DataType> = [
     {
-      key: 'id',
+      key: "id",
       title: <span style={{ color: "#A3A6B4" }}>Inv/Rec date</span>,
       align: "center",
       dataIndex: "id",
     },
     {
-      key: 'invDate',
+      key: "invDate",
       title: <span style={{ color: "#A3A6B4" }}>Inv/Rec date</span>,
       align: "center",
       dataIndex: "invDate",
     },
     {
-      key: 'paymentContent',
+      key: "paymentContent",
       align: "center",
       title: <span style={{ color: "#A3A6B4" }}>Payment content</span>,
       dataIndex: "paymentContent",
     },
     {
-      key: 'amount',
+      key: "amount",
       align: "center",
       title: <span style={{ color: "#A3A6B4" }}>Amount</span>,
       dataIndex: "amount",
     },
     {
-      key: 'invNo',
+      key: "invNo",
       align: "center",
       title: <span style={{ color: "#A3A6B4" }}>Invoice/Rec No</span>,
       dataIndex: "invNo",
     },
     {
-      key:'industry',
+      key: "industry",
       align: "center",
-      title: <span style={{ color: "#A3A6B4" }}> Department bear the cost</span>,
+      title: (
+        <span style={{ color: "#A3A6B4" }}> Department bear the cost</span>
+      ),
       dataIndex: "industry",
     },
     {
-      key:'departmentOnTable',
+      key: "departmentOnTable",
       align: "center",
       title: <span style={{ color: "#A3A6B4" }}>DepartmentOntable</span>,
       dataIndex: "departmentOnTable",
     },
     {
-      key:'note',
+      key: "note",
       align: "center",
       title: <span style={{ color: "#A3A6B4" }}>Note</span>,
       dataIndex: "note",
     },
   ];
 
- 
-
   // console.log(requestCode);
 
-  
   // const tb = detailTable.map(dt);
-  const data = detailTable?.tableDetailRequest
+  const data = detailTable?.tableDetailRequest;
 
-// console.log(data[0]);
+  // console.log(data[0]);
   return (
     <>
       <Table

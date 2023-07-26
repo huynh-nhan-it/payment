@@ -8,8 +8,10 @@ import { ConnectedProps, connect } from "react-redux";
 import { RootState } from "./store";
 import HeaderPayment from "./Header";
 import * as XLSX from "xlsx";
+import request from "../../../../Services/User/getAccount";
 
 interface PaymentRequestList {
+  id:string;
   requestCode: string;
   purpose: string;
   createdBy: string;
@@ -59,20 +61,32 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   //     });
   // };
 
-  console.log(data);
+  
   // console.log(filteredData.createdDateFrom);
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`
-      )
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [data]);
+    const getPaymentList = async () => {
+        const endpoint = `PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`;
+        const response = await request.get(endpoint).then((res) => {
+          // console.log(res.data);
+            setData(res.data);
+        }
+        );
+    }
+    getPaymentList();
+
+}, [])
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`
+  //     )
+  //     .then((response) => {
+  //       setData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, [data]);
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const day = date.getDate();

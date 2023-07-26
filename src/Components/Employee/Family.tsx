@@ -55,33 +55,40 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable }) => {
   console.log(data);
   
   
-  // const handleInputChange = (
-  //   value: string | number,
-  //   parentKey: string,
-  //   childKey: string,
-  //   dataIndex: keyof FamilyInformation
-  // ) => {
-  //   const updatedData = data.map((row) => {
-  //     if (row.key === parentKey) {
-  //       const updatedChildren = row.children.map((child) => {
-  //         if (child.key === childKey) {
-  //           return { ...child, [dataIndex]: value };
-  //         }
-  //         return child;
-  //       });
-  //       return { ...row, children: updatedChildren };
-  //     }
-  //     return row;
-  //   });
+ 
 
-  //   setData(updatedData);
-  //   console.log(updatedData);
-  // };
-
-  const handleChange = (e:any)=> {
-    console.log(e.target.value);
+  const handleChange = (e:any, key: any)=> {
+    console.log(e.target.value, key);
   }
 
+  const formItems = Object.entries(data).map(([key, value]) => ({
+    label: key,
+    value: value,
+  }));
+
+  const handleInputChange = (
+    value: string | number,
+    parentKey: string,
+    childKey: string,
+    dataIndex: keyof FamilyInformation
+  ) => {
+    const updatedData = formItems.map((row) => {
+      if (row.label === parentKey) {
+        const updatedChildren = Object.entries(row).map(([key, value]) => {
+          if (key === childKey) {
+            console.log(key);
+            // return { ...child, [dataIndex]: value };
+          }
+          // return child;
+        });
+        // return { ...row, children: updatedChildren };
+      }
+      // return row;
+    });
+
+    // setData(updatedData);
+    console.log();
+  };
   return (
     <div>
       {/* <Form>
@@ -167,10 +174,11 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable }) => {
                 {isEditable ? (
                   <Input
                     style={{ width: "100%" }}
-                    value={value as string | undefined}
-                    onChange={e=>handleChange(e)}
+                    // onChange={}
+                    // value={value as string | undefined}
+                    // onChange={e=>handleChange(e, key)}
                     // onChange={(e) =>
-                    //   handleInputChange(e.target.value, item.key, "infor")
+                      // handleInputChange(e.target.value, )
                     // }
                   />
                 ) : (

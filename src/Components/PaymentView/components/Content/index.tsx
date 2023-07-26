@@ -6,6 +6,7 @@ import ViewTable from "./components/viewTable";
 import Comment from "./components/comment-content";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import request from "../../../../Services/User/getAccount";
 const { Text } = Typography;
 
 interface TableDetailRequest {
@@ -45,17 +46,45 @@ interface PaymentRequest {
 
 const ViewContent: React.FC = () => {
   const { requestCode } = useParams();
-  const [detail, setDetail] = useState<PaymentRequest | null>(null);
   useEffect(() => {
-    axios
-      .get(`http://localhost:5005/api/DetailRequest/${requestCode}`)
-      .then((response) => {
-        setDetail(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [requestCode]);
+    const getDetailRequest = async () => {
+        const endpoint = "/DetailRequest/" + requestCode;
+        const response = await request.get(endpoint).then((res) => {
+          // console.log(res.data);
+            setDetail(res.data);
+        }
+        );
+    }
+    // const getAttachmentsRequest = async () => {
+    //     const endpoint = "/request/attachment/requestId=" + requestId;
+    //     const response = await request.get(endpoint).then((res) => {
+    //         setAttachmentData(res.data.Data);
+    //     }
+    //     );
+    // }
+    // const getWokflowRequest = async () => {
+    //     const endpoint = "/request/workflow/requestId=" + requestId;
+    //     const response = await request.get(endpoint).then((res) => {
+    //         setWorkflowData(res.data.Data);
+    //     }
+    //     );
+    // }
+    // getWokflowRequest();
+    // getAttachmentsRequest();
+    getDetailRequest();
+
+}, [])
+  const [detail, setDetail] = useState<PaymentRequest | null>(null);
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:5005/api/DetailRequest/${requestCode}`)
+  //     .then((response) => {
+  //       setDetail(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, [requestCode]);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
