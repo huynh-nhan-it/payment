@@ -480,6 +480,7 @@ interface Item {
   dispatch(updateAdvanceAmount(advanceAmount));
   dispatch(updateTotalPayment(total));
 
+  console.log(ListDetail)
 
 
 
