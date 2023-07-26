@@ -14,7 +14,6 @@ import RegisterForm from "./Components/Register/Register";
 import { useEffect, useState } from "react";
 import Setting from "./Components/Setting";
 import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
-import FormRequest from "./Components/PaymentRequest/FormRequest";
 import SubmitRequest from "./Components/PaymentRequest/SubmitRequest";
 import jwt_decode from "jwt-decode";
 
@@ -96,7 +95,7 @@ function App() {
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<RegisterForm />}></Route>
                     <Route
-                      path="PaymentRequest"
+                      path="request/create-request"
                       element={<SubmitRequest />}></Route>
                   </Routes>
                 </Content>

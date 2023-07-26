@@ -1,24 +1,18 @@
-import React from 'react';
-import FormRequest from './FormRequest';
-import TableRequest from './TableRequest';
-import axios from 'axios';
-import dayjs from 'dayjs';
-import Item from 'antd/es/descriptions/Item.js';
-import AttachmentRequest from './AttachmentRequest';
-import ApproverRequest from './ApproverRequest';
+import React from "react";
+import { Provider } from "react-redux";
+import {store} from "./Store";
+import FormRequest from "./FormRequest";
+import TableRequest from "./TableRequest";
 
-const ParentComponent = () => {
-
+const App: React.FC = () => {
   return (
-    <div style={{paddingTop: 64}} >
-      <FormRequest  />
-      <TableRequest onChange={function (data: { paymentMethod: string; }): void {
-        throw new Error('Function not implemented.');
-      } } />
-      <AttachmentRequest/>
-      <ApproverRequest/>
-    </div>  
+    <Provider store={store}>
+      <div>
+        <FormRequest />
+        <TableRequest/>    
+      </div>
+    </Provider>
   );
 };
 
-export default ParentComponent;
+export default App;

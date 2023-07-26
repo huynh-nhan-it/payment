@@ -40,7 +40,7 @@ import {
 
 interface Item {
     key: string;
-    rec_date: Dayjs;
+    rec_date: string;
     pay_content: string;
     amount: number;
     rec_no: string;
@@ -113,20 +113,16 @@ interface Item {
       </td>
     );
   };
-  
-  type PaymentRequestProps = {
-    onChange: (data: PaymentMethodData) => void;
-  };
-  
+    
   type PaymentMethodData = {
     paymentMethod :string;
   };
-  const TableRequest: React.FC<PaymentRequestProps> = () => {
+  const TableRequest: React.FC = () => {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<Item[]>([
       {
         key: '0',
-        rec_date: dayjs(),
+        rec_date: '',
         pay_content: '',
         amount: 0,
         rec_no: '',
@@ -135,6 +131,9 @@ interface Item {
         note: '',
   }
     ]);
+    const [ListDetail, setListDetail] = useState<string[]>([]);
+    const jsonString = JSON.stringify(tableData);
+
       const [paymentMethodData, setPaymentMethodData] = useState<PaymentMethodData>({paymentMethod:''});
   
     const handleDepartmentChange = (newValue: string) => {
@@ -164,10 +163,9 @@ interface Item {
         return item;
       });
       console.log(newData);
-      setTableData(newData);
   
     };
-    const [count, setCount] = useState(2);
+    const [count, setCount] = useState(1);
     const [editingKey, setEditingKey] = useState('');
     
   
@@ -189,14 +187,13 @@ interface Item {
     const cancel = () => {
       setEditingKey('');
     };
-  
+    const formatDate = (dateString: string): string => {
+      const date = dayjs(dateString);
+      return date.format('YYYY-MM-DD');
+    };
     const save = async (key: React.Key) => {
       try {
         const row = (await form.validateFields()) as Item;
-        if (!(row.rec_date instanceof dayjs)) {
-          row.rec_date = dayjs(row.rec_date); // Chuyển đổi thành đối tượng Moment
-        }
-        console.log(row);
         const newData = [...tableData];
         const index = newData.findIndex((item) => key === item.key);
         if (index > -1) {
@@ -204,21 +201,23 @@ interface Item {
           newData.splice(index, 1, {
             ...item,
             ...row,
+            rec_date: formatDate(row.rec_date),
           });
           calculateTotalAmount();
           calculateTotal();
           setTableData(newData);
+          setListDetail([jsonString]);
           setEditingKey('');
         } else {
           newData.push(row);
           setTableData(newData);
+          setListDetail([jsonString]);
           setEditingKey('');
         }    
   
       } catch (errInfo) {
         console.log('Validate Failed:', errInfo);
       }
-  
   
     };
     const {
@@ -231,7 +230,7 @@ interface Item {
         dataIndex: 'rec_date',
         width: '15%',
         editable: true,
-        render: (date: Dayjs | undefined, record: Item) => {
+        render: (date : Dayjs | undefined, record: Item) => {
           const editing = isEditing(record);
           return editing ? (
           <DatePicker
@@ -342,7 +341,7 @@ interface Item {
     const handleAdd = () => {
       const newData: Item = {
         key: count.toString(),
-        rec_date: dayjs(),
+        rec_date: dayjs().toString(),
         pay_content: '',
         amount: 0,
         rec_no: '',
@@ -356,7 +355,9 @@ interface Item {
       setCount(count + 1);
       setEditingKey(newData.key);
       form.resetFields();
-  
+      setListDetail([jsonString]);
+      console.log(tableData);
+      console.log(ListDetail)
    
       
     };
