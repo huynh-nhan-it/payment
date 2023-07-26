@@ -71,7 +71,7 @@ const FormRequest: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  
+
   const [form] = Form.useForm();
   const [supplierData, setSupplierData] = useState<string[]>([]);
   const [currencyData, setCurrencyData] = useState<string[]>([]);
@@ -116,17 +116,18 @@ const FormRequest: React.FC = () => {
   
   return (
     <Layout hasSider>
-      <Layout >
-        <Content className='content-center'>
-          <div style={{ paddingTop: 64, textAlign: 'center', background: colorBgContainer }}>
+      <Layout>
+        <Content className="content-center">
+          <div
+            style={{
+              paddingTop: 64,
+              textAlign: "center",
+              background: colorBgContainer,
+            }}>
             <h1 style={{ fontSize: 28 }}>PAYMENT REQUEST</h1>
-            <div className='row'>
-              <div className='font_text'>
-                <Form
-                  name='paymentRequest'
-                  form={form}
-                  onFinish={onSubmit}
-                >
+            <div className="row">
+              <div className="font_text">
+                <Form name="paymentRequest" form={form} onFinish={onSubmit}>
                   <Row gutter={16}>
                   <Col span={8}>
                   <Form.Item

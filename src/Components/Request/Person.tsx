@@ -144,7 +144,7 @@ const Person: React.FC = () => {
       }
       return (
         <Menu.Item key={item.key}>
-          <Link to={`setting/system/${item.name}`}>{item.label}</Link>
+          <Link to={`/setting/system/${item.name}`}>{item.label}</Link>
         </Menu.Item>
       );
     });

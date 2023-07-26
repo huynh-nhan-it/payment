@@ -1,9 +1,8 @@
-
 .App {
   text-align: center;
 }
 
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -20,7 +19,7 @@
   }
 }
 
-.App{
+.App {
   /* background-image: url("https://tasken.io/images/background-landing-page1.jpg"); */
   background-image: url("https://tasken.io/images/background-landing-page1.jpg");
 }
@@ -44,7 +43,49 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
+
+/* .content-request {
+  padding: 0 12px;
+  padding-left: 200px;
+  top: 64px;
+} */
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .content-request {
+    padding-left: 0;
+  }
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .content-request {
+    padding-left: 0;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .content-request {
+    padding-left: 0;
+  }
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+  .content-request {
+    padding-left: 200px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1240px) {}

@@ -1,61 +1,93 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Checkbox } from "antd";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
+
 const Login: React.FC = () => {
-  const [token, setToken] = useState('');
-
+  function isJWTToken(str: string): boolean {
+    const jwtRegex = /^[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$/;
+    return jwtRegex.test(str);
+  }
+  
+  const [token, setToken] = useState("");
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const onFinish = (values: LoginFormValues) => {
-    // console.log("Form values:", values);
-    axios.post("http://localhost:5005/api/Authen/Login", values)
-    .then((response) => {
-      // Handle successful login here, e.g., store the token in Local Storage or cookies
-      console.log("Login successful!");
-      setToken(response.data)
-
-      localStorage.setItem("authToken", response.data);
-
-    })
-    .catch((error) => {
-      // Handle login error here
-      console.error("Login failed:", error);
-    });
+    // ... handle login logic
+    axios
+      .post("http://localhost:5005/api/Authen/Login", values)
+      .then((response) => {
+        // Handle successful login here, e.g., store the token in Local Storage
+        console.log("Login successful!");
+        setToken(response.data);
+        console.log(response.data);
+        console.log(isJWTToken(response.data));
+        if(isJWTToken(response.data)){
+          localStorage.setItem("authToken", response.data);
+        }
+        // Save token in Local Storage
+      })
+      .catch((error) => {
+        // Handle login error here
+        console.error("Login failed:", error);
+      });
   };
 
- 
+  useEffect(() => {
+    if (token) {
+      window.location.reload();
+      navigate("/");
+    }
+  }, [token]);
+  // const onFinish = (values: LoginFormValues) => {
+  //   // console.log("Form values:", values);
+  //   axios
+  //     .post("http://localhost:5005/api/Authen/Login", values)
+  //     .then((response) => {
+  //       // Handle successful login here, e.g., store the token in Local Storage or cookies
+  //       // console.log("Login successful!");
+  //       setToken(response.data);
+  //       console.log(response.data);
 
-  // var token = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImYzNDRmNjVmLTRmM2ItNDQ2OC1iOTVkLTk3ZjQ2ZWM0NTIyOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImdpYW5nbmd1eWVuLjAxMTIwQGdtYWlsLmNvbSIsImV4cCI6MTY5MDAwODU1MX0.mFVzi37oljAWPWiF4H3YC_m5ZjvZ4DxTVx6EDxDxap5lB9jLkxgqB6C0M65uR6nVuvQkNL5fqY_w2JRpX_HZQA";
-  // var decoded = jwt_decode(token);
+  //       localStorage.setItem("authToken", response.data);
+  //       // navigate("/");
+  //       setIsLoggedIn(true);
+  //       navigate("/");
+  //     })
+  //     .catch((error) => {
+  //       // Handle login error here
+  //       console.error("Login failed:", error);
+  //     });
+  // };
 
-  // console.log(decoded);
-
-  
-
-  // decode header by passing in options (useful for when you need `kid` to verify a JWT):
-  // var decodedHeader = jwt_decode(token, { header: true });
-  // console.log(decodedHeader);
-  //localhost:5005/api/PaymentRequest
-
-  http: return (
+  return (
     <div
       style={{
         display: "flex",
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: "100px",
-        height: "100%",
-        width: "100%",
+        height: "100vh",
+        width: "100vw",
         backgroundColor: "#fff",
-        border: "solid #ccc 0.1px",
       }}>
-      <Form<LoginFormValues> onFinish={onFinish}>
+      <Form<LoginFormValues>
+        style={{
+          width: "400px",
+          height: "400px",
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          border: "solid #ccc 0.1px",
+        }}
+        onFinish={onFinish}>
         <Form.Item
           name="email"
           label="email"

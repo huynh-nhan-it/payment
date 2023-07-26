@@ -30,6 +30,11 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   const [createdBy, setCreatedBy] = useState("");
   const [status, setStatus] = useState("");
   // console.log(filteredData);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // useEffect((data) => {
+  //   fetchData();
+  // }, [data]);
 
   useEffect(() => {
     setPurpose(filteredData.purpose);
@@ -40,11 +45,26 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     setStatus(filteredData.status);
   });
 
+  // const fetchData =() => {
+  //   axios
+  //   .get(
+  //     `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${page}`
+  //   )
+  //     // .get(`http://localhost:5005/api/PaymentRequest/?page=${page}`)
+  //     .then((response) => {
+  //       setData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  console.log(data);
   // console.log(filteredData.createdDateFrom);
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}`
+        `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`
       )
       .then((response) => {
         setData(response.data);
@@ -126,6 +146,13 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
           onClick: () => handleRowClick(record.requestCode),
         })}
         rowKey="requestCode"
+        pagination={{
+          pageSize: 20,
+          current: currentPage,
+          total: 50, // Replace with the total number of records from the API
+          onChange: (page) => setCurrentPage(page),
+        }}
+        scroll={{ x: "max-content" }}
       />
     </>
   );

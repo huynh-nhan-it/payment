@@ -120,7 +120,7 @@ const Signature: React.FC = () => {
             <Col span={12} offset={6}>
               <div>
                 <Input
-                style={{width:"400px"}}
+                  style={{ width: "400px" }}
                   type="file"
                   accept=".jpg,.jpeg,.png"
                   onChange={handleImageUpload}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout } from "antd";
 import { FaFilter } from "react-icons/fa";
 import { TbArrowBarToRight } from "react-icons/tb";
@@ -6,6 +6,7 @@ import "./payment.css";
 
 import DropdownFilter from "./DropdownFilter";
 import { Link } from "react-router-dom";
+import { getDataExcel } from "../../../../Services/PaymentList/apiPaymentList";
 // import RequestDetailsLayout2 from "./RequestDetailsLayout2";
 // import moment from 'moment';
 
@@ -13,7 +14,27 @@ const { Header } = Layout;
 interface HeaderProps {
   exportData: () => void;
 }
+
+
+
 const HeaderPayment: React.FC<HeaderProps> = ({exportData}) => {
+
+  // const [dataExcel, setDataExcel] = useState();
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+  
+  // const fetchData = async () => {
+  //   try {
+  //     const data = await getDataExcel();
+  //     console.log(data);
+  //     setDataExcel(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+
   return (
     <Header 
       className="header-payment"
@@ -34,7 +55,7 @@ const HeaderPayment: React.FC<HeaderProps> = ({exportData}) => {
 
         <div className="create-new padding-10 bg-create-new color-white">
           {" "}
-         <Link style={{color:"#fff"}} to={"/request/create-request"}> + Create New</Link>
+         <Link style={{color:"#fff"}} to={"/request/payment/new"}> + Create New</Link>
         </div>
       </div>
     </Header>

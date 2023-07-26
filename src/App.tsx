@@ -3,9 +3,9 @@ import ApiCall from "./Components/ApiCall";
 import { BrowserRouter, Route, Routes, Link, Navigate } from "react-router-dom";
 import Request from "./Components/Request";
 import Employee from "./Components/Employee";
-import { Layout, theme, Input } from "antd";
+import { Layout, theme, Input, Button } from "antd";
 import HeaderRequest from "./Components/Request/HeaderRequest";
-import { Content } from "antd/es/layout/layout";
+import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import NavbarRequest from "./Components/Request/NavbarRequest";
 import ViewPayment from "./Components/PaymentView/ViewIndex";
@@ -25,6 +25,7 @@ function App() {
   } = theme.useToken();
 
   const [email, setEmail] = useState("");
+
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
     if (storedToken) {
@@ -35,10 +36,15 @@ function App() {
         decoded[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
         ];
+      // console.log(decoded);
 
       setEmail(emailAddress);
     }
-  }, []);
+  }, [email]);
+
+  // console.log(email);
+
+  const [collapsed, setCollapsed] = useState(false);
 
   // console.log(email);
   return (
@@ -47,69 +53,112 @@ function App() {
       {/* <ProtectedRoutes /> */}
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ApiCall />} />
+          <Route
+            path="/login"
+            element={!email ? <Login /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/"
+            element={email ? <ApiCall /> : <Navigate to="/login" />}
+          />
+          {/* <Route
+            path="/"
+            element={email ? <ApiCall /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/login"
+            element={!email ? <Login /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/"
+            element={!email ? <Navigate to="/login" /> : <Navigate to="/" />}
+          /> */}
         </Routes>
-        <Layout>
-          <>
-            <HeaderRequest />
-
-            <Content>
-              <Layout>
-                <Sider
-                  style={{
-                    background: colorBgContainer,
-                    padding: "64px 0",
-                    position: "fixed",
-                    height: "100%",
-                    borderRight: "solid #ccc 0.1px",
-                  }}
-                  width={200}>
-                  <Search
-                    placeholder="input search text"
-                    // onSearch={onSearch}
-                    style={{
-                      width: 200,
-                    }}
-                  />
-                  <NavbarRequest />
-                </Sider>
-                <Content
-                  style={{
-                    padding: "0 12px",
-                    paddingLeft: "200px",
-                    top: "64px",
-                  }}>
-                  <Routes>
-                    <Route path="setting" element={<Setting />}></Route>
-                    <Route
-                      path="setting/system/department"
-                      element={<StructureOrganization />}></Route>
-                    <Route
-                      path="request/payment/view/:requestCode"
-                      element={<ViewPayment></ViewPayment>}></Route>
-                    <Route path="request/payment" element={<Request />} />
-                    <Route
-                      path="setting/system/employee"
-                      element={<Employee />}
-                    />
-                    <Route path="login" element={<Login />} />
-                    <Route path="register" element={<RegisterForm />}></Route>
-                    <Route
-                      path="request/create-request"
-                      element={<SubmitRequest />}></Route>
-                  </Routes>
-                </Content>
-              </Layout>
-            </Content>
-          </>
+        {email && (
           <Routes>
-            <Route path="/" element={<ApiCall />} />
+            <Route path="setting" element={<Setting />}></Route>
+            <Route
+              path="setting/system/department"
+              element={<StructureOrganization />}></Route>
+            <Route
+              path="request/payment/view/:requestCode"
+              element={<ViewPayment></ViewPayment>}></Route>
+            <Route path="request/payment" element={<Request />} />
+            <Route path="setting/system/employee" element={<Employee />} />
+            <Route
+              path="request/payment/new"
+              element={<SubmitRequest />}></Route>
           </Routes>
-          
-        </Layout>
+        )}
+        {/* <Routes>
+          <Route
+            path="/login"
+            element={!email ? <Login /> : <Navigate to="/" />}
+          />
+          <Route path="register" element={<RegisterForm />}></Route>
+        </Routes> */}
       </BrowserRouter>
     </div>
   );
 }
 
 export default App;
+
+// import React from "react";
+// import {
+//   BrowserRouter as Router,
+//   Route,
+//   Routes,
+//   Link,
+//   Navigate,
+// } from "react-router-dom";
+
+// // Giả sử isAuthenticated là biến lưu trạng thái đăng nhập của người dùng (true/false)
+// const isAuthenticated = false;
+
+// const LoginPage = () => {
+//   // Trang đăng nhập
+//   return <h1>Login Page</h1>;
+// };
+
+// const HomePage = () => {
+//   // Trang sau khi đăng nhập thành công
+//   return <h1>Home Page</h1>;
+// };
+
+// const App = () => {
+//   return (
+//     <Router>
+//       <nav>
+//         <ul>
+//           <li>
+//             <Link to="/login">Login</Link>
+//           </li>
+//           <li>
+//             <Link to="/home">Home</Link>
+//           </li>
+//         </ul>
+//       </nav>
+
+//       <Routes>
+//         <Route
+//           path="/login"
+//           element={!isAuthenticated ? <LoginPage /> : <Navigate to="/home" />}
+//         />
+// <Route
+//   path="/home"
+//   element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
+// />
+//         {/* Trang mặc định sẽ điều hướng đến /login nếu chưa đăng nhập hoặc /home nếu đã đăng nhập */}
+//         <Route
+//           path="/"
+//           element={
+//             isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />
+//           }
+//         />
+//       </Routes>
+//     </Router>
+//   );
+// };
+
+// export default App;

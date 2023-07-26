@@ -26,39 +26,65 @@ interface FamilyInfor {
   }[];
 }
 
-interface AdditionalProps {
-  data: FamilyInfor[];
-  isEditable: boolean;
-  setData: React.Dispatch<React.SetStateAction<FamilyInfor[]>>;
+interface FamilyInformation {
+  MartialStatus: {
+    MartialStatus: string | undefined;
+  };
+  "Emergency Contact": {
+    "Contact name": string | undefined;
+    Relationship: string | undefined;
+    Phone: string | undefined;
+  };
+  "Permanent Address": {
+    Street: string | undefined;
+    "Building / flatnumber": string | undefined;
+    City: string | undefined;
+    "Province / state": string | undefined;
+    "Postal code": string | undefined;
+    Country: string | undefined;
+  };
 }
 
-const Family: React.FC<AdditionalProps> = ({ data, isEditable, setData }) => {
-  const handleInputChange = (
-    value: string | number,
-    parentKey: string,
-    childKey: string,
-    dataIndex: keyof FamilyInfor["children"][number]
-  ) => {
-    const updatedData = data.map((row) => {
-      if (row.key === parentKey) {
-        const updatedChildren = row.children.map((child) => {
-          if (child.key === childKey) {
-            return { ...child, [dataIndex]: value };
-          }
-          return child;
-        });
-        return { ...row, children: updatedChildren };
-      }
-      return row;
-    });
+interface FamilyProps {
+  data: FamilyInformation;
+  isEditable: boolean;
+  setData: React.Dispatch<React.SetStateAction<FamilyInformation>>;
+}
 
-    setData(updatedData);
-    console.log(updatedData);
-  };
+const Family: React.FC<FamilyProps> = ({ data, isEditable }) => {
+  console.log(data);
+  
+  
+  // const handleInputChange = (
+  //   value: string | number,
+  //   parentKey: string,
+  //   childKey: string,
+  //   dataIndex: keyof FamilyInformation
+  // ) => {
+  //   const updatedData = data.map((row) => {
+  //     if (row.key === parentKey) {
+  //       const updatedChildren = row.children.map((child) => {
+  //         if (child.key === childKey) {
+  //           return { ...child, [dataIndex]: value };
+  //         }
+  //         return child;
+  //       });
+  //       return { ...row, children: updatedChildren };
+  //     }
+  //     return row;
+  //   });
+
+  //   setData(updatedData);
+  //   console.log(updatedData);
+  // };
+
+  const handleChange = (e:any)=> {
+    console.log(e.target.value);
+  }
 
   return (
     <div>
-      <Form>
+      {/* <Form>
         {data.map((item: any) => {
           return (
             <div key={item.key}>
@@ -119,8 +145,45 @@ const Family: React.FC<AdditionalProps> = ({ data, isEditable, setData }) => {
             </div>
           );
         })}
-      </Form>
+      </Form> */}
 
+      {Object.entries(data).map(([sectionTitle, sectionData]) => (
+        <div key={sectionTitle} style={{ marginBottom: 20 }}>
+          <h2>{sectionTitle}</h2>
+          <Form >
+            {Object.entries(sectionData).map(([key, value]) => (
+              <Form.Item
+                label={key}
+                colon={false}
+                labelCol={{ span: 6, style: { display: "flex" } }}
+                style={{
+                  padding: "4px 8px",
+                  borderBottom: "solid #ccc 0.2px",
+                  marginBottom: "0px",
+                }}
+                key={key}>
+               
+
+                {isEditable ? (
+                  <Input
+                    style={{ width: "100%" }}
+                    value={value as string | undefined}
+                    onChange={e=>handleChange(e)}
+                    // onChange={(e) =>
+                    //   handleInputChange(e.target.value, item.key, "infor")
+                    // }
+                  />
+                ) : (
+                  <span style={{ display: "flex", alignItems: "start" }}>
+                    {/* {item.value} */}
+                    {value as string | undefined}
+                  </span>
+                )}
+              </Form.Item>
+            ))}
+          </Form>
+        </div>
+      ))}
       {/* {data.map((item) =>
   item.children.map((child) => (
     <Form.Item
