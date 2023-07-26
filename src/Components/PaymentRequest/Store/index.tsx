@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import formReducer from "./formSlice";
-//import tableReducer from "./tableSlice";
+import tableReducer from "./tableSlice";
+import calReducer from "./calculateSlice";
 export const store = configureStore({
     reducer: {
       form: formReducer,
-      //table: tableReducer,
+      table: tableReducer,
+      cal: calReducer,
     },
   });
   

@@ -5,7 +5,13 @@ import { Layout, Menu, theme, DatePicker,Select, MenuProps } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import {Col, Row} from 'antd';
 import './RequestDetails.css';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setListDetailAPI } from './Store/tableSlice';
+import { updatePayMethod,
+        updateTotalAmount,
+        updateTax,
+        updateAdvanceAmount,
+        updateTotalPayment } from './Store/calculateSlice';
 import {
     AppstoreOutlined,
     BarChartOutlined,
@@ -21,6 +27,7 @@ import {
     DeleteTwoTone,
   } from '@ant-design/icons';
   import { Upload } from 'antd';
+import { RootState } from './Store';
   
   const {Content, Sider } = Layout;
   const items: MenuProps['items'] = [
@@ -133,6 +140,18 @@ interface Item {
     ]);
     const [ListDetail, setListDetail] = useState<string[]>([]);
     const jsonString = JSON.stringify(tableData);
+    const dispatch = useDispatch();
+    const ListDetailAPI = useSelector((state: RootState) => state.table.ListDetailAPI);
+    const payMethod = useSelector((state: RootState) => state.cal.payMethod);
+    const total_Amount = useSelector((state: RootState) => state.cal.totalAmount);
+    const tax = useSelector((state: RootState) => state.cal.tax);
+    const advance_Amount = useSelector((state: RootState) => state.cal.advanceAmount);
+    const total_Payment = useSelector((state: RootState) => state.cal.totalPayment);
+
+
+
+  // Sử dụng giá trị ListDetailAPI trong component
+  console.log('ListDetailAPI:', ListDetailAPI);
 
       const [paymentMethodData, setPaymentMethodData] = useState<PaymentMethodData>({paymentMethod:''});
   
@@ -212,6 +231,8 @@ interface Item {
           newData.push(row);
           setTableData(newData);
           setListDetail([jsonString]);
+          dispatch(setListDetailAPI(ListDetail))
+
           setEditingKey('');
         }    
   
@@ -356,6 +377,7 @@ interface Item {
       setEditingKey(newData.key);
       form.resetFields();
       setListDetail([jsonString]);
+      dispatch(setListDetailAPI(ListDetail))
       console.log(tableData);
       console.log(ListDetail)
    
@@ -367,14 +389,16 @@ interface Item {
       calculateTotalAmount();
       calculateTotal();
       setTableData(newData);
-  
+      setListDetail([jsonString]);
+      dispatch(setListDetailAPI(ListDetail))
   
     };
   
     const [totalAmount, setTotalAmount] = useState(0);
     const [taxPercentage, setTaxPercentage] = useState(0);
     const [total, setTotal] = useState(0);
-  
+    const [advanceAmount,setAdvanceAmount] =useState(0)
+
     const handleTaxChange = (value: number | null) => {
       if (value !== null) {
       setTaxPercentage(value);
@@ -391,16 +415,21 @@ interface Item {
     useEffect(() => {
       calculateTotalAmount();
     }, [tableData]);
-  
+    
+    const handleAdvanceAmount = (value: number | null) => {
+      if (value !== null) {
+      setAdvanceAmount(value);
+    }
+    };
   
     const calculateTotal = () => {
       const taxAmount = calculateTax();
-      const total = totalAmount + taxAmount;
+      const total = totalAmount + taxAmount-advanceAmount;
       setTotal(total);
     };
     useEffect(() => {
       calculateTotal();
-    }, [totalAmount, taxPercentage]);
+    }, [totalAmount, taxPercentage, advanceAmount]);
     
   
     const [showBankAccountForm, setShowBankAccountForm] = useState(false);
@@ -414,11 +443,16 @@ interface Item {
       accountNumber: '',
       beneficiary: '',
     });
+
+    const [methodPayment, setMethodPayment] = useState('Cash');
+    const methodOptions = [
+      { value: 'cash', label: 'Cash', payment_method: 'Cash' },
+      { value: 'bank_transfer', label: 'Bank Transfer', payment_method: 'Bank Transfer' },
+    ];
     const handlePaymentMethodChange = (value: string) => {
           
       if (value !== 'Cash') {
-        // onChange({ paymentMethod: value });
-
+        setMethodPayment("Bank Transfer")
       }
       if (value === 'bank_transfer') {
         setShowBankAccountForm(true);
@@ -426,16 +460,29 @@ interface Item {
         setShowBankAccountForm(false);
       }
       console.log(value);
+      console.log(methodPayment)
 
     };
     // useEffect(() => {
     //   console.log('Bank Transfer Data:', bankTransferData);
     // }, [bankTransferData]);
   
-    const methodOptions = [
-    { value: 'cash', label: 'Cash', payment_method: 'Cash' },
-    { value: 'bank_transfer', label: 'Bank Transfer', payment_method: 'Bank Transfer' },
-  ];
+    
+
+  console.log(totalAmount)
+  console.log(taxPercentage)
+  console.log(advanceAmount)
+  console.log(total)
+  
+  dispatch(updatePayMethod(methodPayment));
+  dispatch(updateTotalAmount(totalAmount));
+  dispatch(updateTax(taxPercentage));
+  dispatch(updateAdvanceAmount(advanceAmount));
+  dispatch(updateTotalPayment(total));
+
+
+
+
 
   return (
     <Layout hasSider>
@@ -478,9 +525,10 @@ interface Item {
                     <Form.Item
                       name="bankName"
                       label="Bank Name"
+                  
                       rules={[{ required: true, message: 'Please enter bank name' }]}
                     >
-                      <Input onChange={(e :any) =>
+                      <Input defaultValue={"NH TMCP NGOAI THUONG VN"} onChange={(e :any) =>
               setBankTransferData({ ...bankTransferData, bankName: e.target.value })} />
                     </Form.Item>
                     <Form.Item
@@ -488,7 +536,7 @@ interface Item {
                       label="Account Number"
                       rules={[{ required: true, message: 'Please enter account number' }]}
                     >
-                      <Input onChange={(e: any) =>
+                      <Input defaultValue={"0441000740036"} onChange={(e: any) =>
               setBankTransferData({ ...bankTransferData, accountNumber: e.target.value })}/>
                     </Form.Item>
                     <Form.Item
@@ -496,7 +544,7 @@ interface Item {
                       label="Beneficiary"
                       rules={[{ required: true, message: 'Please enter beneficiary' }]}
                     >
-                      <Input onChange={(e : any) =>
+                      <Input defaultValue={"CONG TY TNHH OPUS SOLUTION"} onChange={(e : any) =>
               setBankTransferData({ ...bankTransferData, beneficiary: e.target.value })} />
                     </Form.Item>
                     {/* Thêm các trường thông tin khác của tài khoản ngân hàng */}
@@ -521,6 +569,15 @@ interface Item {
       // parser={(value) => value ? value.replace('%', '') : ''}
     />
   </div>
+  <div style={{ marginBottom: '16px', fontWeight: 'bold', fontSize: '18px' }}>Advance amount:
+  <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}></span>
+    <InputNumber
+      style={{width:200}}
+      formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+      value={advanceAmount}
+      onChange={handleAdvanceAmount}
+    />
+    </div>
   <div style={{ marginBottom: '16px', fontWeight: 'bold', fontSize: '18px' }}>
     Total Payment: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{total}</span>
   </div>  
