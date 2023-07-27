@@ -513,6 +513,19 @@ namespace PaymentModule.Controllers
             }
             return BadRequest(new { success = false, error = true, message = "Does not exist request" });
         }
+
+        [HttpGet("check-my-turn")]
+        public IActionResult CheckTurn(Guid ApproverId, Guid DetailRequestId)
+        {
+            try
+            {
+                return Ok(CheckRightsOfApprover(ApproverId, DetailRequestId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { success = false, error = true, message = e.Message });
+            }
+        }
        
     }
 }
