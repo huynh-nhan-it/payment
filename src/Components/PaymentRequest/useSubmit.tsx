@@ -13,6 +13,7 @@ const useFormSubmit = () => {
       table: state.table,
       approve: state.approve,
       cal: state.cal,
+      type: state.type,
     }));
 
     // Gọi action submitForm

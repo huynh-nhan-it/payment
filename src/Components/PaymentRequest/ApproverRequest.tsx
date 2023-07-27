@@ -24,10 +24,17 @@ const ApproverRequest: React.FC = () => {
   const ListApproveAPI = useSelector((state: RootState)=>state.approve.ListApproveAPI);
   const jsonString = JSON.stringify(selectedApprovers);
   const [ListApprover, setListApprover] = useState<string[]>([]);
-  dispatch(setListApproveAPI(ListApprover));
-  console.log(ListApproveAPI)
+  // dispatch(setListApproveAPI(ListApprover));
+  // console.log(ListApproveAPI)
   //console.log(ListApprover)
-  
+  useEffect(() => {
+    // Chuyển đổi selectedApprovers thành chuỗi JSON và cập nhật ListApproveAPI
+    const jsonString = JSON.stringify(selectedApprovers);
+    dispatch(setListApproveAPI(jsonString));
+  }, [selectedApprovers, dispatch]);
+
+  console.log(ListApproveAPI)
+
 
 
 
@@ -70,8 +77,10 @@ const ApproverRequest: React.FC = () => {
     updatedSelectedApprovers[index] = selectedApproverData;
     setSelectedApprovers(updatedSelectedApprovers);
     setListApprover([jsonString]);
+    dispatch(setListApproveAPI(ListApprover))
 
   }
+    
   };
 
   const deleteApprover = (index: number) => {
@@ -83,6 +92,8 @@ const ApproverRequest: React.FC = () => {
   updatedSelectedApprovers.splice(index, 1);
   setSelectedApprovers(updatedSelectedApprovers);
   setListApprover([jsonString]);
+  dispatch(setListApproveAPI(ListApprover))
+
 
 
   };

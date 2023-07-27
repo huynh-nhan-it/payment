@@ -113,7 +113,7 @@ const FormRequest: React.FC = () => {
       console.error(error);
     }
   };
-  
+  console.log(supplier)
   
   return (
     <Layout hasSider>

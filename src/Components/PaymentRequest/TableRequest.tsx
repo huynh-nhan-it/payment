@@ -47,15 +47,24 @@ import { RootState } from './Store';
 
 interface Item {
     key: string;
-    rec_date: string;
-    pay_content: string;
+    invDate: string;
+    paymentContent: string;
     amount: number;
-    rec_no: string;
-    cost_industry: string;
-    cost_department: string;
+    invNo: string;
+    industry: string;
+    departmentBear: string;
     note: string;
   }
   
+  interface ItemAPI {
+    invDate: string;
+    paymentContent: string;
+    amount: number;
+    invNo: string;
+    industry: string;
+    departmentBear: string;
+    note: string;
+  }
   
   interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     editing: boolean;
@@ -92,19 +101,20 @@ interface Item {
               },
             ]}
           >
-            {dataIndex === 'rec_date' ? (
+            {dataIndex === 'invDate' ? (
               <DatePicker
                 
              />
             )
             :
-            dataIndex === 'cost_department' ? (
+            dataIndex === 'departmentBear' ? (
               <Select
               defaultValue="Nothing selected"
               style={{ width: 200 }}
               options={[
                   { value: 'Nothing selected', label: 'Nothing selected' },
-                  { value: 'Phòng Bán Hàng', label: 'Phòng Bán Hàng' },
+                  { value: 'KO01 - Phòng Hỗ Trợ Kinh Doanh', 
+                  label: 'KO01 - Phòng Hỗ Trợ Kinh Doanh' },
                   { value: 'Phòng Dự Án', label: 'Phòng Dự Án' },
                   { value: '', label: 'Disabled', disabled: true },
               ]}
@@ -129,15 +139,17 @@ interface Item {
     const [tableData, setTableData] = useState<Item[]>([
       {
         key: '0',
-        rec_date: '',
-        pay_content: '',
+        invDate: '',
+        paymentContent: '',
         amount: 0,
-        rec_no: '',
-        cost_industry: '',
-        cost_department:'',
+        invNo: '',
+        industry: '',
+        departmentBear:'',
         note: '',
   }
     ]);
+    
+    const tableDataAPI = tableData.map(({ key, ...rest }) => rest);
     const [ListDetail, setListDetail] = useState<string[]>([]);
     const jsonString = JSON.stringify(tableData);
     const dispatch = useDispatch();
@@ -147,11 +159,16 @@ interface Item {
     const tax = useSelector((state: RootState) => state.cal.tax);
     const advance_Amount = useSelector((state: RootState) => state.cal.advanceAmount);
     const total_Payment = useSelector((state: RootState) => state.cal.totalPayment);
-    dispatch(setListDetailAPI(ListDetail))
+    useEffect(() => {
+      // Chuyển đổi tabledetail thành chuỗi JSON và cập nhật ListApproveAPI
+      const jsonString = JSON.stringify(tableDataAPI);
+      dispatch(setListDetailAPI(jsonString));
+    }, [tableDataAPI, dispatch]);
 
 
 
   // Sử dụng giá trị ListDetailAPI trong component
+  console.log(tableData)
   console.log('ListDetailAPI:', ListDetailAPI);
 
       const [paymentMethodData, setPaymentMethodData] = useState<PaymentMethodData>({paymentMethod:''});
@@ -167,7 +184,7 @@ interface Item {
       const currentItem : Item | undefined = updatedData.find(item => item.key === '0');
       
       // Cập nhật giá trị của Department trong phần tử hiện tại
-      if(currentItem){currentItem.cost_department = newValue;}
+      if(currentItem){currentItem.departmentBear = newValue;}
       else {}
       
       // Cập nhật lại chuỗi dữ liệu Item
@@ -178,7 +195,7 @@ interface Item {
     const handleDateChange = (date: Dayjs, record: Item) => {
       const newData = tableData.map((item) => {
         if (item.key === record.key) {
-          return { ...item, rec_date: date };
+          return { ...item, invDate: date };
         }
         return item;
       });
@@ -193,12 +210,12 @@ interface Item {
   
     const edit = (record: Partial<Item> & { key: React.Key }) => {
       form.setFieldsValue({ 
-        rec_date: '',
-        pay_content: '',
+        invDate: '',
+        paymentContent: '',
         amount: '', 
-        rec_no: '', 
-        cost_industry: '',
-        cost_cost_department: '',
+        invNo: '', 
+        industry: '',
+        cost_departmentBear: '',
         note: '', 
         ...record });
       setEditingKey(record.key);
@@ -221,7 +238,7 @@ interface Item {
           newData.splice(index, 1, {
             ...item,
             ...row,
-            rec_date: formatDate(row.rec_date),
+            invDate: formatDate(row.invDate),
           });
           calculateTotalAmount();
           calculateTotal();
@@ -249,7 +266,7 @@ interface Item {
     const columns = [
       {
         title: 'Inv/Rec date	',
-        dataIndex: 'rec_date',
+        dataIndex: 'invDate',
         width: '15%',
         editable: true,
         render: (date : Dayjs | undefined, record: Item) => {
@@ -263,7 +280,7 @@ interface Item {
       },    
       {
         title: 'Pay Content',
-        dataIndex: 'pay_content',
+        dataIndex: 'paymentContent',
         width: '15%',
         editable: true,
       },
@@ -275,19 +292,19 @@ interface Item {
       }, 
       {
         title: 'Invoice/Rec No',
-        dataIndex: 'rec_no',
+        dataIndex: 'invNo',
         width: '15%',
         editable: true,
       },
       {
         title: 'Cost-bearing Industry',
-        dataIndex: 'cost_industry',
+        dataIndex: 'industry',
         width: '15%',
         editable: true,
       },
       {
         title: 'Department bear the cost',
-        dataIndex: 'cost_department',
+        dataIndex: 'departmentBear',
         width: '15%',
         editable: true,
         render:(_:any, record: Item) => {
@@ -299,12 +316,12 @@ interface Item {
         onChange={handleDepartmentChange}
         options={[
             { value: '1', label: 'Nothing selected' },
-            { value: '2', label: 'Phòng Bán Hàng' },
+            { value: '2', label: 'KO01 - Phòng Hỗ Trợ Kinh Doanh' },
             { value: '3', label: 'Phòng Dự Án' },
             { value: '', label: 'Disabled', disabled: true },
         ]}
     /> 
-        ):(<span>{record.cost_department}</span>);
+        ):(<span>{record.departmentBear}</span>);
       },
       },
       {
@@ -331,10 +348,10 @@ interface Item {
           ) : (
             <span>
             <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-            <EditFilled style={{ fontSize: '30px' }} key={undefined} action={undefined} width={undefined} cite={undefined} data={undefined} form={undefined} label={undefined} slot={undefined} span={undefined} summary={undefined} title={undefined} pattern={undefined} onSubmit={undefined} children={undefined} name={undefined} id={undefined} className={undefined} maxLength={undefined} tabIndex={undefined} autoFocus={undefined} placeholder={undefined} disabled={undefined} open={undefined} onBlur={undefined} onFocus={undefined} onKeyUp={undefined} onKeyDown={undefined} onMouseDown={undefined} onMouseEnter={undefined} onMouseLeave={undefined} onClick={undefined} onSelect={undefined} value={undefined} defaultValue={undefined} onChange={undefined} size={undefined} htmlFor={undefined} onReset={undefined} type={undefined} max={undefined} min={undefined} required={undefined} method={undefined} target={undefined} start={undefined} dir={undefined} multiple={undefined} default={undefined} high={undefined} low={undefined} media={undefined} height={undefined} color={undefined} content={undefined} translate={undefined} hidden={undefined} acceptCharset={undefined} noValidate={undefined} accessKey={undefined} draggable={undefined} lang={undefined} prefix={undefined} contentEditable={undefined} inputMode={undefined} nonce={undefined} async={undefined} manifest={undefined} wrap={undefined} accept={undefined} allowFullScreen={undefined} allowTransparency={undefined} alt={undefined} as={undefined} autoComplete={undefined} autoPlay={undefined} capture={undefined} cellPadding={undefined} cellSpacing={undefined} charSet={undefined} challenge={undefined} checked={undefined} classID={undefined} cols={undefined} colSpan={undefined} controls={undefined} coords={undefined} crossOrigin={undefined} dateTime={undefined} defer={undefined} download={undefined} encType={undefined} formAction={undefined} formEncType={undefined} formMethod={undefined} formNoValidate={undefined} formTarget={undefined} frameBorder={undefined} headers={undefined} href={undefined} hrefLang={undefined} httpEquiv={undefined} integrity={undefined} keyParams={undefined} keyType={undefined} kind={undefined} list={undefined} loop={undefined} marginHeight={undefined} marginWidth={undefined} mediaGroup={undefined} minLength={undefined} muted={undefined} optimum={undefined} defaultChecked={undefined} suppressContentEditableWarning={undefined} suppressHydrationWarning={undefined} contextMenu={undefined} spellCheck={undefined} radioGroup={undefined} role={undefined} about={undefined} datatype={undefined} inlist={undefined} property={undefined} rel={undefined} resource={undefined} rev={undefined} typeof={undefined} vocab={undefined} autoCapitalize={undefined} autoCorrect={undefined} autoSave={undefined} itemProp={undefined} itemScope={undefined} itemType={undefined} itemID={undefined} itemRef={undefined} results={undefined} security={undefined} unselectable={undefined} is={undefined} aria-activedescendant={undefined} aria-atomic={undefined} aria-autocomplete={undefined} aria-busy={undefined} aria-checked={undefined} aria-colcount={undefined} aria-colindex={undefined} aria-colspan={undefined} aria-controls={undefined} aria-current={undefined} aria-describedby={undefined} aria-details={undefined} aria-disabled={undefined} aria-dropeffect={undefined} aria-errormessage={undefined} aria-expanded={undefined} aria-flowto={undefined} aria-grabbed={undefined} aria-haspopup={undefined} aria-hidden={undefined} aria-invalid={undefined} aria-keyshortcuts={undefined} aria-label={undefined} aria-labelledby={undefined} aria-level={undefined} aria-live={undefined} aria-modal={undefined} aria-multiline={undefined} aria-multiselectable={undefined} aria-orientation={undefined} aria-owns={undefined} aria-placeholder={undefined} aria-posinset={undefined} aria-pressed={undefined} aria-readonly={undefined} aria-relevant={undefined} aria-required={undefined} aria-roledescription={undefined} aria-rowcount={undefined} aria-rowindex={undefined} aria-rowspan={undefined} aria-selected={undefined} aria-setsize={undefined} aria-sort={undefined} aria-valuemax={undefined} aria-valuemin={undefined} aria-valuenow={undefined} aria-valuetext={undefined} playsInline={undefined} poster={undefined} preload={undefined} readOnly={undefined} reversed={undefined} rows={undefined} rowSpan={undefined} sandbox={undefined} scope={undefined} scoped={undefined} scrolling={undefined} seamless={undefined} selected={undefined} shape={undefined} sizes={undefined} src={undefined} srcDoc={undefined} srcLang={undefined} srcSet={undefined} step={undefined} useMap={undefined} wmode={undefined} dangerouslySetInnerHTML={undefined} onCopy={undefined} onCopyCapture={undefined} onCut={undefined} onCutCapture={undefined} onPaste={undefined} onPasteCapture={undefined} onCompositionEnd={undefined} onCompositionEndCapture={undefined} onCompositionStart={undefined} onCompositionStartCapture={undefined} onCompositionUpdate={undefined} onCompositionUpdateCapture={undefined} onFocusCapture={undefined} onBlurCapture={undefined} onChangeCapture={undefined} onBeforeInput={undefined} onBeforeInputCapture={undefined} onInput={undefined} onInputCapture={undefined} onResetCapture={undefined} onSubmitCapture={undefined} onInvalid={undefined} onInvalidCapture={undefined} onLoad={undefined} onLoadCapture={undefined} onError={undefined} onErrorCapture={undefined} onKeyDownCapture={undefined} onKeyPress={undefined} onKeyPressCapture={undefined} onKeyUpCapture={undefined} onAbort={undefined} onAbortCapture={undefined} onCanPlay={undefined} onCanPlayCapture={undefined} onCanPlayThrough={undefined} onCanPlayThroughCapture={undefined} onDurationChange={undefined} onDurationChangeCapture={undefined} onEmptied={undefined} onEmptiedCapture={undefined} onEncrypted={undefined} onEncryptedCapture={undefined} onEnded={undefined} onEndedCapture={undefined} onLoadedData={undefined} onLoadedDataCapture={undefined} onLoadedMetadata={undefined} onLoadedMetadataCapture={undefined} onLoadStart={undefined} onLoadStartCapture={undefined} onPause={undefined} onPauseCapture={undefined} onPlay={undefined} onPlayCapture={undefined} onPlaying={undefined} onPlayingCapture={undefined} onProgress={undefined} onProgressCapture={undefined} onRateChange={undefined} onRateChangeCapture={undefined} onSeeked={undefined} onSeekedCapture={undefined} onSeeking={undefined} onSeekingCapture={undefined} onStalled={undefined} onStalledCapture={undefined} onSuspend={undefined} onSuspendCapture={undefined} onTimeUpdate={undefined} onTimeUpdateCapture={undefined} onVolumeChange={undefined} onVolumeChangeCapture={undefined} onWaiting={undefined} onWaitingCapture={undefined} onAuxClick={undefined} onAuxClickCapture={undefined} onClickCapture={undefined} onContextMenu={undefined} onContextMenuCapture={undefined} onDoubleClick={undefined} onDoubleClickCapture={undefined} onDrag={undefined} onDragCapture={undefined} onDragEnd={undefined} onDragEndCapture={undefined} onDragEnter={undefined} onDragEnterCapture={undefined} onDragExit={undefined} onDragExitCapture={undefined} onDragLeave={undefined} onDragLeaveCapture={undefined} onDragOver={undefined} onDragOverCapture={undefined} onDragStart={undefined} onDragStartCapture={undefined} onDrop={undefined} onDropCapture={undefined} onMouseDownCapture={undefined} onMouseMove={undefined} onMouseMoveCapture={undefined} onMouseOut={undefined} onMouseOutCapture={undefined} onMouseOver={undefined} onMouseOverCapture={undefined} onMouseUp={undefined} onMouseUpCapture={undefined} onSelectCapture={undefined} onTouchCancel={undefined} onTouchCancelCapture={undefined} onTouchEnd={undefined} onTouchEndCapture={undefined} onTouchMove={undefined} onTouchMoveCapture={undefined} onTouchStart={undefined} onTouchStartCapture={undefined} onPointerDown={undefined} onPointerDownCapture={undefined} onPointerMove={undefined} onPointerMoveCapture={undefined} onPointerUp={undefined} onPointerUpCapture={undefined} onPointerCancel={undefined} onPointerCancelCapture={undefined} onPointerEnter={undefined} onPointerEnterCapture={undefined} onPointerLeave={undefined} onPointerLeaveCapture={undefined} onPointerOver={undefined} onPointerOverCapture={undefined} onPointerOut={undefined} onPointerOutCapture={undefined} onGotPointerCapture={undefined} onGotPointerCaptureCapture={undefined} onLostPointerCapture={undefined} onLostPointerCaptureCapture={undefined} onScroll={undefined} onScrollCapture={undefined} onWheel={undefined} onWheelCapture={undefined} onAnimationStart={undefined} onAnimationStartCapture={undefined} onAnimationEnd={undefined} onAnimationEndCapture={undefined} onAnimationIteration={undefined} onAnimationIterationCapture={undefined} onTransitionEnd={undefined} onTransitionEndCapture={undefined} />
+            <EditFilled style={{ fontSize: '30px' }} />
             </Typography.Link>
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-            <DeleteFilled style={{ fontSize: '30px' }} key={undefined} id={undefined} className={undefined} title={undefined} maxLength={undefined} tabIndex={undefined} autoFocus={undefined} placeholder={undefined} disabled={undefined} open={undefined} onBlur={undefined} onFocus={undefined} onKeyUp={undefined} onKeyDown={undefined} onMouseDown={undefined} onMouseEnter={undefined} onMouseLeave={undefined} onClick={undefined} onSelect={undefined} children={undefined} value={undefined} defaultValue={undefined} onChange={undefined} size={undefined} label={undefined} cite={undefined} data={undefined} form={undefined} slot={undefined} span={undefined} summary={undefined} pattern={undefined} action={undefined} max={undefined} required={undefined} type={undefined} default={undefined} high={undefined} low={undefined} media={undefined} height={undefined} width={undefined} start={undefined} name={undefined} color={undefined} content={undefined} translate={undefined} hidden={undefined} dir={undefined} acceptCharset={undefined} method={undefined} noValidate={undefined} target={undefined} accessKey={undefined} draggable={undefined} lang={undefined} prefix={undefined} contentEditable={undefined} inputMode={undefined} nonce={undefined} async={undefined} multiple={undefined} manifest={undefined} wrap={undefined} accept={undefined} allowFullScreen={undefined} allowTransparency={undefined} alt={undefined} as={undefined} autoComplete={undefined} autoPlay={undefined} capture={undefined} cellPadding={undefined} cellSpacing={undefined} charSet={undefined} challenge={undefined} checked={undefined} classID={undefined} cols={undefined} colSpan={undefined} controls={undefined} coords={undefined} crossOrigin={undefined} dateTime={undefined} defer={undefined} download={undefined} encType={undefined} formAction={undefined} formEncType={undefined} formMethod={undefined} formNoValidate={undefined} formTarget={undefined} frameBorder={undefined} headers={undefined} href={undefined} hrefLang={undefined} htmlFor={undefined} httpEquiv={undefined} integrity={undefined} keyParams={undefined} keyType={undefined} kind={undefined} list={undefined} loop={undefined} marginHeight={undefined} marginWidth={undefined} mediaGroup={undefined} min={undefined} minLength={undefined} muted={undefined} optimum={undefined} defaultChecked={undefined} suppressContentEditableWarning={undefined} suppressHydrationWarning={undefined} contextMenu={undefined} spellCheck={undefined} radioGroup={undefined} role={undefined} about={undefined} datatype={undefined} inlist={undefined} property={undefined} rel={undefined} resource={undefined} rev={undefined} typeof={undefined} vocab={undefined} autoCapitalize={undefined} autoCorrect={undefined} autoSave={undefined} itemProp={undefined} itemScope={undefined} itemType={undefined} itemID={undefined} itemRef={undefined} results={undefined} security={undefined} unselectable={undefined} is={undefined} aria-activedescendant={undefined} aria-atomic={undefined} aria-autocomplete={undefined} aria-busy={undefined} aria-checked={undefined} aria-colcount={undefined} aria-colindex={undefined} aria-colspan={undefined} aria-controls={undefined} aria-current={undefined} aria-describedby={undefined} aria-details={undefined} aria-disabled={undefined} aria-dropeffect={undefined} aria-errormessage={undefined} aria-expanded={undefined} aria-flowto={undefined} aria-grabbed={undefined} aria-haspopup={undefined} aria-hidden={undefined} aria-invalid={undefined} aria-keyshortcuts={undefined} aria-label={undefined} aria-labelledby={undefined} aria-level={undefined} aria-live={undefined} aria-modal={undefined} aria-multiline={undefined} aria-multiselectable={undefined} aria-orientation={undefined} aria-owns={undefined} aria-placeholder={undefined} aria-posinset={undefined} aria-pressed={undefined} aria-readonly={undefined} aria-relevant={undefined} aria-required={undefined} aria-roledescription={undefined} aria-rowcount={undefined} aria-rowindex={undefined} aria-rowspan={undefined} aria-selected={undefined} aria-setsize={undefined} aria-sort={undefined} aria-valuemax={undefined} aria-valuemin={undefined} aria-valuenow={undefined} aria-valuetext={undefined} playsInline={undefined} poster={undefined} preload={undefined} readOnly={undefined} reversed={undefined} rows={undefined} rowSpan={undefined} sandbox={undefined} scope={undefined} scoped={undefined} scrolling={undefined} seamless={undefined} selected={undefined} shape={undefined} sizes={undefined} src={undefined} srcDoc={undefined} srcLang={undefined} srcSet={undefined} step={undefined} useMap={undefined} wmode={undefined} dangerouslySetInnerHTML={undefined} onCopy={undefined} onCopyCapture={undefined} onCut={undefined} onCutCapture={undefined} onPaste={undefined} onPasteCapture={undefined} onCompositionEnd={undefined} onCompositionEndCapture={undefined} onCompositionStart={undefined} onCompositionStartCapture={undefined} onCompositionUpdate={undefined} onCompositionUpdateCapture={undefined} onFocusCapture={undefined} onBlurCapture={undefined} onChangeCapture={undefined} onBeforeInput={undefined} onBeforeInputCapture={undefined} onInput={undefined} onInputCapture={undefined} onReset={undefined} onResetCapture={undefined} onSubmit={undefined} onSubmitCapture={undefined} onInvalid={undefined} onInvalidCapture={undefined} onLoad={undefined} onLoadCapture={undefined} onError={undefined} onErrorCapture={undefined} onKeyDownCapture={undefined} onKeyPress={undefined} onKeyPressCapture={undefined} onKeyUpCapture={undefined} onAbort={undefined} onAbortCapture={undefined} onCanPlay={undefined} onCanPlayCapture={undefined} onCanPlayThrough={undefined} onCanPlayThroughCapture={undefined} onDurationChange={undefined} onDurationChangeCapture={undefined} onEmptied={undefined} onEmptiedCapture={undefined} onEncrypted={undefined} onEncryptedCapture={undefined} onEnded={undefined} onEndedCapture={undefined} onLoadedData={undefined} onLoadedDataCapture={undefined} onLoadedMetadata={undefined} onLoadedMetadataCapture={undefined} onLoadStart={undefined} onLoadStartCapture={undefined} onPause={undefined} onPauseCapture={undefined} onPlay={undefined} onPlayCapture={undefined} onPlaying={undefined} onPlayingCapture={undefined} onProgress={undefined} onProgressCapture={undefined} onRateChange={undefined} onRateChangeCapture={undefined} onSeeked={undefined} onSeekedCapture={undefined} onSeeking={undefined} onSeekingCapture={undefined} onStalled={undefined} onStalledCapture={undefined} onSuspend={undefined} onSuspendCapture={undefined} onTimeUpdate={undefined} onTimeUpdateCapture={undefined} onVolumeChange={undefined} onVolumeChangeCapture={undefined} onWaiting={undefined} onWaitingCapture={undefined} onAuxClick={undefined} onAuxClickCapture={undefined} onClickCapture={undefined} onContextMenu={undefined} onContextMenuCapture={undefined} onDoubleClick={undefined} onDoubleClickCapture={undefined} onDrag={undefined} onDragCapture={undefined} onDragEnd={undefined} onDragEndCapture={undefined} onDragEnter={undefined} onDragEnterCapture={undefined} onDragExit={undefined} onDragExitCapture={undefined} onDragLeave={undefined} onDragLeaveCapture={undefined} onDragOver={undefined} onDragOverCapture={undefined} onDragStart={undefined} onDragStartCapture={undefined} onDrop={undefined} onDropCapture={undefined} onMouseDownCapture={undefined} onMouseMove={undefined} onMouseMoveCapture={undefined} onMouseOut={undefined} onMouseOutCapture={undefined} onMouseOver={undefined} onMouseOverCapture={undefined} onMouseUp={undefined} onMouseUpCapture={undefined} onSelectCapture={undefined} onTouchCancel={undefined} onTouchCancelCapture={undefined} onTouchEnd={undefined} onTouchEndCapture={undefined} onTouchMove={undefined} onTouchMoveCapture={undefined} onTouchStart={undefined} onTouchStartCapture={undefined} onPointerDown={undefined} onPointerDownCapture={undefined} onPointerMove={undefined} onPointerMoveCapture={undefined} onPointerUp={undefined} onPointerUpCapture={undefined} onPointerCancel={undefined} onPointerCancelCapture={undefined} onPointerEnter={undefined} onPointerEnterCapture={undefined} onPointerLeave={undefined} onPointerLeaveCapture={undefined} onPointerOver={undefined} onPointerOverCapture={undefined} onPointerOut={undefined} onPointerOutCapture={undefined} onGotPointerCapture={undefined} onGotPointerCaptureCapture={undefined} onLostPointerCapture={undefined} onLostPointerCaptureCapture={undefined} onScroll={undefined} onScrollCapture={undefined} onWheel={undefined} onWheelCapture={undefined} onAnimationStart={undefined} onAnimationStartCapture={undefined} onAnimationEnd={undefined} onAnimationEndCapture={undefined} onAnimationIteration={undefined} onAnimationIterationCapture={undefined} onTransitionEnd={undefined} onTransitionEndCapture={undefined} />
+            <DeleteFilled style={{ fontSize: '30px' }} />
           </Popconfirm>
           </span>
           );
@@ -363,12 +380,12 @@ interface Item {
     const handleAdd = () => {
       const newData: Item = {
         key: count.toString(),
-        rec_date: dayjs().toString(),
-        pay_content: '',
+        invDate: dayjs().toString(),
+        paymentContent: '',
         amount: 0,
-        rec_no: '',
-        cost_industry: '',
-        cost_department: '',
+        invNo: '',
+        industry: '',
+        departmentBear: '',
         note: '',
       };
       calculateTotalAmount();

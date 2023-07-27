@@ -3,35 +3,38 @@ import { setListDetailAPI } from './Store/tableSlice';
 import { setListApproveAPI } from './Store/approveSlice';
 import { updatePurpose, updateDepartment, updatePaymentFor, updateSupplier, updateCurrency, updateExchangeRate, updatePoPrNumber } from './Store/formSlice';
 import { updatePayMethod, updateTotalAmount, updateTax, updateAdvanceAmount, updateTotalPayment } from './Store/calculateSlice';
+import { updateTypeState } from './Store/typeSlice';
 
-export const submitForm = (formData: { form: any; table: any; approve: any; cal: any; }) => async (dispatch: (arg0: { payload: any; type: "form/updatePurpose" | "form/updateDepartment" | "form/updatePaymentFor" | "form/updateSupplier" | "form/updateCurrency" | "form/updateExchangeRate" | "form/updatePoPrNumber" | "table/setListDetailAPI" | "form/updatePayMethod" | "form/updateTotalAmount" | "form/updateTax" | "form/updateAdvanceAmount" | "form/updateTotalPayment" | "approve/setListApproveAPI"; }) => void) => {
+export const submitForm = (formData: { form: any; table: any; approve: any; cal: any; type : any }) => async (dispatch: (arg0: { payload: any; type: "form/updatePurpose" | "form/updateDepartment" | "form/updatePaymentFor" | "form/updateSupplier" | "form/updateCurrency" | "form/updateExchangeRate" | "form/updatePoPrNumber" | "table/setListDetailAPI" | "form/updatePayMethod" | "form/updateTotalAmount" | "form/updateTax" | "form/updateAdvanceAmount" | "form/updateTotalPayment" | "approve/setListApproveAPI"; }) => void) => {
   try {
     const formState = formData.form;
     const tableState = formData.table;
     const approveState = formData.approve;
     const calState = formData.cal;
+    const typeState = formData.type;
 
     const payload = {
-      purpose: formState.purpose,
-      department: formState.department,
-      paymentFor: formState.paymentFor,
-      supplier: formState.supplier,
-      currency: formState.currency,
-      exchangeRate: formState.exchangeRate,
-      poPrNumber: formState.poPrNumber,
-      ListDetailAPI: tableState.ListDetailAPI,
-      payMethod: calState.payMethod,
-      totalAmount: calState.totalAmount,
-      tax: calState.tax,
-      advanceAmount: calState.advanceAmount,
-      totalPayment: calState.totalPayment,
-      ListApproveAPI: approveState.ListApproveAPI,
+      Purpose: formState.purpose,
+      Department: formState.department,
+      PaymentFor: formState.paymentFor,
+      Supplier: formState.supplier,
+      Currency: formState.currency,
+      ExchangeRate: formState.exchangeRate,
+      PONumber: formState.poPrNumber,
+      DetailTable: tableState.ListDetailAPI,
+      PaymentMethod: calState.payMethod,
+      SuggestedAmount: calState.totalAmount,
+      Tax: calState.tax,
+      AdvanceAmount: calState.advanceAmount,
+      TotalPayment: calState.totalPayment,
+      Approvers: approveState.ListApproveAPI,
+      typeSave: typeState.typeState
     };
 
     // Gửi request POST đến API sử dụng Axios
     const response = await axios.post('http://localhost:5005/api/User/create-request', payload, {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
       },
     });
 

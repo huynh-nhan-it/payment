@@ -17,6 +17,8 @@ const App: React.FC = () => {
     // Gọi action submitForm
     dispatch(submitForm(formData));
     console.log(formData)
+    console.log(formData.type.typeState)
+    console.log(formData.approve.ListApproveAPI)
   };
 
   return (
