@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, UploadProps } from 'antd';
+import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, UploadProps, List } from 'antd';
 import { Layout, Menu, theme, DatePicker,Select, MenuProps } from 'antd';
 //import moment, { Moment } from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
@@ -147,6 +147,7 @@ interface Item {
     const tax = useSelector((state: RootState) => state.cal.tax);
     const advance_Amount = useSelector((state: RootState) => state.cal.advanceAmount);
     const total_Payment = useSelector((state: RootState) => state.cal.totalPayment);
+    dispatch(setListDetailAPI(ListDetail))
 
 
 

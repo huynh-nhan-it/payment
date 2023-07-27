@@ -14,8 +14,9 @@ export const store = configureStore({
   reducer: {
     form: formReducer,
     table: tableReducer,
-    approve: approveReducer,
     cal: calReducer,
+    approve: approveReducer,
+    
   },
 });
 

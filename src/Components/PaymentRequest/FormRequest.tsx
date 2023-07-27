@@ -26,6 +26,7 @@ const FormRequest: React.FC = () => {
   const exchangeRate = useSelector((state : RootState) => state.form.exchangeRate);
   const poPrNumber = useSelector((state : RootState) => state.form.poPrNumber);
   const dispatch = useDispatch();
+  
 
   const [selectedCurrency, setSelectedCurrency] = useState<string>('VND');
   const handlePurposeChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -14,7 +14,7 @@ import RegisterForm from "./Components/Register/Register";
 import { useEffect, useState } from "react";
 import Setting from "./Components/Setting";
 import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
-import SubmitRequest from "./Components/PaymentRequest/SubmitRequest";
+import SubmitRequest from "./Components/PaymentRequest";
 import jwt_decode from "jwt-decode";
 import Register from "./Components/Login/Register";
 

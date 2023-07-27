@@ -16,18 +16,18 @@ const App: React.FC = () => {
   const handleFormSubmit = () => {
     // Gọi action submitForm
     dispatch(submitForm(formData));
+    console.log(formData)
   };
 
   return (
-    <Provider store={store}>
       <div>
         <FormRequest />
         <TableRequest/>
         <AttachmentRequest/>
         <ApproverRequest/>   
-        <Button onClick={handleFormSubmit}>Submit</Button> 
+        <Button onClick={handleFormSubmit}>Submit</Button>
       </div>
-    </Provider>
+
   );
 };
 

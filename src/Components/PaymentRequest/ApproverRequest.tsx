@@ -3,8 +3,9 @@ import { Button, Layout, Select, theme } from "antd";
 import React, { useEffect, useState } from "react";
 import './RequestDetails.css'
 import { getApprover } from "../../Services/PaymentRequest/apiApprover";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./Store";
+import { setListApproveAPI } from "./Store/approveSlice";
 const { Content } = Layout;
 
 const ApproverRequest: React.FC = () => {
@@ -18,10 +19,16 @@ const ApproverRequest: React.FC = () => {
   const [approverData, setApproverData] = useState<User[]>([]);
   const [approversList, setApproversList] = useState<any[]>([]);
   const [selectedApprovers, setSelectedApprovers] = useState<User[]>([]);
-  
-  const ListApproverAPI = useSelector((state: RootState)=>state.approve.ListApproveAPI);
+  const dispatch = useDispatch();
+
+  const ListApproveAPI = useSelector((state: RootState)=>state.approve.ListApproveAPI);
   const jsonString = JSON.stringify(selectedApprovers);
+  const [ListApprover, setListApprover] = useState<string[]>([]);
+  dispatch(setListApproveAPI(ListApprover));
+  console.log(ListApproveAPI)
+  //console.log(ListApprover)
   
+
 
 
   const {
@@ -53,6 +60,7 @@ const ApproverRequest: React.FC = () => {
     const updatedApprovers = [...approversList];
     updatedApprovers[index].role = selectedOption.value;
     setApproversList(updatedApprovers);
+
     
     const selectedApproverData = approverData.find((approver) => approver.fullName === selectedOption.value);
 
@@ -61,6 +69,8 @@ const ApproverRequest: React.FC = () => {
     const updatedSelectedApprovers = [...selectedApprovers];
     updatedSelectedApprovers[index] = selectedApproverData;
     setSelectedApprovers(updatedSelectedApprovers);
+    setListApprover([jsonString]);
+
   }
   };
 
@@ -72,9 +82,11 @@ const ApproverRequest: React.FC = () => {
     const updatedSelectedApprovers = [...selectedApprovers];
   updatedSelectedApprovers.splice(index, 1);
   setSelectedApprovers(updatedSelectedApprovers);
+  setListApprover([jsonString]);
+
+
   };
 
-  console.log(selectedApprovers)
   
 
 
