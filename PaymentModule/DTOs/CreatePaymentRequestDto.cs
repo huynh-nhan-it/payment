@@ -2,7 +2,7 @@
 {
     public class CreatePaymentRequestDto
     {
-        public string ?RequestId { get; set; }
+        public string? RequestId { get; set; }
         public string Purpose { get; set; }
         public string Department { get; set; }
         public string PaymentFor { get; set; }
@@ -16,10 +16,10 @@
         public double Tax { get; set; }
         public double AdvanceAmount { get; set; }
         public double TotalPayment { get; set; }
-
-        public string typeSave { get; set; }
         public IFormFileCollection? files { get; set; }
         public string Approvers { get; set; }
+        public string typeSave { get; set; }
+
 
     }
 }

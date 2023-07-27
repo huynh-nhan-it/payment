@@ -17,21 +17,21 @@ namespace PaymentModule.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StatusController : ControllerBase
+    public class AddFakeDataController : ControllerBase
     {
         private IDetailRequestService _detailRequestService;
         private readonly PaymentContext _context;
         private readonly ConnectionStringSettings _connectionStringSettings;
 
         private Random random = new Random();
-        public StatusController(IDetailRequestService a, PaymentContext s, ConnectionStringSettings connectionStringSettings)
+        public AddFakeDataController(IDetailRequestService a, PaymentContext s, ConnectionStringSettings connectionStringSettings)
         {
             _detailRequestService = a;
             _context = s;
             _connectionStringSettings = connectionStringSettings;
         }
 
-        [HttpPost("insert-fake-data")]
+        [HttpPost("fake-data-user")]
         public IActionResult GetAllCommentByDRid()
         {
             return Ok(ReadApproverDataFile("C:\\Users\\84961\\Desktop\\Intern_Opus_Solution\\project\\payment\\PaymentModule\\data\\Approver.txt"));
@@ -106,7 +106,7 @@ namespace PaymentModule.Controllers
                             {
                                 firstName = fullname[i];
                             } else
-                            {
+                            {  
                                 lastName += fullname[i] + " ";
                             }
                         }

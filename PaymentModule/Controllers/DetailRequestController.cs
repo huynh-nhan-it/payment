@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PaymentModule.Context;
-
+using PaymentModule.DTOs;
+using PaymentModule.Entities;
 using PaymentModule.Models;
 using PaymentModule.Services.IServices;
 
@@ -130,5 +131,6 @@ namespace PaymentModule.Controllers
             return Ok(listPaymentRequestDetail[listPaymentRequestDetail.Count - 1]);
         }
 
+        
     }
 }

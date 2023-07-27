@@ -19,10 +19,10 @@ namespace PaymentModule.Controllers
             _userService = userService;
         }
         [HttpGet]
-        public IActionResult GetAllApprover()
+        public IActionResult GetAllApprover(Guid myId)
         {
             try { 
-                return Ok(_userService.GetAllApprover());
+                return Ok(_userService.GetAllApprover(myId));
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);

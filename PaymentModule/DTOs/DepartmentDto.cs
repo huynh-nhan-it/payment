@@ -8,7 +8,7 @@ namespace PaymentModule.DTOs
         public string DepartmentName { get; set; }
         public string Description { get; set; }
         public string Contact { get; set; }
-        public ApproverDto Manager { get; set; }
+        public ApproverModel Manager { get; set; }
         public List<ApproverModel>? Supervisors { get; set; }
         public List<ApproverModel>? Employees { get; set; }
         public string UnderDepartment { get; set; }

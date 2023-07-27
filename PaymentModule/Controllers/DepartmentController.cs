@@ -32,7 +32,6 @@ namespace PaymentModule.Controllers
             _connectionStringSettings = connectionStringSettings;
         }
 
-
         [HttpGet("department-name")] 
         public IActionResult GetDepartmentByName(string DepartmentName) {
             try
@@ -48,7 +47,7 @@ namespace PaymentModule.Controllers
                 
             } catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(ex.Message);
             }
         }
 
@@ -58,10 +57,11 @@ namespace PaymentModule.Controllers
             try
             {
                 var departmenList = _departmentService.GetDepartmentModelList();
+                List<string> departmentNameList = new List<string>();
+
                 if (departmenList.Count != 0)
                 {
-                    var departmentNameList = new List<string>();
-                    foreach(var departmentModel in departmenList)
+                    foreach (var departmentModel in departmenList)
                     {
                         departmentNameList.Add(departmentModel.DepartmentName);
                     }
@@ -69,14 +69,12 @@ namespace PaymentModule.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return Ok("Không tìm thấy");
                 }
-                return Ok(_departmentService.GetDepartmentModelList());
-
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(ex.Message);
             }
         }
 
@@ -89,7 +87,7 @@ namespace PaymentModule.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message.ToString());
+                return Ok(ex.Message.ToString());
             }
         }
 
@@ -99,15 +97,14 @@ namespace PaymentModule.Controllers
             try
             {
                 _departmentService.AddDepartment(request);
-                return Ok();
+                return Ok(new { mess = "Succeed" });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(ex.Message);
             }
 
         }
-        
         
         [HttpPost("add-member")]
         public IActionResult AddMember(ApproverDto Approver, string DepartmentName, string Position)
@@ -117,18 +114,58 @@ namespace PaymentModule.Controllers
                 var guidCheck = new Guid();
                 var departmentId = _departmentService.GetIdByDepartmentName(DepartmentName);
                 var userId = _userService.GetId(Approver.Email);
-                if(departmentId.Equals(guidCheck) || userId.Equals(guidCheck) || !(Position == "Supervior" || Position == "Employee"))
+                if(departmentId.Equals(guidCheck) || userId.Equals(guidCheck) || !(Position == "Supervisor" || Position == "Employee"))
                 {
-                    return BadRequest();
+                    return Ok("Position not found");
                 }
                 _departmentService.AddMemberIntoDepartment(departmentId, userId, Position);
-                return Ok();
+                return Ok(new { mess = "Succeed" });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(ex.Message);
             }
         }
 
+        [HttpPut("edit-department")]
+        public IActionResult AddDepartment(Guid departmentId, DepartmentDto request)
+        {
+            try
+            {
+                _departmentService.EditDepartment(departmentId, request);
+                return Ok(new { mess = "Succeed" });
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteDepartment(Guid id)
+        {
+            try
+            {
+                _departmentService.DeleteDepartment(id);
+                return Ok(new { mess = "Succeed" });
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+        }
+        [HttpGet("is-manager")]  
+        public IActionResult IsManager(Guid UserId, string departmentName)
+        {
+            try
+            {
+                bool check = _departmentService.IsManager(UserId, departmentName);
+                return Ok(check);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+        }    
     }
 }

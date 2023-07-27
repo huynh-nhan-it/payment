@@ -155,19 +155,22 @@ namespace PaymentModule.Services.Implements
                 return "";
             }
         }
-        List<ApproverModel> IUserService.GetAllApprover()
+        List<ApproverModel> IUserService.GetAllApprover(Guid myId)
         {
             List<ApproverModel> approList = new List<ApproverModel>();
             var userList = _context.Users.ToList();
             foreach(var u in userList)
             {
-                var approver = new ApproverModel
+                if(!u.Id.Equals(myId))
                 {
-                    FullName = u.FirstName + " " + u.LastName,
-                    Email = u.Email,
-                    JobTitle = u.JobTitle,
-                };
-                approList.Add(approver);
+                    var approver = new ApproverModel
+                    {
+                        FullName = u.FirstName + " " + u.LastName,
+                        Email = u.Email,
+                        JobTitle = u.JobTitle,
+                    };
+                    approList.Add(approver);
+                }
             }
             return approList;
         }

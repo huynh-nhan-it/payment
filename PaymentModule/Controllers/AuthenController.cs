@@ -12,6 +12,7 @@ using PaymentModule.Services.IServices;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace PaymentModule.Controllers
 {
@@ -26,15 +27,17 @@ namespace PaymentModule.Controllers
         private readonly IConfiguration _config;
         private readonly IAccountService _accountRepository;
         private readonly IUserService _userService;
+        private readonly IValidation _validation;
         private readonly ConnectionStringSettings _connectionStringSettings;
 
-        public AuthenController(IConfiguration configuration, IAccountService accountRepository, PaymentContext context , IUserService userService, ConnectionStringSettings connectionStringSettings)
+        public AuthenController(IConfiguration configuration, IAccountService accountRepository, PaymentContext context , IUserService userService, ConnectionStringSettings connectionStringSettings, IValidation validation)
         {
             _context = context;
             _config = configuration;
             _accountRepository = accountRepository;
             _userService = userService;
             _connectionStringSettings = connectionStringSettings;
+            _validation = validation;
         }
 
         [HttpGet, Authorize(Roles = "Admin")]
@@ -43,60 +46,98 @@ namespace PaymentModule.Controllers
             return Ok(_accountRepository.GetMyAccount());
         }
 
-        [HttpPost("Insert-Fake-Data")]
-        public IActionResult FakeDataUser(List<UserDto> DataFakeList)
-        {
-            return Ok();
-        }
+       
 
         [HttpPost("Register")]
         public IActionResult Register(UserDto request)
         {
-            string email = request.email;
-            if(_userService.CheckExistByEmail(email))
+
+            bool flag = true;
+            flag &= _validation.CheckSpace(request.firstName)
+                && _validation.CheckSpace(request.lastName)
+                && _validation.CheckSpace(request.email)
+                && _validation.CheckSpace(request.password)
+                && _validation.CheckSpace(request.phoneNumber);
+            if(!flag)
             {
-                return Ok("Email đã tồn tại");
-            }
-            if (request.password == request.confirmPassword)
+                return Ok("Hãy nhập đầy đủ các thông tin");
+            } else
             {
-                Guid theId = Guid.NewGuid();
-                Guid AccountId = Guid.NewGuid();
-                var userEntity = new UserEntity
+                flag &= _validation.IsAllCharacter(request.firstName)
+                     && _validation.IsAllCharacter(request.lastName);
+                if(!flag)
                 {
-                    Id = theId,
-                    FirstName = request.firstName,
-                    LastName = request.lastName,
-                    Email = request.email,
-                    PhoneNumber = request.phoneNumber,
-                    Avatar = request.avatar,
-                    AccountId = AccountId,
-                    JobTitle = request.jobTitle,
-                };
-                _context.Users.Add(userEntity);
-                _context.SaveChanges();
-
-                HashPassword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
-
-                var accountEntity = new AccountEntity
+                    return Ok("Sai định dạng name");
+                } else
                 {
-                    Id = AccountId,
-                    Email = request.email,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-                    UserId = theId
-                };
-
-                _context.Accounts.Add(accountEntity);
-                _context.SaveChanges();
-
-                Guid StaffId = new Guid("20C3348C-AF49-4E8F-9FCD-0B0E0B295A28");
-                SetRoleForUser(theId, StaffId);
-                return Ok(new {mess = "Success"});
+                    flag &= _validation.CheckEmail(request.email);
+                    if (!flag)
+                    {
+                        return Ok("Email sai định dạng");
+                    }
+                    else
+                    {
+                        flag &= _validation.IsStrongPassword(request.password);
+                        if(!flag)
+                        {
+                            return Ok("Password quá yếu");
+                        } 
+                    }
+                }
             }
-            else
+                
+            if(flag)
             {
-                return Ok(new { mess = "PASSWORD KO TRÙNG KHỚP" });
+                string email = request.email;
+                if (_userService.CheckExistByEmail(email))
+                {
+                    return Ok("Email đã tồn tại");
+                }
+                if (request.password == request.confirmPassword)
+                {
+                    Guid theId = Guid.NewGuid();
+                    Guid AccountId = Guid.NewGuid();
+                    var userEntity = new UserEntity
+                    {
+                        Id = theId,
+                        FirstName = request.firstName,
+                        LastName = request.lastName,
+                        Email = request.email,
+                        PhoneNumber = request.phoneNumber,
+                        Avatar = request.avatar,
+                        AccountId = AccountId,
+                        JobTitle = request.jobTitle,
+                    };
+                    _context.Users.Add(userEntity);
+                    _context.SaveChanges();
+
+                    HashPassword(request.password, out byte[] passwordHash, out byte[] passwordSalt);
+
+                    var accountEntity = new AccountEntity
+                    {
+                        Id = AccountId,
+                        Email = request.email,
+                        PasswordHash = passwordHash,
+                        PasswordSalt = passwordSalt,
+                        UserId = theId
+                    };
+
+                    _context.Accounts.Add(accountEntity);
+                    _context.SaveChanges();
+
+                    Guid StaffId = new Guid("20C3348C-AF49-4E8F-9FCD-0B0E0B295A28");
+                    SetRoleForUser(theId, StaffId);
+                    return Ok(new { mess = "Success" });
+                }
+                else
+                {
+                    return Ok(new { mess = "PASSWORD KO TRÙNG KHỚP" });
+                }
+            } else
+            {
+                return Ok("Đăng ký thất bại");
             }
+            
         }
         private void HashPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -160,8 +201,7 @@ namespace PaymentModule.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, account.UserId.ToString()),
-                new Claim(ClaimTypes.Email, account.Email),
-/*                new Claim(ClaimTypes.Role, "User"), account -> user -> role, 1 user có nhiều Role thì nó là một mảng .. ??? */ 
+                new Claim(ClaimTypes.Email, account.Email)
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -172,8 +212,8 @@ namespace PaymentModule.Controllers
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
-
         }
+        
 
         private RefreshToken CreateRefreshToken()
         {

@@ -13,5 +13,8 @@ namespace PaymentModule.Services.IServices
         public List<DepartmentModel> GetDepartmentModelList();
         public void AddMemberIntoDepartment(Guid DepartmentId, Guid UserId, string Position);
         public void AddDepartment(DepartmentDto departmentDto);
+        public void EditDepartment(Guid DepartmentId,  DepartmentDto NewDepartment);
+        public void DeleteDepartment(Guid DepartmentId);
+        public bool IsManager(Guid myId, string myDepartment);
     }
 }

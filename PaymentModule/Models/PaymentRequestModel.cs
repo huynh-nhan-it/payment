@@ -10,5 +10,14 @@ namespace PaymentModule.Models
         public DateTime CreatedDate { get; set; } 
         public string Status { get; set; }
         
+
+       public PaymentRequestModel() {
+            RequestCode = "unknown";
+            Purpose = "unknown";
+            CreatedBy = "unknown";
+            CreatedDate = DateTime.Now;
+            Status = "unknown";
+        }
+
     }
 }

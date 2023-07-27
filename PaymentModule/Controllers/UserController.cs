@@ -295,14 +295,14 @@ namespace PaymentModule.Controllers
 
                     if (IsTheLastOne(approverId, requestId))
                     {
-                        //cập nhật status bên payment request thành approved
-                        ChangePRStatus(requestId, new Guid("66617255-A3A8-4483-9008-B86F16765E6B"));
+                        //cập nhật status bên payment request thành Done
+                        ChangePRStatus(requestId, new Guid("84A1B594-5C31-4197-B99E-F3906DB706C8"));
                         return Ok(new { mess = "ALL APPROVED" });
                     }
                     else
                     {
                         ChangeState(GetTheNextApproverID(approverId, requestId), requestId, "ApproverDetailRequest", "Current");
-                        return Ok();
+                        return Ok(new {mess = "Succeed"});
                     }
                 }
                 else if (status.Contains("Rejected"))
@@ -502,7 +502,7 @@ namespace PaymentModule.Controllers
             {
                 try
                 {
-                    Request.isDelete = false;
+                    Request.IsDeleted = 0;
                     _context.PaymentRequests.Update(Request);
                     return Ok(new { success = true, error = false, message = "Delete Request successful" });
                 }

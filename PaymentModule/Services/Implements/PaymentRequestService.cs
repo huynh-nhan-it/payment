@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PaymentModule.Context;
 using PaymentModule.DTOs;
 using PaymentModule.Entities;
+using PaymentModule.Models;
 using PaymentModule.Services.IServices;
 
 namespace PaymentModule.Services.Implements
@@ -12,12 +13,33 @@ namespace PaymentModule.Services.Implements
         private PaymentContext _context;
         private IUserService _userService;
         private IDetailRequestService _detailRequestService;
-        public PaymentRequestService( PaymentContext context, IUserService userService, IDetailRequestService detailRequestService)
+        private IStatusService _statusService;
+        public PaymentRequestService( PaymentContext context, IUserService userService, IDetailRequestService detailRequestService, IStatusService statusService)
         {
             _context = context;
             _userService = userService;
             _detailRequestService = detailRequestService;
-        }   
+            _statusService = statusService;
+        }
+
+        PaymentRequestModel IPaymentRequestService.GetPaymentRequestModel(string RequestCode)
+        {
+           var PaymentRequestEnti = _context.PaymentRequests.FirstOrDefault(pr => pr.RequestCode.Equals(RequestCode));
+           if(PaymentRequestEnti != null)
+            {
+                PaymentRequestModel prm = new PaymentRequestModel
+                {
+                    RequestCode = PaymentRequestEnti.RequestCode,
+                    Purpose = PaymentRequestEnti.Purpose,
+                    CreatedBy = _userService.GetUserModelById(PaymentRequestEnti.UserId).FullName,
+                    CreatedDate = PaymentRequestEnti.CreateAt,
+                    Status = _statusService.GetStatusById(PaymentRequestEnti.StatusId),
+                };
+                return prm;
+            }
+            return new PaymentRequestModel();
+        }
+
         ObjectResult IPaymentRequestService.InsertpaymentRequest(Guid requestId, string userId, string type, string RequestCode, Guid paymentRequestId)
         {
             try
@@ -49,7 +71,7 @@ namespace PaymentModule.Services.Implements
                     StatusId = isDaft ? new Guid("D86CF51D-17FA-43BB-BFC5-369EE3034B35") : new Guid("80BCF31A-08AA-433D-879D-AB55E7730045") , //Approving
                     UserId = new Guid(string.IsNullOrEmpty(userId) ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : userId), //Testing...
                     CreateAt = DateTime.Now,
-                    isDelete = false,
+                    IsDeleted = 1,
                     DetailRequestId = requestId
                 };
 

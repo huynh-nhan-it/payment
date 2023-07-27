@@ -113,7 +113,6 @@ namespace PaymentModule.Services.Implements
             };
             _context.Comments.Add(cmtEnti);
             _context.SaveChanges();
-
         }
 
         ObjectResult IDetailRequestService.HandleApprovers(List<ApproverDto> approvers, Guid requestId)
@@ -162,7 +161,7 @@ namespace PaymentModule.Services.Implements
         {
             string error_mess = "Please enter the required information";
             ICollection<DetailTableEntity> detailTableEntitys = new List<DetailTableEntity>();
-            var departmentBearId = new Guid();
+            Guid departmentBearId = new Guid();
             foreach (DetailTableDto colunm in Table)
             {
                 if (colunm.Amount < 0 || colunm.PaymentContent == null)
@@ -186,7 +185,6 @@ namespace PaymentModule.Services.Implements
                     DetailRequestId = requestId,
                 };
                 detailTableEntitys.Add(detailTableEntity);
-
             }
             return new ObjectResult(new { detailTableEntity = detailTableEntitys, success = true, error = false });
 

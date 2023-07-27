@@ -37,6 +37,8 @@ builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 builder.Services.AddScoped<IPaymentRequestService, PaymentRequestService>();
 builder.Services.AddScoped<IDetailRequestService, DetailRequestService>();
 builder.Services.AddScoped<IPersonalService, PersonalService>();
+builder.Services.AddScoped<IValidation, Validation>();
+
 
 //Add 
 builder.Services.AddHttpContextAccessor();

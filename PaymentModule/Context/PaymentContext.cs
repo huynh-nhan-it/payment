@@ -32,9 +32,10 @@ namespace PaymentModule.Context
         public virtual DbSet<DetailTableEntity> DetailTables { get; set; }
         public virtual DbSet<BankEntity> Banks { get; set; }
         public virtual DbSet<TotalPaymentEntity> TotalPayments { get; set; }
-
         public virtual DbSet<DepartmentBearEntity> DepartmentBears { get; set; }
         public virtual DbSet<CommentEntity> Comments { get; set; }
+        public virtual DbSet<SharedPaymentEntity> SharedPayments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Thiết lập mối quan hệ 1-1
@@ -211,7 +212,8 @@ namespace PaymentModule.Context
                  }
              );
 
-            modelBuilder.Entity<DepartmentEntity>().Property(de => de.IsDeteted).HasDefaultValue(true);
+            modelBuilder.Entity<DepartmentEntity>().Property(de => de.IsDeleted).HasDefaultValue(1);
+            modelBuilder.Entity<PaymentRequestEntity>().Property(de => de.IsDeleted).HasDefaultValue(1);
         }
     }
 }

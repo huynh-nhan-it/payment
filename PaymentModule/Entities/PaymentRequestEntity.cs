@@ -13,7 +13,7 @@ namespace PaymentModule.Entities
         public Guid StatusId { get; set; }
         public Guid UserId { get; set; } //created by
         public DateTime CreateAt { get; set; }
-        public bool isDelete { get; set; }  
+        public int IsDeleted { get; set; }  
         public Guid DetailRequestId { get; set; }
         public DetailRequestEntity DetailRequest { get; set; }
     }
