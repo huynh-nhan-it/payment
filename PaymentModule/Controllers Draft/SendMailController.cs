@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mail;
 using System.Net;
+using PaymentModule.Services.IServices;
 
 namespace PaymentModule.Controllers
 {
@@ -9,9 +10,17 @@ namespace PaymentModule.Controllers
     [ApiController]
     public class SendMailController : ControllerBase
     {
+        private IValidation _valid;
+        public SendMailController(IValidation valid) { 
+            _valid = valid;
+        }
         [HttpPost]
         public IActionResult SendMail(string toEmail, string content)
         {
+            if(!_valid.CheckEmail(toEmail))
+            {
+                return Ok(new { mess = "Email sai định dạng" });
+            }
             string fromMail = "pnknguyen0211@gmail.com";
             string fromPassword = "nutzorkutwnnqjgt";
 

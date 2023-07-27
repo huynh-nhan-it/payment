@@ -56,7 +56,7 @@ namespace PaymentModule.Controllers
         {
             
             string connectionString = _connectionStringSettings.ConnectionString;
-            string selectQuery = "SELECT DISTINCT pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, \r\ndr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber, \r\ndt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note, \r\npm.Id as PmId, \r\nadr.ApproverId \r\nFROM DetailRequests AS dr \r\nINNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId \r\nINNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid \r\nINNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id\r\nINNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId  \r\nwhere pr.RequestCode like @RequestCode";
+            string selectQuery = "SELECT DISTINCT dr.Id, pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, \r\ndr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber, \r\ndt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note, \r\npm.Id as PmId, \r\nadr.ApproverId \r\nFROM DetailRequests AS dr \r\nINNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId \r\nINNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid \r\nINNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id\r\nINNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId  \r\nwhere pr.RequestCode like @RequestCode";
             List<PaymentRequestDetail> listPaymentRequestDetail = new List<PaymentRequestDetail>();
             List<DetailTableModel> listDetailTable = new List<DetailTableModel>();
             List<ApproverModel> ApproverList = new List<ApproverModel>(); //trả ra model, kiểm tra đầu vào dựa va
@@ -107,8 +107,8 @@ namespace PaymentModule.Controllers
 
                             var b = new PaymentRequestDetail
                             {
+                                Id = (Guid)reader["Id"],
                                 RequestCode = (string)reader["RequestCode"],
-
                                 UserName = _userService.GetUserModelById((Guid)reader["UserId"]).FullName,
                                 CreateAt = (DateTime)reader["CreateAt"],
                                 Status = _statusService.GetStatusById((Guid)reader["StatusId"]),
