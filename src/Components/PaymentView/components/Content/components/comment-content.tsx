@@ -10,7 +10,6 @@ const Comment: React.FC = () => {
   const handleFeedback = (): void => {
     isFeedBack(true);
   }
-
   const closeFeedBack = (): void => {
     isFeedBack(false);
   }

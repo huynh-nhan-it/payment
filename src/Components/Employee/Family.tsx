@@ -30,65 +30,71 @@ interface FamilyInformation {
   MartialStatus: {
     MartialStatus: string | undefined;
   };
-  "Emergency Contact": {
-    "Contact name": string | undefined;
+  EmergencyContact: {
+    ContactName: string | undefined;
     Relationship: string | undefined;
     Phone: string | undefined;
   };
-  "Permanent Address": {
+  PermanentAddress: {
     Street: string | undefined;
-    "Building / flatnumber": string | undefined;
+    BuildingOrFlatnumber: string | undefined;
     City: string | undefined;
-    "Province / state": string | undefined;
-    "Postal code": string | undefined;
+    ProvinceState: string | undefined;
+    PostalCode: string | undefined;
     Country: string | undefined;
   };
 }
-
+interface MyObject {
+  [key: string]: any;
+}
 interface FamilyProps {
-  data: FamilyInformation;
+  data: MyObject;
   isEditable: boolean;
-  setData: React.Dispatch<React.SetStateAction<FamilyInformation>>;
+  setData: React.Dispatch<React.SetStateAction<MyObject>>;
 }
 
-const Family: React.FC<FamilyProps> = ({ data, isEditable }) => {
+const Family: React.FC<FamilyProps> = ({ data, isEditable, setData }) => {
   console.log(data);
-  
-  
- 
 
-  const handleChange = (e:any, key: any)=> {
-    console.log(e.target.value, key);
-  }
-
+  const handleInputChange = (
+    value: string | number,
+    parentKey: string,
+    childKey: string
+    // dataIndex: keyof AdditionalInfor['children'][number]
+  ) => {
+    const updatedData: MyObject = { ...data };
+    // updatedData[parentKey] = value;
+    updatedData[parentKey][childKey] = value;
+    setData(updatedData);
+  };
   const formItems = Object.entries(data).map(([key, value]) => ({
     label: key,
     value: value,
   }));
 
-  const handleInputChange = (
-    value: string | number,
-    parentKey: string,
-    childKey: string,
-    dataIndex: keyof FamilyInformation
-  ) => {
-    const updatedData = formItems.map((row) => {
-      if (row.label === parentKey) {
-        const updatedChildren = Object.entries(row).map(([key, value]) => {
-          if (key === childKey) {
-            console.log(key);
-            // return { ...child, [dataIndex]: value };
-          }
-          // return child;
-        });
-        // return { ...row, children: updatedChildren };
-      }
-      // return row;
-    });
+  // const handleInputChange = (
+  //   value: string | number,
+  //   parentKey: string,
+  //   childKey: string,
+  //   dataIndex: keyof FamilyInformation
+  // ) => {
+  //   const updatedData = formItems.map((row) => {
+  //     if (row.label === parentKey) {
+  //       const updatedChildren = Object.entries(row).map(([key, value]) => {
+  //         if (key === childKey) {
+  //           console.log(key);
+  //           // return { ...child, [dataIndex]: value };
+  //         }
+  //         // return child;
+  //       });
+  //       // return { ...row, children: updatedChildren };
+  //     }
+  //     // return row;
+  //   });
 
-    // setData(updatedData);
-    console.log();
-  };
+  //   // setData(updatedData);
+  //   console.log();
+  // };
   return (
     <div>
       {/* <Form>
@@ -157,7 +163,7 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable }) => {
       {Object.entries(data).map(([sectionTitle, sectionData]) => (
         <div key={sectionTitle} style={{ marginBottom: 20 }}>
           <h2>{sectionTitle}</h2>
-          <Form >
+          <Form>
             {Object.entries(sectionData).map(([key, value]) => (
               <Form.Item
                 label={key}
@@ -169,17 +175,12 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable }) => {
                   marginBottom: "0px",
                 }}
                 key={key}>
-               
-
                 {isEditable ? (
                   <Input
                     style={{ width: "100%" }}
-                    // onChange={}
-                    // value={value as string | undefined}
-                    // onChange={e=>handleChange(e, key)}
-                    // onChange={(e) =>
-                      // handleInputChange(e.target.value, )
-                    // }
+                    onChange={(e) =>
+                      handleInputChange(e.target.value, sectionTitle, key)
+                    }
                   />
                 ) : (
                   <span style={{ display: "flex", alignItems: "start" }}>

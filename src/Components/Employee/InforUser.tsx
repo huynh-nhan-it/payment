@@ -360,7 +360,7 @@ interface UserInfoEdit {
     PostalCode: string;
     Country: string;
   };
-  Family:{
+  Family: {
     MartialStatus: string;
     ContactName: string;
     Relationship: string;
@@ -371,13 +371,16 @@ interface UserInfoEdit {
     ProvinceOrState: string;
     PostalCode: string;
     Country: string;
-  }
+  };
+  Avatar: string;
 }
 const InforUser = () => {
   const [dataOverview, setDataOverview] = useState<Record<string, string>>({});
   const [dataTest, setDataTest] = useState({});
-  const [dataFamily, setDataFamily] = useState<{}>({});
-  const [dataAdditional, setDataAdditional] = useState<{}>({});
+  const [dataFamily, setDataFamily] = useState<Record<string, string>>({});
+  const [dataAdditional, setDataAdditional] = useState<Record<string, string>>(
+    {}
+  );
   const [dataEmployee, setDataEmployee] = useState<UserInfo>();
 
   const id = localStorage.getItem("id");
@@ -454,39 +457,86 @@ const InforUser = () => {
     MartialStatus: {
       MartialStatus: dataEmployee?.Family.MartialStatus,
     },
-    "Emergency Contact": {
-      "Contact name": dataEmployee?.Family.ContactName,
+    EmergencyContact: {
+      ContactName: dataEmployee?.Family.ContactName,
       Relationship: dataEmployee?.Family.Relationship,
       Phone: dataEmployee?.Family.Phone,
     },
-    "Permanent Address": {
+    PermanentAddress: {
       Street: dataEmployee?.Family.Street,
-      "Building / flatnumber": dataEmployee?.Family.BuildingOrFlatNumber,
+      BuildingFlatnumber: dataEmployee?.Family.BuildingOrFlatNumber,
       City: dataEmployee?.Family.City,
-      "Province / state": dataEmployee?.Family.ProvinceOrState,
-      "Postal code": dataEmployee?.Family.PostalCode,
+      ProvinceState: dataEmployee?.Family.ProvinceOrState,
+      PostalCode: dataEmployee?.Family.PostalCode,
       Country: dataEmployee?.Family.Country,
     },
   };
 
- 
   // console.log(dataFamilyInfor);
   const onChange = (key: string) => {
     console.log(key);
   };
   const [editable, setEditable] = useState(false);
 
-  // console.log(dataOverview['Rank']);
+  const dataAddtion: any = dataAdditional;
+  const dataF: any = dataFamily;
+  // console.log(dataAddtion);
+
+  // console.log(dataAddtion["Bank account"]);
+
+  // console.log(dataAdditional);
+  // console.log(dataFamily);
+  // console.log(dataF);
+  // console.log(dataOverview['EmployeeType']);
   // const dataOverviewUpdate = dataOverview["Rank"];
   // const dataEmployeeTypeUpdate = dataOverview["EmployeeType"];
   // console.log(dataOverviewUpdate, dataEmployeeTypeUpdate);
   const dataEditUserInfo = {
     Overview: {
       EmployeeType: dataOverview["EmployeeType"],
-      Rank: dataOverview["Rank"]
-    }
-  }
-  // console.log(dataAdditionalInfor);
+      Rank: dataOverview["Rank"],
+    },
+    Additional: {
+      Nation: dataAddtion?.Data?.Nation,
+      IDCardNumber: dataAddtion?.Data?.IDCardNumber,
+      DateOfIDCard: dataAddtion?.Data?.DateOfIDCard,
+      PlaceOfIDCard: dataAddtion?.Data?.PlaceOfIDCard,
+      HealthInsurance: dataAddtion?.Data?.HealthInsurance,
+      StartingDate: dataAddtion?.Data?.StartingDate,
+      Note: dataAddtion?.Data?.Note,
+      AcademicLevel: dataAddtion?.Literacy?.AcademicLevel,
+      SpecializedQualification: dataAddtion?.Literacy?.SpecializedQualification,
+      BusinessPhone: dataAddtion?.Data?.BusinessPhone,
+      HomePhone: dataAddtion?.Data?.Phone,
+      PersonalEmail: dataAddtion?.Data?.PersonalEmail,
+      BankName: dataAddtion["Bank account"]?.BankName,
+      BranchNumber: dataAddtion?.Data?.BranchNumber,
+      BankBranchName: dataAddtion?.Data?.BankBranchName,
+      BankAccountNumber: dataAddtion?.Data?.BankAccountNumber,
+      BankAccountName: dataAddtion?.Data?.BankAccountName,
+      Street: dataAddtion?.Data?.Street,
+      BuildingOrFlatNumber: dataAddtion?.Data?.BuildingOrFlatNumber,
+      City: dataAddtion?.Data?.City,
+      ProvinceOrState: dataAddtion?.Data?.ProvinceOrState,
+      PostalCode: dataAddtion?.Data?.PostalCode,
+      Country: dataAddtion?.Data?.Country,
+    },
+    Family: {
+      MartialStatus: dataF?.MartialStatus?.MartialStatus,
+      ContactName: dataF?.EmergencyContact?.ContactName,
+      Phone: dataF?.EmergencyContact?.Phone,
+      Relationship: dataF?.EmergencyContact?.Relationship,
+      Street: dataF?.PermanentAddress?.Street,
+      BuildingOrFlatNumber: dataF?.PermanentAddress?.BuildingOrFlatNumber,
+      City: dataF?.PermanentAddress?.City,
+      ProvinceOrState: dataF?.PermanentAddress?.ProvinceState,
+      PostalCode: dataF?.PermanentAddress?.PostalCode,
+      Country: dataF?.PermanentAddress?.Country,
+    },
+    Avatar: "test",
+  };
+  // console.log(dataAdditional["Data"]);
+  // console.log(dataEditUserInfo);
   const items: TabsProps["items"] = [
     {
       key: "1",
@@ -505,7 +555,7 @@ const InforUser = () => {
       children: (
         <Additional
           data={dataAdditionalInfor}
-          // setData={setDataAdditional}
+          setData={setDataAdditional}
           isEditable={editable}
         />
       ),
@@ -541,19 +591,21 @@ const InforUser = () => {
   };
   const handleClickSave = () => {
     // console.log(isSave);
-    // console.log(data);
+    console.log(dataEditUserInfo);
     setEditable(false);
     const EditUserInfo = async () => {
       const endpoint = "/Personal/EditInfoEmployee?Id=" + id;
-      const response = await request.put(endpoint,dataEditUserInfo).then((res) => {
-        console.log(res.data);
-      });
+      const response = await request
+        .put(endpoint, dataEditUserInfo)
+        .then((res) => {
+          console.log(res.data);
+        });
     };
 
     EditUserInfo();
   };
   // http://localhost:5005/api/Personal/EditInfoEmployee?Id=07A2FE81-BBD7-47C0-8095-668596515EFB
-  
+
   // http://localhost:5005/api/Personal/EditInfoEmployee?Id=07a2fe81-bbd7-47c0-8095-668596515efb
   return (
     <div>

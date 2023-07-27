@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./employee.css";
 import { DatePicker, Form, Input, Table } from "antd";
 import FormItem from "antd/es/form/FormItem";
+import dayjs, { Dayjs } from "dayjs";
 interface Address {
   Street: string | undefined;
   "Building / flatnumber": string | undefined;
@@ -56,20 +57,67 @@ interface AdditionalInfor {
   Data: Data;
 }
 
-interface AdditionalProps {
-  data: AdditionalInfor;
-  isEditable?: boolean;
+// interface AdditionalProps {
+//   data: AdditionalInfor;
+//   isEditable?: boolean;
+// }
+
+interface MyObject {
+  [key: string]: any;
 }
-const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
+interface AdditionalProps {
+  data: MyObject;
+  isEditable?: boolean;
+  setData: React.Dispatch<React.SetStateAction<MyObject>>;
+}
+const Additional: React.FC<AdditionalProps> = ({
+  data,
+  isEditable,
+  setData,
+}) => {
   const formItems = Object.entries(data).map(([key, value]) => ({
     label: key,
     value: value,
   }));
 
-  console.log(formItems.map((fit) => fit.value));
+  // console.log(formItems.map((fit) => fit.value));
 
-  console.log(data);
+  // console.log(data);
 
+  // console.log(data);
+  const handleInputChange = (
+    value: string | number,
+    parentKey: string,
+    childKey: string
+    // dataIndex: keyof AdditionalInfor['children'][number]
+  ) => {
+    // const updatedData: MyObject = { ...data };
+    // // updatedData[parentKey] = value;
+    // updatedData[parentKey][childKey] = value;
+    // console.log(parentKey, childKey, updatedData);
+    // setData(updatedData);
+    const updatedData = formItems.map((row: any)=>{
+      // console.log(row.label, parentKey);
+      if(row.label === parentKey){
+        // console.log(row.value);
+        row.value[childKey] = value
+        // console.log(row.value, childKey);
+        // console.log({...row});
+        // return (row.value)
+        return {...row}
+      }
+      // console.log({...row});
+
+      // console.log(row);
+      return {...row}
+    })
+    console.log(updatedData);
+    // setData(updatedData)
+    // return updatedData
+  };
+  // console.log(data);
+  
+  // console.log(data);
   // const handleInputChange = (
   //   value: string | number,
   //   parentKey: string,
@@ -107,7 +155,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
   return (
     <div>
       {/* <Form> */}
-        {/* {formItems.map((item: any) => {
+      {/* {formItems.map((item: any) => {
             return (
               <div key={item.key}>
                 <div style={{display:"flex"}}>{item.label}</div>
@@ -165,7 +213,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
           
         } */}
 
-        {/* {formItems.map((item) =>
+      {/* {formItems.map((item) =>
           item.label === "User" ||
           item.label === "$id" ||
           item.label === "Id" ||
@@ -197,7 +245,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
             </Form.Item>
           )
         )} */}
-        {/* {data.map((item) => (
+      {/* {data.map((item) => (
           // <span>{item.label}</span>
           (item.children.map((child) => (
             <Form.Item
@@ -276,7 +324,7 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
                       style={{ width: "100%" }}
                       // value={value as string | undefined}
                       disabled={true}
-                      // value={item.value}
+                      defaultValue={dayjs(value as string)}
                       // onChange={(e) =>
                       //   handleInputChange(e.target.value, item.key, "infor")
                       // }
@@ -284,14 +332,18 @@ const Additional: React.FC<AdditionalProps> = ({ data, isEditable }) => {
                   ) : key === "Date of ID Card" ? (
                     <DatePicker
                       style={{ width: "100%" }}
-                      // onChange={(e, datestring) =>
-                      //   handleInputChange(datestring, item.key, child.key, "infor")
-                      // }
+                      defaultValue={dayjs(value as string)}
+                      onChange={(e, datestring) =>
+                        handleInputChange(datestring, sectionTitle, key)
+                      }
                     />
                   ) : (
                     <Input
                       style={{ width: "100%" }}
-                      value={value as string | undefined}
+                      defaultValue={value as string}
+                      onChange={(e) =>
+                        handleInputChange(e.target.value, sectionTitle, key)
+                      }
                     />
                   )
                 ) : (

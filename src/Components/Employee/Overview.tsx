@@ -352,10 +352,6 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
     label: key,
     value: value,
   }));
-
-  const [dataOverviewEdit, setDataOverviewEdit] = useState({})
-  const [dataRank, setDataRank] = useState({})
-  const [dataEmployeeType, setDataEmployeeType] = useState<{}>()
   const handleInputChange = (
     value: string | number,
     label: string,
@@ -367,6 +363,7 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
     // Tìm thuộc tính có label trùng với label nhận được và cập nhật giá trị mới
     updatedData[label] = value;
 
+    
     // Cập nhật state với dữ liệu mới
     setData(updatedData);
     // setDataOverviewEdit()
@@ -397,6 +394,7 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
     // }
     // console.log(dataOverviewEdit);
   };
+  console.log(data);
 
   // console.log(data["Rank"]);
   // console.log(data["EmployeeType"]);
