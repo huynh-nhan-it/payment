@@ -35,6 +35,16 @@ export const getDepartments = async () => {
   }
 };
 
+export const getBearDepartments = async () => {
+  try {
+    const response = await axios.get('http://localhost:5005/api/Department/department-bear-list');
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
 //POST API
 type PostData = {
     purpose: string;

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, UploadProps, List } from 'antd';
 import { Layout, Menu, theme, DatePicker,Select, MenuProps } from 'antd';
-//import moment, { Moment } from 'moment';
 import dayjs, { Dayjs } from 'dayjs';
 import {Col, Row} from 'antd';
 import './RequestDetails.css';
+import { getBearDepartments } from '../../Services/PaymentRequest/apiForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { setListDetailAPI } from './Store/tableSlice';
 import { updatePayMethod,
@@ -44,6 +44,7 @@ import { RootState } from './Store';
     icon: React.createElement(icon),
     label: `nav ${index + 1}`,
   }));
+  
 
 interface Item {
     key: string;
@@ -76,65 +77,67 @@ interface Item {
     children: React.ReactNode;
   }
   
-  const EditableCell: React.FC<EditableCellProps> = ({
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
   
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Please Input ${title}!`,
-              },
-            ]}
-          >
-            {dataIndex === 'invDate' ? (
-              <DatePicker
-                
-             />
-            )
-            :
-            dataIndex === 'departmentBear' ? (
-              <Select
-              defaultValue="Nothing selected"
-              style={{ width: 200 }}
-              options={[
-                  { value: 'Nothing selected', label: 'Nothing selected' },
-                  { value: 'KO01 - Phòng Hỗ Trợ Kinh Doanh', 
-                  label: 'KO01 - Phòng Hỗ Trợ Kinh Doanh' },
-                  { value: 'Phòng Dự Án', label: 'Phòng Dự Án' },
-                  { value: '', label: 'Disabled', disabled: true },
-              ]}
-          /> 
-            )
-            : (
-              inputNode
-            )}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
     
   type PaymentMethodData = {
     paymentMethod :string;
   };
   const TableRequest: React.FC = () => {
+    const EditableCell: React.FC<EditableCellProps> = ({
+      editing,
+      dataIndex,
+      title,
+      inputType,
+      record,
+      index,
+      children,
+      ...restProps
+    }) => {
+      const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+    
+      return (
+        <td {...restProps}>
+          {editing ? (
+            <Form.Item
+              name={dataIndex}
+              style={{ margin: 0 }}
+              rules={[
+                {
+                  required: true,
+                  message: `Please Input ${title}!`,
+                },
+              ]}
+            >
+              {dataIndex === 'invDate' ? (
+                <DatePicker
+                  
+               />
+              )
+              :
+              dataIndex === 'departmentBear' ? (
+                <Select
+                defaultValue="Nothing selected"
+                style={{ width: 200 }}       
+            > 
+            
+                        {bearDepartmentList.map((departmentName) => (
+                          <option key={departmentName} value={departmentName}>                          
+                            {departmentName}
+                          </option>
+                        ))}
+                        </Select>
+                     
+              )
+              : (
+                inputNode
+              )}
+            </Form.Item>
+          ) : (
+            children
+          )}
+        </td>
+      );
+    };
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<Item[]>([
       {
@@ -148,7 +151,22 @@ interface Item {
         note: '',
   }
     ]);
-    
+    useEffect(() => {
+      fetchData();
+    }, []);
+    const [bearDepartmentList, setBearDepartmentList] = useState<string[]>([]);
+    const fetchData = async () => {
+      try {
+        const bearDepartmentResponse = await getBearDepartments();
+  
+  
+        setBearDepartmentList(bearDepartmentResponse);
+        
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
     const tableDataAPI = tableData.map(({ key, ...rest }) => rest);
     const [ListDetail, setListDetail] = useState<string[]>([]);
     const jsonString = JSON.stringify(tableData);
@@ -159,6 +177,8 @@ interface Item {
     const tax = useSelector((state: RootState) => state.cal.tax);
     const advance_Amount = useSelector((state: RootState) => state.cal.advanceAmount);
     const total_Payment = useSelector((state: RootState) => state.cal.totalPayment);
+
+  
     useEffect(() => {
       // Chuyển đổi tabledetail thành chuỗi JSON và cập nhật ListApproveAPI
       const jsonString = JSON.stringify(tableDataAPI);
@@ -314,13 +334,13 @@ interface Item {
         defaultValue="1"
         style={{ width: 200 }}
         onChange={handleDepartmentChange}
-        options={[
-            { value: '1', label: 'Nothing selected' },
-            { value: '2', label: 'KO01 - Phòng Hỗ Trợ Kinh Doanh' },
-            { value: '3', label: 'Phòng Dự Án' },
-            { value: '', label: 'Disabled', disabled: true },
-        ]}
-    /> 
+          >
+            {bearDepartmentList.map((departmentName) => (
+                        <option key={departmentName} value={departmentName}>                          
+                          {departmentName}
+                        </option>
+                      ))}
+          </Select> 
         ):(<span>{record.departmentBear}</span>);
       },
       },
