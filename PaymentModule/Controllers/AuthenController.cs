@@ -40,7 +40,7 @@ namespace PaymentModule.Controllers
             _validation = validation;
         }
 
-        [HttpGet, Authorize(Roles = "Admin")]
+        [HttpGet, Authorize(Roles = "STAFF")]
         public IActionResult GetMyAccount()
         {
             return Ok(_accountRepository.GetMyAccount());
@@ -201,8 +201,14 @@ namespace PaymentModule.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, account.UserId.ToString()),
-                new Claim(ClaimTypes.Email, account.Email)
             };
+
+            foreach (string role in _userService.GetRoleList(account.UserId))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
@@ -255,6 +261,13 @@ namespace PaymentModule.Controllers
                     command.ExecuteNonQuery();
                 }
             }
+        }
+
+        [HttpPost("Log-out")]
+        public IActionResult LogOut()
+        {
+            
+            return Ok(_accountRepository.UpdateClaimVersion());
         }
     }
 }

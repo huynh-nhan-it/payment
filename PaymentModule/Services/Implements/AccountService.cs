@@ -19,7 +19,7 @@ namespace PaymentModule.Services.Implements
             var myUserName = string.Empty;
             if (_httpContextAccessor != null)
             {
-                myUserName = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                myUserName = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Version);
             }
             return myUserName;
         }
@@ -32,9 +32,28 @@ namespace PaymentModule.Services.Implements
 
         string IAccountService.GetMyAccount()
         {
-            throw new NotImplementedException();
+            var myUserName = string.Empty;
+            if (_httpContextAccessor != null)
+            {
+                myUserName = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Version);
+            }
+            return myUserName;
         }
+        Claim IAccountService.UpdateClaimVersion()
+        {
+            var newVersion = "2.0"; // Giá trị version mới bạn muốn đặt
+            var myClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Version);
 
+            if (myClaim != null)
+            {
+                // Xóa claim cũ nếu muốn thay thế hoàn toàn
+                ((ClaimsIdentity)_httpContextAccessor.HttpContext.User.Identity).RemoveClaim(myClaim);
+
+                // Thêm claim mới với giá trị version mới
+                ((ClaimsIdentity)_httpContextAccessor.HttpContext.User.Identity).AddClaim(new Claim(ClaimTypes.Version, newVersion));
+            }
+            return myClaim;
+        }
         string IAccountService.GetUserIdByAccountId(Guid accountId)
         {
             throw new NotImplementedException();

@@ -9,6 +9,7 @@ using PaymentModule.Models;
 using PaymentModule.Services.Implements;
 using PaymentModule.Services.IServices;
 
+
 namespace PaymentModule.Controllers
 {
     [Route("api/[controller]")]
@@ -82,8 +83,6 @@ namespace PaymentModule.Controllers
                     Status = _statusRepository.GetStatusById(PREntity.StatusId),
                 });
                 return Ok(paymentRequestList.ToList());
-
-        
             }
             catch (Exception ex)
             {
@@ -110,7 +109,7 @@ namespace PaymentModule.Controllers
                 PaymentRequestList.Add(request);
             }
 
-            string emailtemplatepath = Path.Combine(Directory.GetCurrentDirectory(), "Export//ExportExcel.html");
+            string emailtemplatepath = Path.Combine(Directory.GetCurrentDirectory(), "ExcelExportTemplate//ExportExcel.html");
             string htmldata = System.IO.File.ReadAllText(emailtemplatepath);
 
             string excelstring = "";
@@ -230,6 +229,6 @@ namespace PaymentModule.Controllers
                 }
             }
             return Ok(paymentList);
-        }
+        }       
     }
 }

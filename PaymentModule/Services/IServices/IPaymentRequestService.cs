@@ -7,5 +7,6 @@ namespace PaymentModule.Services.IServices
     {
         public ObjectResult InsertpaymentRequest(Guid requestId, string userId, string type, string RequestCode, Guid paymentRequestId);
         public PaymentRequestModel GetPaymentRequestModel(string RequestCode);
+        public Guid GetStatusOfPaymentRequest(Guid id);
     }
 }

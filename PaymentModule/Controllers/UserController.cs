@@ -105,6 +105,9 @@ namespace PaymentModule.Controllers
             var RequestId = prd.RequestId;
             string RequestCode = "";
             Guid PaymentRequestId = Guid.NewGuid();
+
+            //check payment request id xem có ở trạng thái Rejectedz hay không
+
             if (!string.IsNullOrWhiteSpace(RequestId))
             {
                 string DirPath = Path.Combine("data/request", RequestId);
