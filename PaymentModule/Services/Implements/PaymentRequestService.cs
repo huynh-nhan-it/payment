@@ -40,14 +40,33 @@ namespace PaymentModule.Services.Implements
             return new PaymentRequestModel();
         }
 
+        Guid IPaymentRequestService.GetStatusOfPaymentRequest(Guid id)
+        {
+            Guid resultId = new Guid();
+            var paymentEnti = _context.PaymentRequests.FirstOrDefault(s => s.Id.Equals(id));
+            if(paymentEnti != null) {
+                resultId = paymentEnti.StatusId;
+            }
+            return resultId;
+        }
+
         ObjectResult IPaymentRequestService.InsertpaymentRequest(Guid requestId, string userId, string type, string RequestCode, Guid paymentRequestId)
         {
             try
             {
                 string resultRequestCode = RequestCode == "" ? "" : RequestCode;
-                bool isDaft = type == "create-request" ? false : true;
+                Guid StatusOfTypeSave = new Guid();
+
+               if(type.Contains("create-request"))
+                {
+                    StatusOfTypeSave = new Guid("80BCF31A-08AA-433D-879D-AB55E7730045");
+                } else if(type.Contains("save-draft"))
+                {
+                    StatusOfTypeSave = new Guid("D86CF51D-17FA-43BB-BFC5-369EE3034B35");
+                }
+
                 var lastPaymentRequest = _context.PaymentRequests
-                    .OrderByDescending(pr => pr.Id)
+                    .OrderByDescending(pr => pr.CreateAt)
                     .FirstOrDefault();
 
                 if (lastPaymentRequest != null)
@@ -68,7 +87,7 @@ namespace PaymentModule.Services.Implements
                     Id = paymentRequestId,
                     RequestCode = resultRequestCode, //Testing...
                     Purpose = _detailRequestService.GetPurposeById(requestId),
-                    StatusId = isDaft ? new Guid("D86CF51D-17FA-43BB-BFC5-369EE3034B35") : new Guid("80BCF31A-08AA-433D-879D-AB55E7730045") , //Approving
+                    StatusId = StatusOfTypeSave, //Approving
                     UserId = new Guid(string.IsNullOrEmpty(userId) ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : userId), //Testing...
                     CreateAt = DateTime.Now,
                     IsDeleted = 1,
