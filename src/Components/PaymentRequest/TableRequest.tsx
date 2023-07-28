@@ -169,7 +169,7 @@ interface Item {
 
   // Sử dụng giá trị ListDetailAPI trong component
   console.log(tableData)
-  console.log('ListDetailAPI:', ListDetailAPI);
+ 
 
       const [paymentMethodData, setPaymentMethodData] = useState<PaymentMethodData>({paymentMethod:''});
   
@@ -199,7 +199,7 @@ interface Item {
         }
         return item;
       });
-      console.log(newData);
+
   
     };
     const [count, setCount] = useState(1);
@@ -396,8 +396,7 @@ interface Item {
       form.resetFields();
       setListDetail([jsonString]);
       dispatch(setListDetailAPI(ListDetail))
-      console.log(tableData);
-      console.log(ListDetail)
+
    
       
     };

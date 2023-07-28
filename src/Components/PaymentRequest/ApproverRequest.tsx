@@ -24,16 +24,13 @@ const ApproverRequest: React.FC = () => {
   const ListApproveAPI = useSelector((state: RootState)=>state.approve.ListApproveAPI);
   const jsonString = JSON.stringify(selectedApprovers);
   const [ListApprover, setListApprover] = useState<string[]>([]);
-  // dispatch(setListApproveAPI(ListApprover));
-  // console.log(ListApproveAPI)
-  //console.log(ListApprover)
+  
   useEffect(() => {
     // Chuyển đổi selectedApprovers thành chuỗi JSON và cập nhật ListApproveAPI
     const jsonString = JSON.stringify(selectedApprovers);
     dispatch(setListApproveAPI(jsonString));
   }, [selectedApprovers, dispatch]);
 
-  console.log(ListApproveAPI)
 
 
 

@@ -1,25 +1,25 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+// import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface TypeState{
-    typeState: string
-}
+// interface TypeState{
+//     typeState: string,
+// }
 
-const initialState: TypeState = {
-    typeState :   "create-request",
+// const initialState: TypeState = {
+//     typeState :   "",
     
-  };
+//   };
 
-const typeSlice = createSlice({
-    name: 'type',
-    initialState,
-    reducers:{
-        updateTypeState: (state, action: PayloadAction<string>) =>{
-            state.typeState = "create-request";
-        },
+// const typeSlice = createSlice({
+//     name: 'type',
+//     initialState,
+//     reducers:{
+//         updateTypeState: (state, action: PayloadAction<string>) =>{
+//             state.typeState = action.payload;
+//         },
         
-    }
-});
+//     }
+// });
 
-export const {updateTypeState 
-            } = typeSlice.actions;
-export default typeSlice.reducer
+// export const {updateTypeState 
+//             } = typeSlice.actions;
+// export default typeSlice.reducer
