@@ -3,15 +3,14 @@ import { setListDetailAPI } from './Store/tableSlice';
 import { setListApproveAPI } from './Store/approveSlice';
 import { updatePurpose, updateDepartment, updatePaymentFor, updateSupplier, updateCurrency, updateExchangeRate, updatePoPrNumber } from './Store/formSlice';
 import { updatePayMethod, updateTotalAmount, updateTax, updateAdvanceAmount, updateTotalPayment } from './Store/calculateSlice';
-import { updateTypeState } from './Store/typeSlice';
+// import { updateTypeState } from './Store/typeSlice';
 
-export const submitForm = (formData: { form: any; table: any; approve: any; cal: any; type : any }) => async (dispatch: (arg0: { payload: any; type: "form/updatePurpose" | "form/updateDepartment" | "form/updatePaymentFor" | "form/updateSupplier" | "form/updateCurrency" | "form/updateExchangeRate" | "form/updatePoPrNumber" | "table/setListDetailAPI" | "form/updatePayMethod" | "form/updateTotalAmount" | "form/updateTax" | "form/updateAdvanceAmount" | "form/updateTotalPayment" | "approve/setListApproveAPI"; }) => void) => {
+export const submitForm = (formData: { form: any; table: any; approve: any; cal: any; }, typeSave: any) => async (dispatch: (arg0: { payload: any; type: "form/updatePurpose" | "form/updateDepartment" | "form/updatePaymentFor" | "form/updateSupplier" | "form/updateCurrency" | "form/updateExchangeRate" | "form/updatePoPrNumber" | "table/setListDetailAPI" | "form/updatePayMethod" | "form/updateTotalAmount" | "form/updateTax" | "form/updateAdvanceAmount" | "form/updateTotalPayment" | "approve/setListApproveAPI" ; }) => void) => {
   try {
     const formState = formData.form;
     const tableState = formData.table;
     const approveState = formData.approve;
     const calState = formData.cal;
-    const typeState = formData.type;
 
     const payload = {
       Purpose: formState.purpose,
@@ -28,7 +27,7 @@ export const submitForm = (formData: { form: any; table: any; approve: any; cal:
       AdvanceAmount: calState.advanceAmount,
       TotalPayment: calState.totalPayment,
       Approvers: approveState.ListApproveAPI,
-      typeSave: typeState.typeState
+      typeSave: typeSave
     };
 
     // Gửi request POST đến API sử dụng Axios
@@ -57,6 +56,7 @@ export const submitForm = (formData: { form: any; table: any; approve: any; cal:
     dispatch(updateAdvanceAmount(data.advanceAmount));
     dispatch(updateTotalPayment(data.totalPayment));
     dispatch(setListApproveAPI(data.ListApproveAPI));
+    // dispatch(updateTypeState(data.TypeState));
 
     // Hoặc bạn có thể thực hiện các hành động khác sau khi gửi thành công dữ liệu lên server
     // Ví dụ, hiển thị thông báo thành công, chuyển trang, vv.

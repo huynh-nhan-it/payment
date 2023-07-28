@@ -19,6 +19,7 @@ import { Col, Row } from "antd";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { BsFillSendFill } from "react-icons/bs";
 import { MdDrafts } from "react-icons/md";
+// import { updateTypeState } from "./Store/typeSlice";
 const App: React.FC = () => {
   const formData = useFormData();
   const dispatch: AppDispatch = useDispatch();
@@ -28,12 +29,11 @@ const App: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (typeSave:any) => {
     // Gọi action submitForm
-    dispatch(submitForm(formData));
-    console.log(formData);
-    console.log(formData.type.typeState);
-    console.log(formData.approve.ListApproveAPI);
+    dispatch(submitForm(formData, typeSave));
+    console.log(formData, typeSave);
+    
     navigate("/request/payment");
   };
 
@@ -87,16 +87,24 @@ const App: React.FC = () => {
                     </a>
                   </Col>
                   <Col>
-                    <a href="#" className="text-header">
+                    <a className="text-header">
                       {" "}
-                      <MdDrafts style={{ marginRight: "5px" }} /> Save Draft
+                      <MdDrafts style={{ marginRight: "5px" }} onClick={ ()=> {
+                          handleFormSubmit("save-draft");
+                        }} /> Save Draft
                     </a>
                   </Col>
                   <Col>
-                    <a onClick={handleFormSubmit} href="#" className="text-header">
+                  <a className="text-header">
                       {" "}
-                      <BsFillSendFill style={{ marginRight: "5px" }} /> Submit
+                      <BsFillSendFill style={{ marginRight: "5px" }} onClick={ ()=> {
+                          handleFormSubmit("create-request");
+                        }
+                          } /> Submit
                     </a>
+                     
+                      
+                    
                   </Col>
                 </Row>
               </Header>
@@ -105,7 +113,6 @@ const App: React.FC = () => {
               <TableRequest />
               <AttachmentRequest />
               <ApproverRequest />
-              {/* <Button onClick={handleFormSubmit}>Submit</Button> */}
             </Content>
           </Layout>
         </Content>
