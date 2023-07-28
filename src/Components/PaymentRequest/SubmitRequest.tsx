@@ -34,7 +34,7 @@ const App: React.FC = () => {
     console.log(formData);
     console.log(formData.type.typeState);
     console.log(formData.approve.ListApproveAPI);
-    navigate("/request/payment");
+    // navigate("/request/payment");
   };
 
   return (
@@ -93,7 +93,7 @@ const App: React.FC = () => {
                     </a>
                   </Col>
                   <Col>
-                    <a onClick={handleFormSubmit} href="#" className="text-header">
+                    <a onClick={handleFormSubmit} className="text-header">
                       {" "}
                       <BsFillSendFill style={{ marginRight: "5px" }} /> Submit
                     </a>

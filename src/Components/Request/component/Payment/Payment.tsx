@@ -11,7 +11,7 @@ import * as XLSX from "xlsx";
 import request from "../../../../Services/User/getAccount";
 
 interface PaymentRequestList {
-  id:string;
+  id: string;
   requestCode: string;
   purpose: string;
   createdBy: string;
@@ -32,7 +32,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   const [createdBy, setCreatedBy] = useState("");
   const [status, setStatus] = useState("");
   // console.log(filteredData);
-  const [totalPage, setTotalPage] = useState(0)
+  const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
   // useEffect((data) => {
@@ -62,30 +62,35 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   //     });
   // };
 
-  
   // console.log(filteredData.createdDateFrom);
   useEffect(() => {
     const getPaymentList = async () => {
-        const endpoint = `PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`;
-        const response = await request.get(endpoint).then((res) => {
-          // console.log(res.data);
-            setData(res.data);
-        }
-        );
-    }
-    const getPaymentPage = async () => {
-      const endpoint = `PaymentRequest/?page=${currentPage}`;
+      const endpoint = `PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`;
+      // console.log(endpoint);
       const response = await request.get(endpoint).then((res) => {
         // console.log(res.data);
-          setTotalPage(res.data.length)
-      }
-      );
-  }
-    getPaymentList();
-    getPaymentPage();
+        setTotalPage(res.data.length)
+        setData(res.data);
+        console.log(res.data);
+      });
+    };
 
-}, [purpose,requestCode,createdDateFrom,createDateTo,createdBy,status,currentPage])
-console.log(totalPage);
+    getPaymentList();
+  }, [
+    purpose,
+    requestCode,
+    createdDateFrom,
+    createDateTo,
+    createdBy,
+    status,
+    currentPage,
+  ]);
+  console.log(totalPage);
+  const handleSetCurrentPage = (page: any) => {
+    // console.log(page);
+    setCurrentPage(page)
+  };
+  // console.log(currentPage);
   // useEffect(() => {
   //   axios
   //     .get(
@@ -172,10 +177,10 @@ console.log(totalPage);
         })}
         rowKey="requestCode"
         pagination={{
-          pageSize: 3,
+          pageSize:10,
           current: currentPage,
           total: totalPage, // Replace with the total number of records from the API
-          onChange: (page) => setCurrentPage(page),
+          onChange: (page) => handleSetCurrentPage(page),
         }}
         scroll={{ x: "max-content" }}
       />
