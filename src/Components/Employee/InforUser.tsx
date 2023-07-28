@@ -337,6 +337,7 @@ const contract1: Contract = {
 const InforUser = () => {
   const [dataOverview, setDataOverview] = useState<Record<string, string>>({});
   const [dataName, setDataName] = useState("");
+  const [dataSignature, setDataSignature] = useState<Record<string, string>>({});
   const [dataFamily, setdataFamily] = useState<Record<string, string>>({});
   const [dataAdditional, setDataAdditional] = useState<Record<string, string>>({});
   const [dataEmployee, setDataEmployee] = useState<UserInfo>();
@@ -347,7 +348,7 @@ const InforUser = () => {
     const getUserInfor = async () => {
       const endpoint = "/Personal/EmployeeInfo?Id=" + id;
       const response = await request.get(endpoint).then((res) => {
-        // console.log(res.data.userInfo.Additional);
+        console.log(res.data.userInfo);
         setDataName(
           res.data.userInfo.FirstName + " " + res.data.userInfo.LastName
         );
@@ -355,6 +356,7 @@ const InforUser = () => {
         setDataOverview(res.data.userInfo.Overview);
         setDataAdditional(res.data.userInfo.Additional);
         setdataFamily(res.data.userInfo.Family);
+        setDataSignature(res.data.userInfo.Signature);
       });
     };
 
@@ -374,82 +376,18 @@ const InforUser = () => {
   };
   const mergedObject = { ...newDataOverview, ...dataOverview };
 
-  const dataAdditionalInfor = {
-    Data: {
-      Nation: dataEmployee?.Additional.Nation,
-      Phone: dataEmployee?.Additional.HomePhone,
-      "ID card number": dataEmployee?.Additional.IDCardNumber,
-      "Date of ID Card": dataEmployee?.Additional.DateOfIDCard,
-      "Place of ID card": dataEmployee?.Additional.PlaceOfIDCard,
-      "Health insurance": dataEmployee?.Additional.HealthInsurance,
-      "Starting date": dataEmployee?.Additional.StartingDate,
-      "Starting date offical": dataEmployee?.Additional.StartingDateOfficial,
-      "Leaving date": dataEmployee?.Additional.LeavingDate,
-      "Start Date Maternity Leave":
-        dataEmployee?.Additional.StartDateMaternityLeave,
-      Note: dataEmployee?.Additional.StartDateMaternityLeave,
-    },
-    Literacy: {
-      "Academic level": dataEmployee?.Additional.AcademicLevel,
-      "Specialized qualification":
-        dataEmployee?.Additional.SpecializedQualification,
-    },
-    "Contact Info": {
-      "Business phone": dataEmployee?.Additional.BusinessPhone,
-      "Home phone": dataEmployee?.Additional.HomePhone,
-      "Personal email": dataEmployee?.Additional.PersonalEmail,
-    },
-    "Bank account": {
-      "Bank Name": dataEmployee?.Additional.BankName,
-      "Branch number": dataEmployee?.Additional.BankAccountNumber,
-      "Bank brach name": dataEmployee?.Additional.BankBranchName,
-      "Bank account number": dataEmployee?.Additional.BankAccountNumber,
-      "Bank Account Name": dataEmployee?.Additional.BankAccountName,
-    },
-    Address: {
-      Street: dataEmployee?.Additional.Street,
-      "Building / flatnumber": dataEmployee?.Additional.BuildingOrFlatNumber,
-      City: dataEmployee?.Additional.City,
-      "Province / state": dataEmployee?.Additional.ProvinceOrState,
-      "Postal code": dataEmployee?.Additional.PostalCode,
-      Country: dataEmployee?.Additional.Country,
-    },
-  };
 
-  // const dataFamilyamilyInfor = {
-  //   MartialStatus: {
-  //     MartialStatus: dataEmployee?.Family.MartialStatus,
-  //   },
-  //   EmergencyContact: {
-  //     ContactName: dataEmployee?.Family.ContactName,
-  //     Relationship: dataEmployee?.Family.Relationship,
-  //     Phone: dataEmployee?.Family.Phone,
-  //   },
-  // ["{"]
-  //     Street: dataEmployee?.Family.Street,
-  //     BuildingFlatnumber: dataEmployee?.Family.BuildingOrFlatNumber,
-  //     City: dataEmployee?.Family.City,
-  //     ProvinceState: dataEmployee?.Family.ProvinceOrState,
-  //     PostalCode: dataEmployee?.Family.PostalCode,
-  //     Country: dataEmployee?.Family.Country,
-  //   },
-  // };
-
-  // console.log(dataFamilyamilyInfor);
   const onChange = (key: string) => {
     console.log(key);
   };
   const [editable, setEditable] = useState(false);
 
-  // console.log(dataAdditional);
-  // console.log(dataAdditional);
-  // console.log(dataAdditional);
   const dataEditUserInfo = {
-    Overview: {
+    overview: {
       EmployeeType: dataOverview["EmployeeType"],
       Rank: dataOverview["Rank"],
     },
-    Additional: {
+    additional: {
       Nation: dataAdditional["Nation"],
       IDCardNumber: dataAdditional["IDCardNumber"],
       DateOfIDCard: dataAdditional["DateOfIDCard"],
@@ -474,7 +412,7 @@ const InforUser = () => {
       PostalCode: dataAdditional["PostalCode"],
       Country: dataAdditional["Country"],
     },
-    Family: {
+    family: {
       MartialStatus: dataFamily["MartialStatus"],
       ContactName: dataFamily["ContactName"],
       Phone: dataFamily["Phone"],
@@ -532,7 +470,11 @@ const InforUser = () => {
     {
       key: "5",
       label: `Signature`,
-      children: <Signature  />,
+      children: <Signature 
+          data={dataSignature}
+          setData={setDataSignature}
+          isEditable={editable}
+      />,
     },
   ];
   const handleClickEdit = () => {
@@ -592,17 +534,25 @@ const InforUser = () => {
     },
     Avatar: '',
   };
+  const formData = new FormData();
 
+  // Thêm các thuộc tính và giá trị từ object data vào FormData
+  formData.append('overview', JSON.stringify(dataEditUserInfo.overview));
+  formData.append('additional', JSON.stringify(dataEditUserInfo.additional));
+  formData.append('family', JSON.stringify(dataEditUserInfo.family));
+  formData.append('Avatar', dataEditUserInfo.Avatar);
+  
+  // console.log(JSON.stringify(dataEditUserInfo.overview));
+  // console.log(formData);
+  // console.log(formData.get('overview'));
+  // console.log(dataEditUserInfo.additional);
   const handleClickSave =  async ()  => {
-    // console.log(isSave);
-
-    // console.log(id);
     setEditable(false);
 
     try {
       console.log(initialEmployeeData);
   
-      const response = await request.put("/Personal/EditInfoEmployee?Id=" + id, initialEmployeeData);
+      const response = await request.put("/Personal/EditInfoEmployee?Id=" + id, formData);
       console.log(response.data);
       // Xử lý phản hồi thành công (nếu cần)
   
@@ -626,12 +576,6 @@ const InforUser = () => {
   // http://localhost:5005/api/Personal/EditInfoEmployee?Id=07a2fe81-bbd7-47c0-8095-668596515efb
   return (
     <div>
-      {/* , Additional[], Family[] */}
-      {/* <HeaderEmployee
-        setEditable={setEditable}
-        data={dataEmployee as UserInfo}
-        isEditable={editable}
-      /> */}
       <Header
         className="header-employee"
         style={{
@@ -674,17 +618,3 @@ const InforUser = () => {
 };
 
 export default InforUser;
-// {editable && (
-//   <span
-//     style={{
-//       border: "#ccc solid 0.1px",
-//       borderRadius: "50%",
-//       background: "#555",
-//       padding: "5px 9px",
-//       position: "relative",
-//       right: "-30px",
-//     }}
-//     onClick={handleUpdateAvatar}>
-//     <BsFillCameraFill style={{ color: "#fff" }} />
-//   </span>
-// )}

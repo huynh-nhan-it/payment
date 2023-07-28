@@ -131,14 +131,35 @@ const Additional: React.FC<AdditionalProps> = ({
               }}
               key={item.label}>
               {isEditable ? (
-                <Input
-                  style={{ width: "100%" }}
-                  defaultValue={item.value}
-                  onChange={(e) =>
-                    handleInputChange(e.target.value, item.label)
-                  }
-                />
-              ) : (
+                  item.label === "StartingDateOfficial" ||
+                  item.label === "LeavingDate" ||
+                  item.label === "StartDateMaternityLeave" ? (
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      disabled={true}
+                      defaultValue={dayjs(item.value as string)}
+                      // onChange={(e) =>
+                      //   handleInputChange(e.target.value, item.item.label, "infor")
+                      // }
+                    />
+                  ) : item.label ===  "StartingDate" ||item.label ===  "DateOfIDCard"  ? (
+                    <DatePicker
+                      style={{ width: "100%" }}
+                      defaultValue={dayjs(item.value as string)}
+                      onChange={(e, datestring) =>
+                        handleInputChange(datestring, item.label)
+                      }
+                    />
+                  ) : (
+                    <Input
+                      style={{ width: "100%" }}
+                      defaultValue={item.value as string}
+                      onChange={(e) =>
+                        handleInputChange(e.target.value, item.label)
+                      }
+                    />
+                  )
+                ) : (
                 <span style={{ display: "flex", alignItems: "start" }}>
                   {item.value}
                 </span>

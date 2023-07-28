@@ -1,6 +1,7 @@
-import React, {  } from "react";
+import React from "react";
 import "./employee.css";
-import { Form, Input } from "antd";
+import { DatePicker, Form, Input } from "antd";
+import dayjs from "dayjs";
 
 interface MyObject {
   [key: string]: any;
@@ -55,6 +56,15 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
                     onChange={(e) =>
                       handleInputChange(e.target.value, item.label)
                     }
+                  />
+                ) : item.label === "BirthDay" ? (
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    disabled={true}
+                    defaultValue={dayjs(item.value as string)}
+                    // onChange={(e) =>
+                    //   handleInputChange(e.target.value, item.item.label, "infor")
+                    // }
                   />
                 ) : (
                   <Input

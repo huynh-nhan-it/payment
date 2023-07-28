@@ -16,7 +16,18 @@ const fontOptions = [
 const onChange = (key: string) => {
   console.log(key);
 };
-const Signature: React.FC = () => {
+
+interface MyObject {
+  [key: string]: any;
+}
+interface SignatureProps {
+  data: MyObject;
+  isEditable?: boolean;
+  setData: React.Dispatch<React.SetStateAction<MyObject>>;
+}
+
+const Signature: React.FC<SignatureProps> = ({data, setData, isEditable}) => {
+  console.log(data);
   const [inputText, setInputText] = useState<string>("");
   const [selectedFont, setSelectedFont] = useState<any>(fontOptions[0]); // Lựa chọn font chữ mặc định
   const [selectedImage, setSelectedImage] = useState<
@@ -164,12 +175,22 @@ const Signature: React.FC = () => {
   ];
   return (
     <div>
+      {isEditable?
+      
       <Tabs
         style={{ padding: "16px" }}
         defaultActiveKey="1"
         items={items}
         onChange={onChange}
       />
+      : (
+
+        <div>
+          <img src={data["img-path"]} alt="qr"></img>
+
+        </div>
+      )
+    }
     </div>
   );
 };
