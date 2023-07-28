@@ -3,6 +3,7 @@
     public class PaymentRequestDetail
     {
         public Guid Id { get; set; }
+        public Guid requestId { get; set; }
         public string RequestCode { get; set; }
         public string UserName { get; set; }
         public DateTime CreateAt { get; set; }

@@ -56,7 +56,7 @@ namespace PaymentModule.Controllers
         {
             
             string connectionString = _connectionStringSettings.ConnectionString;
-            string selectQuery = "SELECT DISTINCT dr.Id, pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, \r\ndr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber, \r\ndt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note, \r\npm.Id as PmId, \r\nadr.ApproverId \r\nFROM DetailRequests AS dr \r\nINNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId \r\nINNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid \r\nINNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id\r\nINNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId  \r\nwhere pr.RequestCode like @RequestCode";
+            string selectQuery = "SELECT DISTINCT  dr.Id as drId, pr.Id as prId ,pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, dr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber,   dt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note,   pm.Id as PmId,   adr.ApproverId   FROM DetailRequests AS dr   INNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId INNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid INNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id  INNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId   where pr.RequestCode like @RequestCode";
             List<PaymentRequestDetail> listPaymentRequestDetail = new List<PaymentRequestDetail>();
             List<DetailTableModel> listDetailTable = new List<DetailTableModel>();
             List<ApproverModel> ApproverList = new List<ApproverModel>(); //trả ra model, kiểm tra đầu vào dựa va
@@ -107,7 +107,8 @@ namespace PaymentModule.Controllers
 
                             var b = new PaymentRequestDetail
                             {
-                                Id = (Guid)reader["Id"],
+                                Id = (Guid)reader["drId"],
+                                requestId = (Guid)reader["prId"],
                                 RequestCode = (string)reader["RequestCode"],
                                 UserName = _userService.GetUserModelById((Guid)reader["UserId"]).FullName,
                                 CreateAt = (DateTime)reader["CreateAt"],
@@ -131,6 +132,21 @@ namespace PaymentModule.Controllers
             return Ok(listPaymentRequestDetail[listPaymentRequestDetail.Count - 1]);
         }
 
-        
+        [HttpGet("Approver")]
+        public IActionResult GetApproversOfRequest(Guid DetailRequestId)
+        {
+            List<ObjectResult> appList = new List<ObjectResult>();
+            appList = _userService.GetApproverOfRequest(DetailRequestId);
+            return Ok(appList);
+            /*try
+            {
+                List<ObjectResult> appList = new List<ObjectResult>();
+                appList = _userService.GetApproverOfRequest(DetailRequestId);
+                return Ok(appList);
+            }catch
+            {
+                return Ok("Not found");
+            }*/
+        }
     }
 }
