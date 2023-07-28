@@ -79,17 +79,30 @@
 // };
 
 // export default Person;
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown, Menu, MenuProps } from "antd";
 import { BsQuestionLg } from "react-icons/bs";
 import { IoCloseSharp, IoPersonCircleOutline } from "react-icons/io5";
 
 import "./request.css";
 import { Link } from "react-router-dom";
+import request from "../../Services/User/getAccount";
 
 const Person: React.FC = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const id = localStorage.getItem('id')
+  const [dataName, setDataName] = useState('')
+  useEffect(() => {
+    const getUserInfor = async () => {
+      const endpoint = "/Personal/EmployeeInfo?Id=" + id;
+      const response = await request.get(endpoint).then((res) => {
+        setDataName(res.data.userInfo.FirstName + ' ' +res.data.userInfo.LastName);
+        // setData(res.data)
+      });
+    };
 
+    getUserInfor();
+  }, []);
   interface MenuItem {
     key: string;
     label: string;
@@ -109,7 +122,7 @@ const Person: React.FC = () => {
     },
     {
       key: "2",
-      label: "Bang Nguyen Minh",
+      label: dataName,
       type: "group",
       children: [
         {

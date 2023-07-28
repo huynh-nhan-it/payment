@@ -7,6 +7,7 @@ import { Content } from "antd/es/layout/layout";
 import HeaderRequest from "../../../../../Request/HeaderRequest";
 import NavbarRequest from "../../../../../Request/NavbarRequest";
 import Search from "antd/es/input/Search";
+import NavbarSetting from "../Navbar/NavbarSetting";
 
 const StructureOrganization = () => {
   const handleClickCard = () => {};
@@ -33,14 +34,7 @@ const StructureOrganization = () => {
               collapsible
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}>
-              <Search
-                placeholder="input search text"
-                // onSearch={onSearch}
-                style={{
-                  width: 200,
-                }}
-              />
-              <NavbarRequest />
+              <NavbarSetting />
             </Sider>
             <Content
               style={{

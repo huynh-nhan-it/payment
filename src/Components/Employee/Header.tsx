@@ -177,7 +177,8 @@ const HeaderEmployee: React.FC<HeaderEmployeeProps> = ({
           marginTop: "64px",
           alignItems: "center",
         }}>
-        <div onClick={handleClickSave}>{isEditable && <AiOutlineSave />}</div>
+          <div style={{paddingLeft:"50px"}}></div>
+        <div style={{paddingLeft:"50px"}} onClick={handleClickSave}>{isEditable && <AiOutlineSave />}</div>
         <div className="return-employee">
           <a href="/setting" className="text-header">
             <TiArrowBackOutline />

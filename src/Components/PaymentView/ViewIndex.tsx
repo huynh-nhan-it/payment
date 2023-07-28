@@ -29,7 +29,7 @@ function ViewPayment() {
                 height: "100%",
                 borderRight: "solid #ccc 0.1px",
               }}
-              // collapsedWidth="0"
+              collapsedWidth="0"
               collapsible
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}>

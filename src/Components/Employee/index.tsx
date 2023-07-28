@@ -3,6 +3,7 @@ import { Layout, Menu, Input, theme } from "antd";
 import InforUser from "./InforUser";
 import HeaderRequest from "../Request/HeaderRequest";
 import NavbarRequest from "../Request/NavbarRequest";
+import NavbarSetting from "../Setting/components/System/Structure-Organization/Navbar/NavbarSetting";
 
 const { Search } = Input;
 const { Content, Sider } = Layout;
@@ -27,18 +28,11 @@ const Employee: React.FC = () => {
                 height: "100%",
                 borderRight: "solid #ccc 0.1px",
               }}
-              // collapsedWidth="0"
+              collapsedWidth="0"
               collapsible
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}>
-              <Search
-                placeholder="input search text"
-                // onSearch={onSearch}
-                style={{
-                  width: 200,
-                }}
-              />
-              <NavbarRequest />
+              <NavbarSetting />
             </Sider>
             <Content
               style={{ paddingLeft: collapsed ? "0" : "200px" }}

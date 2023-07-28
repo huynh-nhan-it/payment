@@ -32,6 +32,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   const [createdBy, setCreatedBy] = useState("");
   const [status, setStatus] = useState("");
   // console.log(filteredData);
+  const [totalPage, setTotalPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1);
 
   // useEffect((data) => {
@@ -72,9 +73,19 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
         }
         );
     }
+    const getPaymentPage = async () => {
+      const endpoint = `PaymentRequest/?page=${currentPage}`;
+      const response = await request.get(endpoint).then((res) => {
+        // console.log(res.data);
+          setTotalPage(res.data.length)
+      }
+      );
+  }
     getPaymentList();
+    getPaymentPage();
 
-}, [])
+}, [purpose,requestCode,createdDateFrom,createDateTo,createdBy,status,currentPage])
+console.log(totalPage);
   // useEffect(() => {
   //   axios
   //     .get(
@@ -161,9 +172,9 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
         })}
         rowKey="requestCode"
         pagination={{
-          pageSize: 20,
+          pageSize: 3,
           current: currentPage,
-          total: 50, // Replace with the total number of records from the API
+          total: totalPage, // Replace with the total number of records from the API
           onChange: (page) => setCurrentPage(page),
         }}
         scroll={{ x: "max-content" }}

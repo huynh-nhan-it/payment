@@ -377,6 +377,7 @@ interface UserInfoEdit {
 const InforUser = () => {
   const [dataOverview, setDataOverview] = useState<Record<string, string>>({});
   const [dataTest, setDataTest] = useState({});
+  const [dataName, setDataName] = useState("");
   const [dataFamily, setDataFamily] = useState<Record<string, string>>({});
   const [dataAdditional, setDataAdditional] = useState<Record<string, string>>(
     {}
@@ -390,6 +391,9 @@ const InforUser = () => {
       const endpoint = "/Personal/EmployeeInfo?Id=" + id;
       const response = await request.get(endpoint).then((res) => {
         // console.log(res.data);
+        setDataName(
+          res.data.userInfo.FirstName + " " + res.data.userInfo.LastName
+        );
         setDataEmployee(res.data.userInfo);
         setDataOverview(res.data.userInfo.Overview);
         setDataAdditional(res.data.userInfo.Additional);
@@ -623,7 +627,7 @@ const InforUser = () => {
           marginTop: "64px",
           alignItems: "center",
         }}>
-        <div onClick={handleClickSave}>{editable && <AiOutlineSave />}</div>
+        <div style={{paddingLeft:"50px"}} onClick={handleClickSave}>{editable && <AiOutlineSave />}</div>
         <div className="return-employee">
           <a href="/setting" className="text-header">
             <TiArrowBackOutline />
@@ -633,27 +637,14 @@ const InforUser = () => {
       </Header>
       <div className="employee-avatar-name-edit">
         <h2 className="name-employee">
-          {editable && (
-            <span
-              style={{
-                border: "#ccc solid 0.1px",
-                borderRadius: "50%",
-                background: "#555",
-                padding: "5px 9px",
-                position: "relative",
-                right: "-30px",
-              }}
-              onClick={handleUpdateAvatar}>
-              <BsFillCameraFill style={{ color: "#fff" }} />
-            </span>
-          )}
+          
           <span>
             <Avatar />
             {/* <img
               className="avatar-employee"
               src="https://img.freepik.com/free-icon/user_318-159711.jpg"></img> */}
           </span>
-          Bang Nguyen Minh{" "}
+         {dataName}
         </h2>
         <div onClick={handleClickEdit} className="edit-employee">
           {!editable && <TbUserEdit />}
@@ -670,3 +661,17 @@ const InforUser = () => {
 };
 
 export default InforUser;
+// {editable && (
+//   <span
+//     style={{
+//       border: "#ccc solid 0.1px",
+//       borderRadius: "50%",
+//       background: "#555",
+//       padding: "5px 9px",
+//       position: "relative",
+//       right: "-30px",
+//     }}
+//     onClick={handleUpdateAvatar}>
+//     <BsFillCameraFill style={{ color: "#fff" }} />
+//   </span>
+// )}

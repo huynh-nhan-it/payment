@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { Layout } from "antd";
 import UserOutlined from "@ant-design/icons";
 import "./Header.css";
-import MenuHeader from "./MenuHeader";
+
+import request from "../../Services/User/getAccount";
 const { Header } = Layout;
-const AppHeader = ({ title, decription }) => {
+const AppHeader = () => {
   // const [data, setData] = useState([]);
   // // https://tasken.io/api/api/landingpage/tenant/8dc6957b-4869-4877-a511-6563f990d59e?v=1688011765685
   // const url =
@@ -33,6 +34,20 @@ const AppHeader = ({ title, decription }) => {
   //     console.error("Error:", error);
   //   });
 
+  const id = localStorage.getItem('id')
+  const [dataName, setDataName] = useState('')
+  useEffect(() => {
+    const getUserInfor = async () => {
+      const endpoint = "/Personal/EmployeeInfo?Id=" + id;
+      const response = await request.get(endpoint).then((res) => {
+        setDataName(res.data.userInfo.FirstName + ' ' +res.data.userInfo.LastName);
+        // setData(res.data)
+      });
+    };
+
+    getUserInfor();
+  }, []);
+  // console.log(dataName);
   return (
     <Header className="header">
       <div className="logo-name">
@@ -45,7 +60,7 @@ const AppHeader = ({ title, decription }) => {
       </div>
       <div className="header-homepage">
         {" "}
-        <UserOutlined /> Bang Nguyen Minh
+        <UserOutlined /> {dataName}
       </div>
       <div className="header-homepage">Trang chủ</div>
     </Header>
