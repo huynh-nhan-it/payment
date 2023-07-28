@@ -39,7 +39,6 @@ const Comment: React.FC<Comment> = ({ requestCode, userId, DetailRequestId}) => 
   const [stateForm, setStateForm] = useState<Comments[] | []>([]);
   const [hasFetchedData, setHasFetchedData] = useState(false); 
   
-  console.log(hasFetchedData);// Biến cờ
   useEffect(() => {
     if (!hasFetchedData) {
       axios
@@ -98,7 +97,14 @@ const Comment: React.FC<Comment> = ({ requestCode, userId, DetailRequestId}) => 
         <p>is Loading ...</p>
       ) : (
         <div className="comment">
-          {isFeedBack ? "" : <CommentForm></CommentForm>}
+          {isFeedBack ? "" : <CommentForm 
+          isFeedBack={undefined}
+          handleFeedback={undefined}
+          setHasFetchedData = {undefined}
+          index={undefined}
+          userId={userId}
+          DetailRequestId={DetailRequestId}
+           ></CommentForm>}
           {stateForm?.map((child, index) => (
             <React.Fragment key={index}>
                             {/* Comment list */}

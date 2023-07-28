@@ -85,7 +85,7 @@ const ViewHeader: React.FC<IHeader> = ({
             Progress
           </a>
         </Col>
-        {    
+        { checkApprove &&
         (
           <>
             <Col>

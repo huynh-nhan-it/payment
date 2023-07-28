@@ -22,7 +22,7 @@ interface feedBack {
   [key: string]: boolean;
 }
 interface ICommentForm {
-  isFeedBack?: feedBack;
+  isFeedBack?: feedBack ;
   handleFeedback?: (index: any) => void;
   setHasFetchedData?: () => void;
   index?: any;

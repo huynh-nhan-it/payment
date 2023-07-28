@@ -10,7 +10,6 @@ import NavbarRequest from "../Request/NavbarRequest";
 import Search from "antd/es/input/Search";
 import ModalStatus from "./components/ModalStatus";
 import axios from "axios";
-
 function ViewPayment(userId: any) {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -21,18 +20,20 @@ function ViewPayment(userId: any) {
   const [type, setType] = useState("");
   const [DetailRequestId, setDetailRequestId] = useState("");
   const [RequestId, setRequestId] = useState("");
-
+  const [Loading, setLoading] = useState(true);
   useEffect(() => {
     axios
-      .get("http://localhost:5005/api/DetaiRequest/" + requestCode)
+      .get(`http://localhost:5005/api/DetailRequest/${requestCode}`)
       .then((respone) => {
-        setDetailRequestId(respone.data.Id);
+        setDetailRequestId(respone.data.id);
         setRequestId(respone.data.requestId);
+        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+  
   const showModal = (type: any) => {
     setType(type);
     setIsModalOpen(true);
@@ -48,6 +49,7 @@ function ViewPayment(userId: any) {
         )
         .then((respone) => {
           if (respone.data.success) {
+            setLoading(true);
             window.location.href = "/request/payment";
           }
           setIsModalOpen(false);
@@ -56,11 +58,12 @@ function ViewPayment(userId: any) {
           console.error(error);
         });
     } else {
+      
       axios
         .post(
           `http://localhost:5005/api/User/accept-or-not`,
           {
-            approverId: userId,
+            approverId: userId.userId,
             requestId: RequestId,
             action: type,
           },
@@ -71,9 +74,10 @@ function ViewPayment(userId: any) {
           }
         )
         .then((response) => {
+          console.log(response.data);
           if (response.data.mess !== "NOT YOUR TURN") {
             const data = {
-              userId: userId,
+              userId: userId.userId,
               detailRequestId: DetailRequestId,
               content: Reason.resizableTextArea.textArea.textContent,
               createdAt: new Date(Date.now()).toISOString(),
@@ -84,8 +88,8 @@ function ViewPayment(userId: any) {
                   "Content-Type": "application/json",
                 },
               })
-              .then((response) => {
-                console.log("hahahah");
+              .then((res) => {
+                setLoading(true);
                 setIsModalOpen(false);
                 window.location.href = "/request/payment";
               })
@@ -106,7 +110,7 @@ function ViewPayment(userId: any) {
 
   return (
     <div>
-      <Layout>
+      {Loading ? (<p>Loading...</p>) : (<Layout>
         <HeaderRequest />
         <Content>
           <Layout>
@@ -140,13 +144,13 @@ function ViewPayment(userId: any) {
             >
               <ViewHeader
                 showModal={showModal}
-                userId={userId}
+                userId={userId.userId}
                 DetailRequestId={DetailRequestId}
               ></ViewHeader>
               <div>
                 {requestCode && (
                   <ViewContent
-                    userId={userId}
+                    userId={userId.userId}
                     DetailRequestId={DetailRequestId}
                   ></ViewContent>
                 )}{" "}
@@ -160,7 +164,8 @@ function ViewPayment(userId: any) {
             </Content>
           </Layout>
         </Content>
-      </Layout>
+      </Layout>)}
+      
     </div>
   );
 }
