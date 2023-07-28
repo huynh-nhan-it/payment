@@ -13,5 +13,7 @@ namespace PaymentModule.Services.IServices
         public List<ApproverModel> GetAllApprover(Guid myId);
         public ApproverModel GetApproverById(Guid id);
         public bool CheckExistByEmail(string email);
+        public List<ObjectResult> GetApproverOfRequest(Guid detailRequestId);
+        public List<string> GetRoleList(Guid userId);
     }
 }

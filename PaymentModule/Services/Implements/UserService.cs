@@ -16,6 +16,7 @@ namespace PaymentModule.Services.Implements
     {
         private readonly PaymentContext _context;
         private readonly ConnectionStringSettings _connectionStringSettings;
+        
 
         public UserService(PaymentContext context, ConnectionStringSettings connectionStringSettings)
         {
@@ -193,6 +194,25 @@ namespace PaymentModule.Services.Implements
             }
         }
 
+        private ApproverModel GetApproverByIdFunction(Guid ApproverId)
+        {
+            var userEnti = _context.Users.SingleOrDefault(u => u.Id.Equals(ApproverId));
+            if (userEnti != null)
+            {
+                var approverModel = new ApproverModel
+                {
+                    FullName = userEnti.FirstName + " " + userEnti.LastName,
+                    Email = userEnti.Email,
+                    JobTitle = userEnti.JobTitle,
+                };
+                return approverModel;
+            }
+            else
+            {
+                return new ApproverModel();
+            }
+        }
+
         bool IUserService.CheckExistByEmail(string email)
         {
             var user = _context.Users.SingleOrDefault(u => u.Email.Equals(email));
@@ -201,6 +221,66 @@ namespace PaymentModule.Services.Implements
                 return true;
             }
             return false;
+        }
+
+        List<ObjectResult> IUserService.GetApproverOfRequest(Guid DetailRequestId)
+        {
+            string selectQuery = "select * from ApproverDetailRequest where DetailRequestId = @DetailRequestId";
+            List<ObjectResult> ApproverList = new List<ObjectResult>();
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Guid approverID = (Guid)reader["ApproverId"];
+                            ApproverModel app = GetApproverByIdFunction(approverID);
+                            var approverandstatus = new { approver = app, Status = (string)reader["Status"] };
+                            ApproverList.Add(new ObjectResult(approverandstatus) );
+                        }
+                    }
+                }
+            }
+            return ApproverList;
+        }
+
+
+        List<string> IUserService.GetRoleList(Guid UserId)
+        {
+            string selectQuery = "Select RoleId from UserRole as ur where ur.UserId = @UserId";
+            List<string> roleListOfUser = new List<string>();
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@UserId", UserId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Guid roleId = (Guid)reader["RoleId"];
+                            roleListOfUser.Add(getRoleById(roleId));
+                        }
+                    }
+                }
+            }
+            return roleListOfUser;
+        }
+
+        private string getRoleById(Guid roleId)
+        {
+            var role = _context.Roles.FirstOrDefault(rol => rol.Id.Equals(roleId) == true);
+            if (role != null)
+            {
+                return role.Role;
+            }
+            return "STAFF";
         }
     }
 }
