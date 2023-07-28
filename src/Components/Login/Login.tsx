@@ -17,7 +17,7 @@ const Login: React.FC = () => {
     return jwtRegex.test(str);
   }
 
-  const [token, setToken] = useState();
+  const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [id, setId] = useState("");
   const navigate = useNavigate();
@@ -31,6 +31,7 @@ const Login: React.FC = () => {
         // setData(res.data);
         // se(res.data);
         if(isJWTToken(res.data)){
+          console.log()
           localStorage.setItem("authToken", res.data);
           const decoded: { [key: string]: string } = jwt_decode(res.data);
           setToken(res.data)
@@ -39,10 +40,14 @@ const Login: React.FC = () => {
             decoded[
               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
             ];
+          const role = decoded[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role"
+          ];
           // console.log(decoded);
 
           setId(id);
           localStorage.setItem("id", id);
+          localStorage.setItem("role", role);
         }else{
           setError(res.data)
         }
@@ -85,7 +90,6 @@ const Login: React.FC = () => {
   // console.log(error);
   useEffect(() => {
     if (token) {
-      window.location.reload();
       navigate("/");
     }
   }, [token]);

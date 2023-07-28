@@ -39,6 +39,8 @@ const ViewHeader: React.FC<IHeader> = ({
         console.error(error);
       });
   }, []);
+  const role = localStorage.getItem("role");
+  console.log(role);
   return (
     <Header
       style={{
@@ -64,7 +66,7 @@ const ViewHeader: React.FC<IHeader> = ({
             <BsFiletypePdf style={{ marginRight: "5px" }} /> Download file
           </a>
         </Col>
-        <Col>
+        {role && <Col>
           <a
             href="#"
             className="text-header"
@@ -75,7 +77,7 @@ const ViewHeader: React.FC<IHeader> = ({
             {" "}
             <MdDeleteOutline style={{ marginRight: "5px" }} /> Delete
           </a>
-        </Col>
+        </Col>}
         <Col>
           <a href="#" className="text-header">
             {" "}

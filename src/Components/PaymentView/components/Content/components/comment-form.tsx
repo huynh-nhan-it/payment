@@ -46,7 +46,6 @@ const CommentForm: React.FC<ICommentForm> = ({
       content: values["content-comment"],
       createdAt: new Date(Date.now()).toISOString()
     };
-    console.log(data);
     axios
       .post(`http://localhost:5005/api/Comment`, data, {
         headers: {
