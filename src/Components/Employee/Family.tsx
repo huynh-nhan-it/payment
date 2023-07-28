@@ -56,22 +56,32 @@ interface FamilyProps {
 const Family: React.FC<FamilyProps> = ({ data, isEditable, setData }) => {
   console.log(data);
 
-  const handleInputChange = (
-    value: string | number,
-    parentKey: string,
-    childKey: string
-    // dataIndex: keyof AdditionalInfor['children'][number]
-  ) => {
-    const updatedData: MyObject = { ...data };
-    // updatedData[parentKey] = value;
-    updatedData[parentKey][childKey] = value;
-    setData(updatedData);
-  };
+  // const handleInputChange = (
+  //   value: string | number,
+  //   parentKey: string,
+  //   childKey: string
+  //   // dataIndex: keyof AdditionalInfor['children'][number]
+  // ) => {
+  //   const updatedData: MyObject = { ...data };
+  //   // updatedData[parentKey] = value;
+  //   updatedData[parentKey][childKey] = value;
+  //   setData(updatedData);
+  // };
+  // const formItems = Object.entries(data).map(([key, value]) => ({
+  //   label: key,
+  //   value: value,
+  // }));
   const formItems = Object.entries(data).map(([key, value]) => ({
     label: key,
     value: value,
   }));
+  const handleInputChange = (value: string | number, label: string) => {
+    const updatedData: MyObject = { ...data };
 
+    updatedData[label] = value;
+
+    setData(updatedData);
+  };
   // const handleInputChange = (
   //   value: string | number,
   //   parentKey: string,
@@ -97,6 +107,42 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable, setData }) => {
   // };
   return (
     <div>
+      <Form>
+        {formItems.map((item) =>
+          item.label === "User" ||
+          item.label === "$id" ||
+          item.label === "Id" ||
+          item.label === "UserId" ||
+          item.label === "relationships" ? (
+            ""
+          ) : (
+            <Form.Item
+              label={item.label}
+              colon={false}
+              labelCol={{ span: 6, style: { display: "flex" } }} // Set the label column span to 8
+              style={{
+                padding: "4px 8px",
+                borderBottom: "solid #ccc 0.2px",
+                marginBottom: "0px",
+              }}
+              key={item.label}>
+              {isEditable ? (
+                <Input
+                  style={{ width: "100%" }}
+                  defaultValue={item.value}
+                  onChange={(e) =>
+                    handleInputChange(e.target.value, item.label)
+                  }
+                />
+              ) : (
+                <span style={{ display: "flex", alignItems: "start" }}>
+                  {item.value}
+                </span>
+              )}
+            </Form.Item>
+          )
+        )}
+      </Form>
       {/* <Form>
         {data.map((item: any) => {
           return (
@@ -160,7 +206,7 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable, setData }) => {
         })}
       </Form> */}
 
-      {Object.entries(data).map(([sectionTitle, sectionData]) => (
+      {/* {Object.entries(data).map(([sectionTitle, sectionData]) => (
         <div key={sectionTitle} style={{ marginBottom: 20 }}>
           <h2>{sectionTitle}</h2>
           <Form>
@@ -184,7 +230,7 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable, setData }) => {
                   />
                 ) : (
                   <span style={{ display: "flex", alignItems: "start" }}>
-                    {/* {item.value} */}
+                 
                     {value as string | undefined}
                   </span>
                 )}
@@ -192,7 +238,7 @@ const Family: React.FC<FamilyProps> = ({ data, isEditable, setData }) => {
             ))}
           </Form>
         </div>
-      ))}
+      ))} */}
       {/* {data.map((item) =>
   item.children.map((child) => (
     <Form.Item

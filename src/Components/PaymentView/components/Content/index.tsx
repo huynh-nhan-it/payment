@@ -1,4 +1,4 @@
-import { Col, Row, theme } from "antd";
+import { Col, Row, theme, Modal } from "antd";
 import { Layout } from "antd";
 import React, { useEffect, useState } from "react";
 import { Typography } from "antd";
@@ -27,6 +27,7 @@ interface Approver {
   jobTitle: string;
 }
 
+
 interface PaymentRequest {
   requestCode: string;
   userName: string;
@@ -44,7 +45,12 @@ interface PaymentRequest {
   approverIds: Approver[];
 }
 
-const ViewContent: React.FC = () => {
+interface IViewContent {
+  userId: any,
+  DetailRequestId: any
+}
+
+const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId}) => {
   const { requestCode } = useParams();
   useEffect(() => {
     const getDetailRequest = async () => {
@@ -265,7 +271,7 @@ const ViewContent: React.FC = () => {
         </div>
         <div className="row"></div>
         <div>
-          <Comment></Comment>
+          <Comment requestCode = {requestCode} userId = {userId} DetailRequestId = {DetailRequestId}></Comment>
         </div>
       </div>
     </div>

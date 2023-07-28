@@ -1,51 +1,50 @@
 import "./App.css";
 import ApiCall from "./Components/ApiCall";
-import { BrowserRouter, Route, Routes, Link, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Request from "./Components/Request";
 import Employee from "./Components/Employee";
-import { Layout, theme, Input, Button } from "antd";
-import HeaderRequest from "./Components/Request/HeaderRequest";
-import { Content, Header } from "antd/es/layout/layout";
-import Sider from "antd/es/layout/Sider";
-import NavbarRequest from "./Components/Request/NavbarRequest";
 import ViewPayment from "./Components/PaymentView/ViewIndex";
 import Login from "./Components/Login/Login";
-import RegisterForm from "./Components/Register/Register";
-import { useEffect, useState } from "react";
 import Setting from "./Components/Setting";
 import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
 import SubmitRequest from "./Components/PaymentRequest";
-import jwt_decode from "jwt-decode";
 import Register from "./Components/Login/Register";
 
-const { Search } = Input;
 
 function App() {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
 
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [userId, setuserId] = useState("");
+  const userId = localStorage.getItem("id");
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("authToken");
-    if (storedToken) {
-      const decoded: { [key: string]: string } = jwt_decode(storedToken);
 
-      // Access the emailaddress property
-      const emailAddress =
-        decoded[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-        ];
-      // console.log(decoded);
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem("authToken");
+  //   if (storedToken) {
+  //     const decoded: { [key: string]: string } = jwt_decode(storedToken);
 
-      setEmail(emailAddress);
-    }
-  }, [email]);
+  //     // Access the emailaddress property
+  //     const emailAddress =
+  //       decoded[
+  //         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+  //       ];
+
+  //     const UserId = decoded[
+  //       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+  //     ];
+  //     // console.log(decoded);
+
+  //     setEmail(emailAddress);
+  //     setuserId(userId)
+  //   }
+  // }, [email]);
 
   // console.log(email);
 
-  const [collapsed, setCollapsed] = useState(false);
+  // const [collapsed, setCollapsed] = useState(false);
 
   // console.log(email);
   return (
@@ -56,7 +55,7 @@ function App() {
         <Routes>
           <Route
             path="/login"
-            element={!email ? <Login /> : <Navigate to="/" />}
+            element={!userId ? <Login /> : <Navigate to="/" />}
           />
            <Route
             path="/register"
@@ -64,7 +63,7 @@ function App() {
           />
           <Route
             path="/"
-            element={email ? <ApiCall /> : <Navigate to="/login" />}
+            element={userId ? <ApiCall /> : <Navigate to="/login" />}
           />
           {/* <Route
             path="/"
@@ -79,7 +78,7 @@ function App() {
             element={!email ? <Navigate to="/login" /> : <Navigate to="/" />}
           /> */}
         </Routes>
-        {email && (
+        {userId &&(
           <Routes>
             <Route path="setting" element={<Setting />}></Route>
             <Route
@@ -87,7 +86,7 @@ function App() {
               element={<StructureOrganization />}></Route>
             <Route
               path="request/payment/view/:requestCode"
-              element={<ViewPayment></ViewPayment>}></Route>
+              element={<ViewPayment userId={userId}></ViewPayment>}></Route>
             <Route path="request/payment" element={<Request />} />
             <Route path="setting/system/employee" element={<Employee />} />
             <Route
