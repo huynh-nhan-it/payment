@@ -44,25 +44,3 @@ export const getBearDepartments = async () => {
     return [];
   }
 };
-
-//POST API
-type PostData = {
-    purpose: string;
-    departmentName: string;
-    paymentFor: string;
-    supplierName: string;
-    currency: string;
-    poNumber: number;
-    paymentMethod: string;
-  };
-  
-  // Hàm gọi API để thực hiện Post dữ liệu
-  export const postPaymentRequest = async (data: PostData) => {
-    try {
-      const response = await axios.post('http://localhost:5005/api/DetailRequest', data);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  };

@@ -78,7 +78,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     getPaymentList();
   }, [
     purpose,
-    requestCode,
+    requestCode,  
     createdDateFrom,
     createDateTo,
     createdBy,

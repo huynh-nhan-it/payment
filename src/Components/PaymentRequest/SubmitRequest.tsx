@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { AppDispatch, store } from "./Store";
 import FormRequest from "./FormRequest";
@@ -8,7 +8,7 @@ import ApproverRequest from "./ApproverRequest";
 import useFormData from "./useData";
 import { useDispatch } from "react-redux";
 import { submitForm } from "./SubmitAPI";
-import { Button, Layout, theme } from "antd";
+import { Alert, Button, Layout, Space, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
@@ -19,25 +19,35 @@ import { Col, Row } from "antd";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { BsFillSendFill } from "react-icons/bs";
 import { MdDrafts } from "react-icons/md";
-// import { updateTypeState } from "./Store/typeSlice";
+import * as showError from "./showError";
+
 const App: React.FC = () => {
   const formData = useFormData();
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
-  const handleClickCard = () => {};
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
   const handleFormSubmit = (typeSave:any) => {
     // Gọi action submitForm
+    if(formData.form.purpose ==''){
+      showError.PurposeError();
+    }
+    else if(formData.form.poPrNumber<0){
+      showError.PoPrError();
+    }
+    else{
     dispatch(submitForm(formData, typeSave));
     console.log(formData, typeSave);
     
     navigate("/request/payment");
+  }
   };
 
   return (
+
     <div>
       <Layout>
         <HeaderRequest />
@@ -101,10 +111,7 @@ const App: React.FC = () => {
                           handleFormSubmit("create-request");
                         }
                           } /> Submit
-                    </a>
-                     
-                      
-                    
+                    </a>                    
                   </Col>
                 </Row>
               </Header>

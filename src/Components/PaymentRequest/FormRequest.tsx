@@ -3,7 +3,7 @@ import {Col, Form, Layout, Row, theme } from 'antd';
 import './RequestDetails.css';
 import { Input, Select } from 'antd';
 import { InputNumber } from 'antd';
-import { getSuppliers, getCurrencies, getDepartments, postPaymentRequest } from '../../Services/PaymentRequest/apiForm'
+import { getSuppliers, getCurrencies, getDepartments} from '../../Services/PaymentRequest/apiForm'
 import { useDispatch, useSelector } from "react-redux";
 import { updatePurpose,
         updateDepartment,
@@ -101,18 +101,7 @@ const FormRequest: React.FC = () => {
 
   
 
-  const onSubmit = async () => {
-    try {
-      const formValues = form.getFieldsValue();
-      const response = await postPaymentRequest(formValues);
-      if (response) {
-        // Xử lý kết quả trả về từ API (nếu cần)
-        console.log(response);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
   console.log(supplier)
   
   return (
@@ -128,7 +117,7 @@ const FormRequest: React.FC = () => {
             <h1 style={{ fontSize: 28 }}>PAYMENT REQUEST</h1>
             <div className="row">
               <div className="font_text">
-                <Form name="paymentRequest" form={form} onFinish={onSubmit}>
+                <Form name="paymentRequest" form={form} >
                   <Row gutter={16}>
                   <Col span={8}>
                   <Form.Item
