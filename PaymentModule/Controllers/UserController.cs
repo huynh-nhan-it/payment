@@ -21,7 +21,6 @@ namespace PaymentModule.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
         public static List<UserModel> users = new List<UserModel>();
         public static List<AccountModel> accounts = new List<AccountModel>();
         public IUserService _userService;
@@ -232,7 +231,10 @@ namespace PaymentModule.Controllers
                     if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
                     return Ok("Please enter the required information");
                 }
-            } 
+            } else
+            {
+                return Ok(prd.files);
+            }
 
 
             var detailRequestDto = new DetailRequestDto

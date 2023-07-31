@@ -78,10 +78,7 @@ namespace PaymentModule.Controllers
                 }
                 
             }
-
-            userWithDetails.Avatar = actStaticPath;
-            _context.SaveChanges();
-            var InfoUser = System.Text.Json.JsonSerializer.Serialize(new { userInfo = userWithDetails }, options);
+            var InfoUser = System.Text.Json.JsonSerializer.Serialize(new { userInfo = userWithDetails, avt = actStaticPath }, options);
             string formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(InfoUser), Formatting.Indented);
             return Ok(formattedJson);
         }
@@ -225,7 +222,32 @@ namespace PaymentModule.Controllers
             if (user == null ) { return BadRequest("User was not found"); }
             var options = new JsonSerializerOptions { WriteIndented = true, ReferenceHandler = ReferenceHandler.Preserve };
 
-            IFormFile Avatar = personal.Avatar;
+            if (personal.Avatar != null)
+            {
+                IFormFile Avatar = personal.Avatar;
+                var asyncHandleAvatar = await _personalService.HandleFile(Avatar, Id, "Avatar");
+                var resultHandleAvatar = asyncHandleAvatar.Value as dynamic;
+                
+                if ((resultHandleAvatar?.success || resultHandleAvatar?.success))
+                {
+                    string name = "signature";
+                    if (resultHandleAvatar?.success) { name = "avatar"; }
+                    var filePath = Path.Combine("wwwroot/image/" + name, Id.ToString());
+                    if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
+
+                    if (resultHandleAvatar?.success && resultHandleAvatar?.success)
+                    {
+                        var fileSignaturePath = Path.Combine("wwwroot/image/signature" + name, Id.ToString());
+                        if (Directory.Exists(fileSignaturePath)) { Directory.Delete(fileSignaturePath, true); }
+                    }
+                }
+
+                /*if (resultHandleAvatar?.error)
+                {
+                    err = resultHandleAvatar.message;
+                }*/
+                user.Avatar = resultHandleAvatar.fileNamePath == null ? user.Avatar : resultHandleAvatar.fileNamePath;
+            }
             string Rank = personal.overview.Rank;
             string EmployeeType = personal.overview.EmployeeType;
 
@@ -253,7 +275,6 @@ namespace PaymentModule.Controllers
             string PostalCode = personal.additional.PostalCode;
             string Country = personal.additional.Country;
             string contracts = personal.additional.Contracts;
-
 
             string MartialStatus = personal.family.MartialStatus;
             string ContactName = personal.family.ContactName;
@@ -331,11 +352,9 @@ namespace PaymentModule.Controllers
             var resultHandleFamily = HandleFamily(family, Id).Value as dynamic;
             var asyncHandleSignature = await HandleSignature(signature, Id);
             var resultHandleSignature = asyncHandleSignature.Value as dynamic;
-            var asyncHandleAvatar = await _personalService.HandleFile(Avatar, Id, "Avatar");
-            var resultHandleAvatar = asyncHandleAvatar.Value as dynamic;
+            
         
-
-            if (resultHandleSignature?.error || resultHandleAdditional?.error || resultHandleFamily?.error || resultHandleOverview?.error || resultHandleAvatar?.error)
+            if (resultHandleSignature?.error || resultHandleAdditional?.error || resultHandleFamily?.error || resultHandleOverview?.error )
             {
                 string err = "";
                 if (resultHandleSignature?.error)
@@ -351,25 +370,6 @@ namespace PaymentModule.Controllers
                     err = resultHandleFamily.message;
                 }
 
-                if (err != "" && (resultHandleAvatar?.success || resultHandleAvatar?.success))
-                {
-                    string name = "signature";
-                    if (resultHandleAvatar?.success) { name = "avatar"; }
-                    var filePath = Path.Combine("wwwroot/image/" + name, Id.ToString());
-                    if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
-
-                    if (resultHandleAvatar?.success && resultHandleAvatar?.success)
-                    {
-                        var fileSignaturePath = Path.Combine("wwwroot/image/signature" + name, Id.ToString());
-                        if (Directory.Exists(fileSignaturePath) ) { Directory.Delete(fileSignaturePath, true); }
-                    }
-                }
-
-                if (resultHandleAvatar?.error)
-                {
-                    err = resultHandleAvatar.message;
-                }
-
                 if (resultHandleSignature?.error)
                 {
                     err = resultHandleSignature.message;
@@ -377,7 +377,7 @@ namespace PaymentModule.Controllers
                 return BadRequest(new {err});
             }
 
-            user.Avatar = resultHandleAvatar.fileNamePath == null ? user.Avatar : resultHandleAvatar.fileNamePath;
+            
             user.Overview = resultHandleOverview.overviewToUpdate;
             user.Additional = resultHandleAdditional.additionalToUpdate;
             user.Family = resultHandleFamily.FamilyToUpdate;
