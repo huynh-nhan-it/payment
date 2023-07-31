@@ -99,6 +99,55 @@ export interface UserInfo {
   }
   
   
+interface EmployeeData {
+    family: {
+      ContactName: string;
+      Relationship: string;
+      MartialStatus: string;
+      PostalCodeFamily: string;
+      BuildingOrFlatNumberFamily: string;
+      PhoneFamily: string;
+      StreetFamily: string;
+      CountryFamily: string;
+      relationships: string;
+      CityFamily: string;
+    };
+    additional: {
+      BuildingOrFlatNumber: string;
+      Phone: string;
+      BusinessPhone: string;
+      HomePhone: string;
+      Street: string;
+      SpecializedQualification: string;
+      BankName: string;
+      Nation: string;
+      Country: string;
+      BankBranchName: string;
+      BranchNumber: string;
+      City: string;
+      BankAccountNumber: string;
+      BankAccountName: string;
+      StartingDate: string;
+      PersonalEmail: string;
+      AcademicLevel: string;
+      ProvinceOrState: string;
+      DateOfIDCard: string;
+      HealthInsurance: string;
+      Note: string;
+      Contracts: string;
+      IDCardNumber: string;
+      PostalCode: string;
+    };
+    overview: {
+      Rank: string;
+      EmployeeType: string;
+    };
+    signature: {
+      QRcode: string;
+      ImageSignature: string;
+    };
+    Avatar: string;
+  }
   interface Family {
     $id: string;
     Id: string;

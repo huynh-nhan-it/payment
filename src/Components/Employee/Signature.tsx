@@ -26,7 +26,21 @@ interface SignatureProps {
   setData: React.Dispatch<React.SetStateAction<MyObject>>;
 }
 
-const Signature: React.FC<SignatureProps> = ({data, setData, isEditable}) => {
+const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
+  console.log(data);
+  const formItems = Object.entries(data).map(([key, value]) => ({
+    label: key,
+    value: value,
+  }));
+  const handleInputChange = (value: string, label: string) => {
+    const updatedData: MyObject = { ...data };
+    setInputText(value);
+
+    updatedData[label] = value;
+
+    setData(updatedData);
+  };
+  console.log(formItems);
   console.log(data);
   const [inputText, setInputText] = useState<string>("");
   const [selectedFont, setSelectedFont] = useState<any>(fontOptions[0]); // Lựa chọn font chữ mặc định
@@ -34,15 +48,18 @@ const Signature: React.FC<SignatureProps> = ({data, setData, isEditable}) => {
     string | ArrayBuffer | null
   >(null);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputText(event.target.value);
-  };
+  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setInputText(event.target.value);
+  // };
 
   const handleFontChange = (selectedOption: any) => {
     setSelectedFont(selectedOption);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    label: string
+  ) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -52,9 +69,19 @@ const Signature: React.FC<SignatureProps> = ({data, setData, isEditable}) => {
       };
       reader.readAsDataURL(file);
     }
+    const fileName = file?.name;
+    console.log(fileName);
+    const updatedData: MyObject = { ...data };
+
+    updatedData[label] = `data/image/signature/a3e4d297-29ae-42f8-a2f7-9d511f31b0b9/${file?.name}`;
+    updatedData['QRcode'] = ''
+    setData(updatedData);
+    // setData(fileName)
+    // setData(fileName, )
   };
 
-  console.log(selectedFont);
+  console.log(data);
+  // console.log(selectedFont);
   const items: TabsProps["items"] = [
     {
       key: "1",
@@ -65,12 +92,19 @@ const Signature: React.FC<SignatureProps> = ({data, setData, isEditable}) => {
             <Col span={12}>
               <div>
                 <label>Confirm Your Name</label>
-                <Input
-                  type="text"
-                  id="inputText"
-                  value={inputText}
-                  onChange={handleInputChange}
-                />
+                {formItems.map(
+                  (item) =>
+                    item.label === "QRcode" && (
+                      <Input
+                        type="text"
+                        id="inputText"
+                        value={inputText}
+                        onChange={(e) =>
+                          handleInputChange(e.target.value, item.label)
+                        }
+                      />
+                    )
+                )}
               </div>
             </Col>
             <Col span={12}>
@@ -130,12 +164,20 @@ const Signature: React.FC<SignatureProps> = ({data, setData, isEditable}) => {
           <Row style={{ paddingTop: 20 }}>
             <Col span={12} offset={6}>
               <div>
-                <Input
-                  style={{ width: "400px" }}
-                  type="file"
-                  accept=".jpg,.jpeg,.png"
-                  onChange={handleImageUpload}
-                />
+                {formItems.map(
+                  (item) =>
+                    item.label === "ImagePath" && (
+                      <Input
+                        style={{ width: "400px" }}
+                        type="file"
+                        accept=".jpg,.jpeg,.png"
+                        // onChange={handleImageUpload}
+                        onChange={(e) =>
+                          handleImageUpload(e, item.label)
+                        }
+                      />
+                    )
+                )}
               </div>
             </Col>
           </Row>
@@ -175,22 +217,19 @@ const Signature: React.FC<SignatureProps> = ({data, setData, isEditable}) => {
   ];
   return (
     <div>
-      {isEditable?
-      
-      <Tabs
-        style={{ padding: "16px" }}
-        defaultActiveKey="1"
-        items={items}
-        onChange={onChange}
-      />
-      : (
-
+      {isEditable ? (
+        <Tabs
+          style={{ padding: "16px" }}
+          defaultActiveKey="1"
+          items={items}
+          onChange={onChange}
+        />
+      ) : (
         <div>
-          <img src={data["img-path"]} alt="qr"></img>
-
+          <img src={`${data["ImagePath"]}`} alt="qr"></img>
+          
         </div>
-      )
-    }
+      )}
     </div>
   );
 };

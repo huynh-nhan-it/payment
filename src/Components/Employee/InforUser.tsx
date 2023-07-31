@@ -1,173 +1,4 @@
-// import React, { useEffect, useState } from "react";
-// import HeaderEmployee from "./Header";
-// import { TbUserEdit } from "react-icons/tb";
-// import "./employee.css";
-// import { TabsProps } from 'antd';
-// import { Tabs } from 'antd';
-// import Overview from "./Overview";
-// import Additional from "./Additional";
-// import Family from "./Family";
-// import Properties from "./Properties";
-// import Signature from "./Signature";
-
-// import jsonData from './api.json';
-// import { BsFillCameraFill } from "react-icons/bs";
-// import { AiOutlineCamera } from "react-icons/ai";
-// import Avatar from "./Avatar";
-// import { getEmployeeInfor } from "../../Services/User/getAccount";
-
-// interface Employee {
-//   key: string;
-//   name: string;
-//   infor: string;
-//   isEditable: boolean;
-//   type: string;
-// }
-
-// interface AdditionalInfor {
-//   key: string;
-//   label: string;
-//   children: {
-//     key: string;
-//     name: string;
-//     infor: string | number;
-//     isEditable: boolean;
-//     type: string;
-//   }[];
-// }
-
-// interface FamilyInfor {
-//   key: string;
-//   label: string;
-//   children: {
-//     key: string;
-//     name: string;
-//     infor: string | number;
-//     isEditable: boolean;
-//     type: string;
-//   }[]
-// }
-
-// const initialDataOverview: Employee[] = jsonData.initialDataOverview;
-// const initialDataAdditional: AdditionalInfor[] = jsonData.initialDataAdditional;
-// const initialdataFamilyamily: FamilyInfor[] = jsonData.initialdataFamilyamily;
-
-// // Access and work with the initialData array here
-// // console.log(initialDataAdditional);
-
-// const InforUser = () => {
-
-//   const [dataEmployee, setDataExcel] = useState();
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-//   const fetchData = async () => {
-//     try {
-//       const data = await getEmployeeInfor();
-//       console.log(data.userInfo.Overview);
-//       setDataExcel(data);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-//   const onChange = (key: string) => {
-//     console.log(key);
-//   };
-//   const [editable, setEditable] = useState(false);
-//   const [dataOverview, setDataOverview] = useState(initialDataOverview)
-//   const [dataAdditional, setDataAdditional] = useState<AdditionalInfor[]>(initialDataAdditional)
-//   const [dataFamilyamily, setdataFamilyamily] = useState<FamilyInfor[]>(initialdataFamilyamily)
-//   const [data, setData] = useState<[Employee[], AdditionalInfor[], FamilyInfor[]]>([dataOverview, dataAdditional, dataFamilyamily])
-
-//   const items: TabsProps['items'] = [
-//     {
-//       key: '1',
-//       label: `Overview`,
-//       children: <Overview
-//         data={dataOverview}
-//         setData={setDataOverview}
-//         isEditable={editable} />,
-//     },
-//     {
-//       key: '2',
-//       label: `Additional`,
-//       children: <Additional
-//         data={dataAdditional}
-//         setData={setDataAdditional}
-//         isEditable={editable}
-//       />
-//     },
-//     {
-//       key: '3',
-//       label: `Family`,
-//       children: <Family
-//         data={dataFamilyamily}
-//         setData={setdataFamilyamily}
-//         isEditable={editable}
-//       />,
-//     },
-//     {
-//       key: '4',
-//       label: `Properties`,
-//       children: <Properties />,
-//     },
-//     {
-//       key: '5',
-//       label: `Signature`,
-//       children: <Signature />,
-//     },
-//   ];
-//   const handleClickEdit = () => {
-//     setEditable(true);
-//   }
-
-//   const handleUpdateAvatar = () =>{
-//     console.log("avata");
-//   }
-//   return (
-//     <div>
-//       <HeaderEmployee setEditable={setEditable} data={data as [Employee[], AdditionalInfor[], FamilyInfor[]]} isEditable={editable} />
-//       <div className="employee-avatar-name-edit">
-//         <h2 className="name-employee">
-//         {editable &&
-//         <span style={{
-//           border: "#ccc solid 0.1px",
-//           borderRadius: "50%",
-//           background: "#555",
-//           padding: "5px 9px",
-//           position: "relative",
-//           right: "-30px"
-//         }}
-//           onClick={handleUpdateAvatar}
-//         >
-
-//           <BsFillCameraFill style={{color:"#fff"}}/>
-//         </span>
-//         }
-//           <span>
-
-//           <Avatar/>
-//             {/* <img
-//               className="avatar-employee"
-//               src="https://img.freepik.com/free-icon/user_318-159711.jpg"></img> */}
-
-//           </span>Bang Nguyen Minh </h2>
-//         <div onClick={handleClickEdit} className="edit-employee">
-//           {!editable && <TbUserEdit />}
-//         </div>
-
-//       </div>
-//       <Tabs style={{ padding: "16px" }} defaultActiveKey="1" items={items} onChange={onChange} />
-//     </div>
-//   );
-// };
-
-// export default InforUser;
-
 import React, { useEffect, useState } from "react";
-import HeaderEmployee from "./Header";
 import { TbUserEdit } from "react-icons/tb";
 import "./employee.css";
 import { TabsProps } from "antd";
@@ -178,168 +9,24 @@ import Family from "./Family";
 import Properties from "./Properties";
 import Signature from "./Signature";
 
-import jsonData from "./api.json";
-import { BsFillCameraFill } from "react-icons/bs";
-import { AiOutlineCamera, AiOutlineSave } from "react-icons/ai";
+import { AiOutlineSave } from "react-icons/ai";
 import Avatar from "./Avatar";
 import request from "../../Services/User/getAccount";
 import { Header } from "antd/es/layout/layout";
 import { TiArrowBackOutline } from "react-icons/ti";
-import { AdditionalInfor, Contract, UserInfo } from "./Interface";
-// import { Data } from "./Data";
-
-// interface UserInfoEdit {
-//   Overview: {
-//     EmployeeType: string;
-//     Rank: string;
-//   };
-//   Additional: {
-//     Nation: string;
-//     IDCardNumber: string;
-//     DateOfIDCard: string;
-//     PlaceOfIDCard: string;
-//     HealthInsurance: string;
-//     StartingDate: string;
-//     Note: string;
-//     AcademicLevel: string;
-//     SpecializedQualification: string;
-//     BusinessPhone: string;
-//     HomePhone: string;
-//     PersonalEmail: string;
-//     BankName: string;
-//     BranchNumber: string;
-//     BankBranchName: string;
-//     BankAccountNumber: string;
-//     BankAccountName: string;
-//     Street: string;
-//     BuildingOrFlatNumber: string;
-//     City: string;
-//     ProvinceOrState: string;
-//     PostalCode: string;
-//     Country: string;
-//   };
-//   Family: {
-//     MartialStatus: string;
-//     ContactName: string;
-//     Relationship: string;
-//     Phone: string;
-//     Street: string;
-//     BuildingOrFlatNumber: string;
-//     City: string;
-//     ProvinceOrState: string;
-//     PostalCode: string;
-//     Country: string;
-//   };
-//   Avatar: string;
-// }
-
-interface EmployeeData {
-  additional: {
-    BuildingOrFlatNumber: string;
-    family: {
-      ContactName: string;
-      Relationship: string;
-      MartialStatus: string;
-      PostalCodeFamily: string;
-      BuildingOrFlatNumberFamily: string;
-      PhoneFamily: string;
-      StreetFamily: string;
-      CountryFamily: string;
-      relationships: string;
-      CityFamily: string;
-    };
-    Phone: string;
-    BusinessPhone: string;
-    HomePhone: string;
-    Street: string;
-    SpecializedQualification: string;
-    BankName: string;
-    Nation: string;
-    Country: string;
-    BankBranchName: string;
-    BranchNumber: string;
-    City: string;
-    BankAccountNumber: string;
-    BankAccountName: string;
-    StartingDate: string;
-    PersonalEmail: string;
-    AcademicLevel: string;
-    ProvinceOrState: string;
-    DateOfIDCard: string;
-    HealthInsurance: string;
-    Note: string;
-    Contracts: string;
-    IDCardNumber: string;
-    PostalCode: string;
-  };
-  overview: {
-    Rank: string;
-    EmployeeType: string;
-  };
-  signature: {
-    QRcode: string;
-    ImageSignature: string;
-  };
-  Avatar: string;
-}
-const initialDataAdditional: AdditionalInfor = {
-  $id: '',
-  Id: '',
-  UserId: '',
-  User: {
-    $ref: '',
-  },
-  Nation: '',
-  IDCardNumber: '',
-  DateOfIDCard: '',
-  PlaceOfIDCard: '',
-  HealthInsurance: '',
-  StartingDate: '',
-  StartingDateOfficial: '',
-  LeavingDate: '',
-  StartDateMaternityLeave: '',
-  Note: '',
-  AcademicLevel: '',
-  SpecializedQualification: '',
-  BusinessPhone: '',
-  HomePhone: '',
-  PersonalEmail: '',
-  BankName: '',
-  BranchNumber: '',
-  BankBranchName: '',
-  BankAccountNumber: '',
-  BankAccountName: '',
-  Street: '',
-  BuildingOrFlatNumber: '',
-  City: '',
-  ProvinceOrState: '',
-  PostalCode: '',
-  Country: '',
-  contracts: {
-    $id: '',
-    $values: [],
-  },
-};
-
-// Create an example Contract object
-const contract1: Contract = {
-  $id: 'contract1Id',
-  Id: 'contract1Id',
-  ContractType: 'Full-time',
-  FromDate: '2023-07-28',
-  ToDate: '2024-07-27',
-  SigningDate: '2023-07-28',
-  Subject: 'Employment Contract',
-  Department: 'HR Department',
-  Note: 'This is a sample contract.',
-};
+import { UserInfo } from "./Interface";
+import axios from "axios";
 
 const InforUser = () => {
   const [dataOverview, setDataOverview] = useState<Record<string, string>>({});
   const [dataName, setDataName] = useState("");
-  const [dataSignature, setDataSignature] = useState<Record<string, string>>({});
-  const [dataFamily, setdataFamily] = useState<Record<string, string>>({});
-  const [dataAdditional, setDataAdditional] = useState<Record<string, string>>({});
+  const [dataSignature, setDataSignature] = useState<Record<string, string>>(
+    {}
+  );
+  const [dataFamily, setDataFamily] = useState<Record<string, string>>({});
+  const [dataAdditional, setDataAdditional] = useState<Record<string, string>>(
+    {}
+  );
   const [dataEmployee, setDataEmployee] = useState<UserInfo>();
 
   const id = localStorage.getItem("id");
@@ -347,35 +34,66 @@ const InforUser = () => {
   useEffect(() => {
     const getUserInfor = async () => {
       const endpoint = "/Personal/EmployeeInfo?Id=" + id;
-      const response = await request.get(endpoint).then((res) => {
-        console.log(res.data.userInfo);
+      request.get(endpoint).then((res) => {
         setDataName(
           res.data.userInfo.FirstName + " " + res.data.userInfo.LastName
         );
         setDataEmployee(res.data.userInfo);
-        setDataOverview(res.data.userInfo.Overview);
         setDataAdditional(res.data.userInfo.Additional);
-        setdataFamily(res.data.userInfo.Family);
+
         setDataSignature(res.data.userInfo.Signature);
+        if (res.data.userInfo.Additional) {
+          const sanitizedAdditionalData: Record<string, string> = {};
+          Object.entries(res.data.userInfo.Additional).forEach(([key, value]) => {
+            if (typeof value === "string") {
+              sanitizedAdditionalData[key] = value;
+            } else {
+              sanitizedAdditionalData[key] = "";
+            }
+          });
+          setDataAdditional(sanitizedAdditionalData);
+        }
+        if (res.data.userInfo.Overview) {
+          const sanitizedOverviewData: Record<string, string> = {};
+          Object.entries(res.data.userInfo.Overview).forEach(([key, value]) => {
+            if (typeof value === "string") {
+              sanitizedOverviewData[key] = value
+            }
+            else if (typeof value === "number") {
+              sanitizedOverviewData[key] = String(value);
+            }
+            else {
+              sanitizedOverviewData[key] = "";
+            }
+          });
+          setDataOverview(sanitizedOverviewData);
+        }
+        if (res.data.userInfo.Family) {
+          const sanitizedFamilyData: Record<string, string> = {};
+          Object.entries(res.data.userInfo.Family).forEach(([key, value]) => {
+            if (typeof value === "string") {
+              sanitizedFamilyData[key] = value;
+            }
+            else {
+              sanitizedFamilyData[key] = "";
+            }
+          });
+          setDataFamily(sanitizedFamilyData);
+        }
       });
     };
 
     getUserInfor();
-  }, []);
-
-  console.log(dataAdditional);
-
-  // http://localhost:5005/api/Personal/EditInfoEmployee?Id=
+  }, [id]);
 
   const newDataOverview = {
-    "First-name": dataEmployee?.FirstName,
-    "Last-name": dataEmployee?.LastName,
+    "First name": dataEmployee?.FirstName,
+    "Last name": dataEmployee?.LastName,
     Login: dataEmployee?.Email,
     Email: dataEmployee?.Email,
-    "Job-Title": dataEmployee?.JobTitle,
+    "Job Title": dataEmployee?.JobTitle,
   };
   const mergedObject = { ...newDataOverview, ...dataOverview };
-
 
   const onChange = (key: string) => {
     console.log(key);
@@ -398,9 +116,9 @@ const InforUser = () => {
       AcademicLevel: dataAdditional["AcademicLevel"],
       SpecializedQualification: dataAdditional["SpecializedQualification"],
       BusinessPhone: dataAdditional["BusinessPhone"],
-      HomePhone: dataAdditional["Phone"],
+      HomePhone: dataAdditional["HomePhone"],
       PersonalEmail: dataAdditional["PersonalEmail"],
-      BankName: dataAdditional["Bank account"],
+      BankName: dataAdditional["BankName"],
       BranchNumber: dataAdditional["BranchNumber"],
       BankBranchName: dataAdditional["BankBranchName"],
       BankAccountNumber: dataAdditional["BankAccountNumber"],
@@ -420,14 +138,16 @@ const InforUser = () => {
       Street: dataFamily["Street"],
       BuildingOrFlatNumber: dataFamily["BuildingOrFlatNumber"],
       City: dataFamily["City"],
-      ProvinceOrState: dataFamily["ProvinceState"],
+      ProvinceOrState: dataFamily["ProvinceOrState"],
       PostalCode: dataFamily["PostalCode"],
       Country: dataFamily["Country"],
     },
+    signature: {
+      QRcode: dataSignature["QRcode"],
+      ImageSignature: dataSignature["ImagePath"],
+    },
     Avatar: "test",
   };
-  // console.log(dataAdditional["Data"]);
-  console.log(dataEditUserInfo);
   const items: TabsProps["items"] = [
     {
       key: "1",
@@ -457,7 +177,7 @@ const InforUser = () => {
       children: (
         <Family
           data={dataFamily}
-          setData={setdataFamily}
+          setData={setDataFamily}
           isEditable={editable}
         />
       ),
@@ -470,11 +190,13 @@ const InforUser = () => {
     {
       key: "5",
       label: `Signature`,
-      children: <Signature 
+      children: (
+        <Signature
           data={dataSignature}
           setData={setDataSignature}
           isEditable={editable}
-      />,
+        />
+      ),
     },
   ];
   const handleClickEdit = () => {
@@ -485,95 +207,147 @@ const InforUser = () => {
     console.log("avata");
   };
 
-  const initialEmployeeData: EmployeeData = {
-    additional: {
-      BuildingOrFlatNumber: '',
-      family: {
-        ContactName: '',
-        Relationship: '',
-        MartialStatus: '',
-        PostalCodeFamily: '',
-        BuildingOrFlatNumberFamily: '',
-        PhoneFamily: '',
-        StreetFamily: '',
-        CountryFamily: '',
-        relationships: '',
-        CityFamily: '',
-      },
-      Phone: '',
-      BusinessPhone: '',
-      HomePhone: '',
-      Street: '',
-      SpecializedQualification: '',
-      BankName: '',
-      Nation: '',
-      Country: 'test',
-      BankBranchName: 'test',
-      BranchNumber: '',
-      City: '',
-      BankAccountNumber: '',
-      BankAccountName: '',
-      StartingDate: '',
-      PersonalEmail: '',
-      AcademicLevel: '',
-      ProvinceOrState: '',
-      DateOfIDCard: '',
-      HealthInsurance: '',
-      Note: '',
-      Contracts: '',
-      IDCardNumber: '',
-      PostalCode: '',
-    },
-    overview: {
-      Rank: '',
-      EmployeeType: '',
-    },
-    signature: {
-      QRcode: '',
-      ImageSignature: '',
-    },
-    Avatar: '',
-  };
+  // Now, the formData object contains all the data from the initialEmployeeData object
+  const token = localStorage.getItem("authToken");
+
+  // console.log(dataEditUserInfo.additional);
+  const handleClickSave = async () => {
+    setEditable(false);
+
+
   const formData = new FormData();
 
   // Thêm các thuộc tính và giá trị từ object data vào FormData
-  formData.append('overview', JSON.stringify(dataEditUserInfo.overview));
-  formData.append('additional', JSON.stringify(dataEditUserInfo.additional));
-  formData.append('family', JSON.stringify(dataEditUserInfo.family));
-  formData.append('Avatar', dataEditUserInfo.Avatar);
-  
-  // console.log(JSON.stringify(dataEditUserInfo.overview));
-  // console.log(formData);
-  // console.log(formData.get('overview'));
-  // console.log(dataEditUserInfo.additional);
-  const handleClickSave =  async ()  => {
-    setEditable(false);
+  formData.append("overview[Rank]", dataEditUserInfo.overview.Rank);
+  formData.append(
+    "overview[EmployeeType]",
+    dataEditUserInfo.overview.EmployeeType
+  );
+  formData.append(
+    "additional.BuildingOrFlatNumber",
+    dataEditUserInfo.additional.BuildingOrFlatNumber
+  );
+  formData.append("additional.Phone", dataEditUserInfo.additional.HomePhone);
+  formData.append(
+    "additional.BusinessPhone",
+    dataEditUserInfo.additional.BusinessPhone
+  );
+  formData.append(
+    "additional.HomePhone",
+    dataEditUserInfo.additional.HomePhone
+  );
+  formData.append("additional.Street", dataEditUserInfo.additional.Street);
+  formData.append(
+    "additional.SpecializedQualification",
+    dataEditUserInfo.additional.SpecializedQualification
+  );
+  formData.append("additional.BankName", dataEditUserInfo.additional.BankName);
+  formData.append(
+    "additional.PlaceOfIDCard",
+    dataEditUserInfo.additional.PlaceOfIDCard
+  );
+  formData.append("additional.Nation", dataEditUserInfo.additional.Nation);
+  formData.append("additional.Country", dataEditUserInfo.additional.Country);
+  formData.append(
+    "additional.BankBranchName",
+    dataEditUserInfo.additional.BankBranchName
+  );
+  formData.append(
+    "additional.BranchNumber",
+    dataEditUserInfo.additional.BranchNumber
+  );
+  formData.append("additional.City", dataEditUserInfo.additional.City);
+  formData.append(
+    "additional.BankAccountNumber",
+    dataEditUserInfo.additional.BankAccountNumber
+  );
+  formData.append(
+    "additional.BankAccountName",
+    dataEditUserInfo.additional.BankAccountName
+  );
+  formData.append(
+    "additional.StartingDate",
+    dataEditUserInfo.additional.StartingDate
+  );
+  formData.append(
+    "additional.PersonalEmail",
+    dataEditUserInfo.additional.PersonalEmail
+  );
+  formData.append(
+    "additional.AcademicLevel",
+    dataEditUserInfo.additional.AcademicLevel
+  );
+  formData.append(
+    "additional.ProvinceOrState",
+    dataEditUserInfo.additional.ProvinceOrState
+  );
+  formData.append(
+    "additional.DateOfIDCard",
+    dataEditUserInfo.additional.DateOfIDCard
+  );
+  formData.append(
+    "additional.HealthInsurance",
+    dataEditUserInfo.additional.HealthInsurance
+  );
+  formData.append("additional.Note", dataEditUserInfo.additional.Note);
+  formData.append(
+    "additional.IDCardNumber",
+    dataEditUserInfo.additional.IDCardNumber
+  );
+  formData.append(
+    "additional.PostalCode",
+    dataEditUserInfo.additional.PostalCode
+  );
+  formData.append("family.ContactName", dataEditUserInfo.family.ContactName);
+  formData.append("family.Relationship", dataEditUserInfo.family.Relationship);
+  formData.append(
+    "family.MartialStatus",
+    dataEditUserInfo.family.MartialStatus
+  );
+  formData.append(
+    "family.PostalCodeFamily",
+    dataEditUserInfo.family.PostalCode
+  );
+  formData.append(
+    "family.BuildingOrFlatNumberFamily",
+    dataEditUserInfo.family.BuildingOrFlatNumber
+  );
+  formData.append("family.PhoneFamily", dataEditUserInfo.family.Phone);
+  formData.append("family.StreetFamily", dataEditUserInfo.family.Street);
+  formData.append("family.CountryFamily", dataEditUserInfo.family.Country);
+  formData.append(
+    "family.ProvinceOrStateFamily",
+    dataEditUserInfo.family.ProvinceOrState
+  );
+  formData.append("family.relationships", "");
+  formData.append("family.CityFamily", dataEditUserInfo.family.City);
+  formData.append("signature.QRcode", dataEditUserInfo.signature.QRcode);
+  formData.append(
+    "signature.ImageSignature",
+    dataEditUserInfo.signature.ImageSignature
+  );
+  formData.append("Avatar", dataEditUserInfo.Avatar);
 
-    try {
-      console.log(initialEmployeeData);
-  
-      const response = await request.put("/Personal/EditInfoEmployee?Id=" + id, formData);
-      console.log(response.data);
-      // Xử lý phản hồi thành công (nếu cần)
-  
-    } catch (error) {
-      console.error("Error occurred:", error);
-      // Xử lý lỗi ở đây (nếu cần)
-    }
-    // const EditUserInfo = async () => {
-    //   const endpoint = "/Personal/EditInfoEmployee?Id=" + id;
-    //   const response = await request
-    //     .put(endpoint, initialEmployeeData)
-    //     .then((res) => {
-    //       console.log(res.data);
-    //     });
-    // };
+    const headers = {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    };
 
-    // EditUserInfo();
+    // Send the PUT request using Axios
+    const API_URL = "http://localhost:5005/api/";
+    const url = `${API_URL}Personal/EditInfoEmployee?Id=${id}`;
+    console.log(url);
+    axios
+      .put(url, formData, { headers })
+      .then((response) => {
+        // Handle the response if needed
+        console.log("Data updated successfully:", response.data);
+      })
+      .catch((error) => {
+        // Handle errors if any
+        console.error("Error updating data:", error);
+      });
   };
-  // http://localhost:5005/api/Personal/EditInfoEmployee?Id=07A2FE81-BBD7-47C0-8095-668596515EFB
-
-  // http://localhost:5005/api/Personal/EditInfoEmployee?Id=07a2fe81-bbd7-47c0-8095-668596515efb
   return (
     <div>
       <Header
@@ -584,7 +358,9 @@ const InforUser = () => {
           marginTop: "64px",
           alignItems: "center",
         }}>
-        <div style={{paddingLeft:"50px"}} onClick={handleClickSave}>{editable && <AiOutlineSave />}</div>
+        <div style={{ paddingLeft: "50px" }} onClick={handleClickSave}>
+          {editable && <AiOutlineSave />}
+        </div>
         <div className="return-employee">
           <a href="/setting" className="text-header">
             <TiArrowBackOutline />
@@ -594,14 +370,13 @@ const InforUser = () => {
       </Header>
       <div className="employee-avatar-name-edit">
         <h2 className="name-employee">
-          
           <span>
             <Avatar />
             {/* <img
               className="avatar-employee"
               src="https://img.freepik.com/free-icon/user_318-159711.jpg"></img> */}
           </span>
-         {dataName}
+          {dataName}
         </h2>
         <div onClick={handleClickEdit} className="edit-employee">
           {!editable && <TbUserEdit />}

@@ -25,9 +25,13 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
 
     setData(updatedData);
   };
-  console.log(formItems);
-  console.log(data);
-
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month < 10 ? "0" + month : month}/${year}`;
+  };
   return (
     <div>
       <Form>
@@ -75,7 +79,9 @@ const Overview: React.FC<OverviewProps> = ({ data, isEditable, setData }) => {
                 )
               ) : (
                 <span style={{ display: "flex", alignItems: "start" }}>
-                  {item.value}
+                  {item.label === "BirthDay"
+                    ? formatDate(item.value)
+                    : item.value}
                 </span>
               )}
             </Form.Item>

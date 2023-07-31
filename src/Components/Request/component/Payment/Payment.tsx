@@ -65,7 +65,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   // console.log(filteredData.createdDateFrom);
   useEffect(() => {
     const getPaymentList = async () => {
-      const endpoint = `PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`;
+      const endpoint = `PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}`;
       // console.log(endpoint);
       const response = await request.get(endpoint).then((res) => {
         // console.log(res.data);
@@ -78,12 +78,11 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     getPaymentList();
   }, [
     purpose,
-    requestCode,  
+    requestCode,
     createdDateFrom,
     createDateTo,
     createdBy,
     status,
-    currentPage,
   ]);
   console.log(totalPage);
   const handleSetCurrentPage = (page: any) => {
@@ -139,6 +138,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
           Draft: "#2F85EF",
           Rejected: "#FF0000",
           Approving: "#FFA500",
+          Done: 'rgb(22, 124, 130)'
         };
         const backgroundColor = statusColors[record.status] || "#000000"; // Default color if status not found
 
@@ -176,12 +176,12 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
           onClick: () => handleRowClick(record.requestCode),
         })}
         rowKey="requestCode"
-        pagination={{
-          pageSize:10,
-          current: currentPage,
-          total: totalPage, // Replace with the total number of records from the API
-          onChange: (page) => handleSetCurrentPage(page),
-        }}
+        // pagination={{
+        //   pageSize:10,
+        //   current: currentPage,
+        //   total: totalPage, // Replace with the total number of records from the API
+        //   onChange: (page) => handleSetCurrentPage(page),
+        // }}
         scroll={{ x: "max-content" }}
       />
     </>
