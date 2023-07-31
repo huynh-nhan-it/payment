@@ -38,9 +38,6 @@ builder.Services.AddScoped<IPaymentRequestService, PaymentRequestService>();
 builder.Services.AddScoped<IDetailRequestService, DetailRequestService>();
 builder.Services.AddScoped<IPersonalService, PersonalService>();
 builder.Services.AddScoped<IValidation, Validation>();
-
-
-//Add 
 builder.Services.AddHttpContextAccessor();
 
 //Add DBContext
@@ -55,9 +52,9 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -80,13 +77,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("CORS");
 app.MapControllers();
-
 app.Run();

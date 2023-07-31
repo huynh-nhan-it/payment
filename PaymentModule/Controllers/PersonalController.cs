@@ -64,11 +64,25 @@ namespace PaymentModule.Controllers
             {
                 return BadRequest("User was not found");
             }
+            string avt = userWithDetails.Avatar; //lấy avt cũ
+            string[] avtString = avt.Split("/");
+            string actStaticPath = "http://localhost:5005/";
+            for(int i = 1; i < avtString.Length; i++)
+            {
+                if(i == avtString.Length - 1)
+                {
+                    actStaticPath += avtString[i];
+                } else
+                {
+                    actStaticPath += avtString[i] + "/";
+                }
+                
+            }
 
+            userWithDetails.Avatar = actStaticPath;
+            _context.SaveChanges();
             var InfoUser = System.Text.Json.JsonSerializer.Serialize(new { userInfo = userWithDetails }, options);
             string formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(InfoUser), Formatting.Indented);
-
-
             return Ok(formattedJson);
         }
 
@@ -341,12 +355,12 @@ namespace PaymentModule.Controllers
                 {
                     string name = "signature";
                     if (resultHandleAvatar?.success) { name = "avatar"; }
-                    var filePath = Path.Combine("data/image/" + name, Id.ToString());
+                    var filePath = Path.Combine("wwwroot/image/" + name, Id.ToString());
                     if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
 
                     if (resultHandleAvatar?.success && resultHandleAvatar?.success)
                     {
-                        var fileSignaturePath = Path.Combine("data/image/signature" + name, Id.ToString());
+                        var fileSignaturePath = Path.Combine("wwwroot/image/signature" + name, Id.ToString());
                         if (Directory.Exists(fileSignaturePath) ) { Directory.Delete(fileSignaturePath, true); }
                     }
                 }

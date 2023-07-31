@@ -38,7 +38,7 @@ namespace PaymentModule.Services.Implements
                 switch (type)
                 {
                     case "Avatar":
-                        directoryPath = Path.Combine("data/image/avatar", userId.ToString());
+                        directoryPath = Path.Combine("wwwroot/image/avatar", userId.ToString());
                         if (Directory.Exists(directoryPath)) {
                             Directory.Delete(directoryPath, true);
                         }
@@ -52,7 +52,7 @@ namespace PaymentModule.Services.Implements
                         break;
 
                     case "Signature":
-                        directoryPath = Path.Combine("data/image/signature", userId.ToString());
+                        directoryPath = Path.Combine("wwwroot/image/signature", userId.ToString());
                         if (Directory.Exists(directoryPath)) { Directory.Delete(directoryPath, true); }
                         Directory.CreateDirectory(directoryPath);
                         fileNamePath = Path.Combine(directoryPath, file.FileName);

@@ -25,11 +25,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="data\image\avatar\" />
-    <Folder Include="data\image\signature\" />
-    <Folder Include="data\request\" />
     <Folder Include="ExcelFiles\" />
     <Folder Include="PdfFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Approver.txt" />
+    <None Include="wwwroot\department-bear-the-cost.txt" />
+    <None Include="wwwroot\image\avatar\a3e4d297-29ae-42f8-a2f7-9d511f31b0b9\logo192.png" />
+    <None Include="wwwroot\image\signature\9c9bcae3-8dfc-4d61-b43b-0127a84a5aeb\logo192.png" />
+    <None Include="wwwroot\image\signature\a3e4d297-29ae-42f8-a2f7-9d511f31b0b9\wallpaperflare.com_wallpaper.jpg" />
+    <None Include="wwwroot\request\088bc73b-c17f-4ddd-8267-d47ca9af5800\漂染工厂络整工段紧式操作员作业指导书.doc" />
+    <None Include="wwwroot\request\6a2ec036-27cf-4103-a2d2-c966979cc825\Thanh toan.v1.2.xlsx" />
+    <None Include="wwwroot\request\6ecedbfc-b106-4438-8f0e-a42c586aad67\logo192.png" />
+    <None Include="wwwroot\request\6ecedbfc-b106-4438-8f0e-a42c586aad67\logo512.png" />
+    <None Include="wwwroot\request\8304545c-137e-4f7a-80a4-303ef4c9e3b9\2023OPS-PAY-000010.pdf" />
+    <None Include="wwwroot\request\9b92072d-132a-4678-ad76-bbaa5c4138db\logo192.png" />
+    <None Include="wwwroot\request\a92e12ec-4e78-4b76-9496-f3d1eb325cc9\2023OPS-PAY-000010.pdf" />
+    <None Include="wwwroot\request\b8ed4a07-d8cf-440d-a4a9-7e929de2722d\2023OPS-PAY-000010.pdf" />
+    <None Include="wwwroot\request\e3146c14-1118-443a-989d-7bc270d0ec69\2023OPS-PAY-000010.pdf" />
+    <None Include="wwwroot\request\f05fcf5d-286c-493a-96d4-90ef2dc32593\2023OPS-PAY-000010.pdf" />
   </ItemGroup>
 
 </Project>
