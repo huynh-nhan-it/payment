@@ -2,13 +2,17 @@ import { LinkOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Layout, Row, Upload, UploadProps, theme } from 'antd';
 import React from 'react';
 import './RequestDetails.css'
+import { setSelectedFile } from './Store/attachmentSlice';
 const { Content } = Layout;
-const AttachmentRequest:React.FC = () => { 
+const AttachmentRequest:React.FC = () => {
+
     const props: UploadProps = {
         action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
         onChange({ file, fileList }) {
           if (file.status !== "uploading") {
             console.log(file, fileList);
+            
+            setSelectedFile(fileList)
           }
         },
       };  

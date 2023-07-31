@@ -8,7 +8,7 @@ const useFormData = () => {
     table: state.table,
     approve: state.approve,
     cal: state.cal,
-    // type: state.type
+    attachment: state.attachment
   }));
 
   return formData;

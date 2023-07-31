@@ -31,20 +31,41 @@ const App: React.FC = () => {
   } = theme.useToken();
 
   const handleFormSubmit = (typeSave:any) => {
-    // Gọi action submitForm
+    //Gọi action submitForm
     if(formData.form.purpose ==''){
       showError.PurposeError();
     }
-    else if(formData.form.poPrNumber<0){
+    else if(formData.form.department ==''){
+      showError.DepartmentError();
+    }
+    else if(formData.form.paymentFor ==''){
+      showError.PaymentForError();
+    }
+    else if(formData.form.supplier ==''){
+      showError.SupplierError();
+    }
+    else if(formData.form.currency ==''){
+      showError.CurrencyError();
+    }
+    else if(formData.form.poPrNumber==0){
       showError.PoPrError();
+    }
+    else if((formData.form.exchangeRate || formData.form.poPrNumber)<0){
+      showError.NumberError();
     }
     else{
     dispatch(submitForm(formData, typeSave));
     console.log(formData, typeSave);
+<<<<<<< Updated upstream
 
     navigate("/request/payment");
   }
+=======
+    //navigate("/request/payment");
+    
+>>>>>>> Stashed changes
   };
+}
 
   return (
 

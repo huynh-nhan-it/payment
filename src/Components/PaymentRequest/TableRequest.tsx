@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, UploadProps, List } from 'antd';
+import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, UploadProps, List, message, notification } from 'antd';
 import { Layout, Menu, theme, DatePicker,Select, MenuProps } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import {Col, Row} from 'antd';
@@ -51,7 +51,7 @@ interface Item {
     invDate: string;
     paymentContent: string;
     amount: number;
-    invNo: string;
+    invNo: number;
     industry: string;
     departmentBear: string;
     note: string;
@@ -61,7 +61,7 @@ interface Item {
     invDate: string;
     paymentContent: string;
     amount: number;
-    invNo: string;
+    invNo: number;
     industry: string;
     departmentBear: string;
     note: string;
@@ -93,8 +93,8 @@ interface Item {
       children,
       ...restProps
     }) => {
-      const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-    
+      const inputNode = inputType === 'number' ? <InputNumber maxLength={14} /> : <Input />;
+      
       return (
         <td {...restProps}>
           {editing ? (
@@ -103,7 +103,7 @@ interface Item {
               style={{ margin: 0 }}
               rules={[
                 {
-                  required: true,
+                  required: ['invDate', 'paymentContent', 'amount'].includes(dataIndex),
                   message: `Please Input ${title}!`,
                 },
               ]}
@@ -116,6 +116,7 @@ interface Item {
               :
               dataIndex === 'departmentBear' ? (
                 <Select
+                showSearch
                 defaultValue="Nothing selected"
                 style={{ width: 200 }}       
             > 
@@ -145,7 +146,7 @@ interface Item {
         invDate: '',
         paymentContent: '',
         amount: 0,
-        invNo: '',
+        invNo: 0,
         industry: '',
         departmentBear:'',
         note: '',
@@ -240,6 +241,12 @@ interface Item {
         ...record });
       setEditingKey(record.key);
     };
+
+    useEffect(() => {
+      // Thực hiện gọi hàm edit với record bạn muốn chỉnh sửa mặc định khi trang được tải
+      const recordToEdit = { key: '0', invDate: '', paymentContent: '', amount: 0, invNo: 0, industry: '', cost_departmentBear: '', note: '' };
+      edit(recordToEdit);
+    }, []); // [] đảm bảo rằng useEffect chỉ được gọi một lần khi trang được tải
   
     const cancel = () => {
       setEditingKey('');
@@ -253,6 +260,14 @@ interface Item {
         const row = (await form.validateFields()) as Item;
         const newData = [...tableData];
         const index = newData.findIndex((item) => key === item.key);
+        if (row.amount < 0 || row.invNo < 0) {
+          // Hiển thị cảnh báo
+          notification.error({
+            message: 'Number Error :(',
+            description: 'You already entered a Invalid Number. Amount or Invoice/Rec No cannot nagative. Please enter agian !',
+          });
+          return; // Dừng tiến trình lưu nếu có lỗi
+        }
         if (index > -1) {
           const item = newData[index];
           newData.splice(index, 1, {
@@ -390,7 +405,7 @@ interface Item {
         ...col,
         onCell: (record: Item) => ({
           record,
-          inputType: col.dataIndex === 'amount' ? 'number' : 'text',
+          inputType: col.dataIndex === 'amount' || col.dataIndex === 'invNo' ? 'number' : 'text',
           dataIndex: col.dataIndex,
           title: col.title,
           editing: isEditing(record),
@@ -403,7 +418,7 @@ interface Item {
         invDate: dayjs().toString(),
         paymentContent: '',
         amount: 0,
-        invNo: '',
+        invNo: 0,
         industry: '',
         departmentBear: '',
         note: '',
@@ -447,6 +462,7 @@ interface Item {
     };
     const calculateTotalAmount = () => {
       const sum = tableData.reduce((total, item) => total + item.amount, 0);
+      
       setTotalAmount(sum);
     };
     useEffect(() => {
@@ -456,6 +472,8 @@ interface Item {
     const handleAdvanceAmount = (value: number | null) => {
       if (value !== null) {
       setAdvanceAmount(value);
+      const newTotalAmount = totalAmount + calculateTax() - value;
+      setTotalAmount(newTotalAmount);
     }
     };
   
@@ -466,6 +484,7 @@ interface Item {
     };
     useEffect(() => {
       calculateTotal();
+       
     }, [totalAmount, taxPercentage, advanceAmount]);
     
   
@@ -519,7 +538,10 @@ interface Item {
 
   console.log(ListDetail)
 
-
+  const formatNumberWithCommas = (number: any) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+  
 
 
   return (
@@ -593,7 +615,7 @@ interface Item {
       <Col span={12}>     
       <Form className='form-calculate'>
   <div style={{ marginBottom: '16px', fontWeight: 'bold',fontSize: '18px' }}>
-    Total Amount: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{totalAmount}</span>
+    Total Amount: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{formatNumberWithCommas(totalAmount)}</span>
   </div>
   <div style={{ marginBottom: '16px', fontWeight: 'bold', fontSize: '18px' }}>Tax:
   <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}></span>
@@ -617,7 +639,7 @@ interface Item {
     />
     </div>
   <div style={{ marginBottom: '16px', fontWeight: 'bold', fontSize: '18px' }}>
-    Total Payment: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{total}</span>
+    Total Payment: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{formatNumberWithCommas(totalAmount)}</span>
   </div>  
 </Form>
 </Col>

@@ -13,9 +13,12 @@ import { updatePurpose,
         updateExchangeRate,
         updatePoPrNumber } from './Store/formSlice';
 import { RootState } from './Store';
+import * as showError from "./showError";
+
 const { Content } = Layout;
 const FormItem = Form.Item;
 const { Option } = Select;
+
 
 const FormRequest: React.FC = () => {
   const purpose = useSelector((state : RootState) => state.form.purpose);
@@ -59,7 +62,6 @@ const FormRequest: React.FC = () => {
 
   const handleExchangeRateChange = (value: any) => {
     dispatch(updateExchangeRate(value));
-    setSelectedCurrency(value);
     console.log(value)
   }
 
@@ -81,6 +83,7 @@ const FormRequest: React.FC = () => {
   
   useEffect(() => {
     fetchData();
+
   }, []);
 
   
@@ -146,6 +149,7 @@ const FormRequest: React.FC = () => {
                   >
                     
                     <Select
+                      showSearch
                       style={{ width: 200 }}
                       key="department"
                       
@@ -153,7 +157,7 @@ const FormRequest: React.FC = () => {
                       onChange={handleDepartmentChange}
                     >
                       {departmentData.map((departmentName) => (
-                        <Option key={departmentName} value={departmentName}>                          
+                        <Option key={departmentName} value={departmentName}>                         
                           {departmentName}
                         </Option>
                       ))}
@@ -189,6 +193,7 @@ const FormRequest: React.FC = () => {
                   >
                     
                     <Select
+                      showSearch
                       style={{ width: 200 }}
                       key="supplier"
                       value={supplier}
@@ -213,6 +218,7 @@ const FormRequest: React.FC = () => {
                   >
                    
                     <Select
+                      showSearch
                       style={{ width: 200 }}
                       key="currency"
                       value={currency}
@@ -239,6 +245,7 @@ const FormRequest: React.FC = () => {
                           <InputNumber
                           style={{width:200}}
                           placeholder='Exchange Rate'
+                          maxLength={15}
                           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                           value={exchangeRate}
                           onChange={handleExchangeRateChange}
@@ -257,6 +264,7 @@ const FormRequest: React.FC = () => {
                     <InputNumber
                       style={{ width: 200 }}
                       placeholder="PO/PR number"
+                      maxLength={15}
                       value={poPrNumber}
                       onChange={handlePoPrNumberChange}
                     />

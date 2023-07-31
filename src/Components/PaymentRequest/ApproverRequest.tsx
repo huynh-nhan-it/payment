@@ -130,6 +130,7 @@ const getOptionLabel = (option: { value: string; label: string }) => {
                 <div key={index} style={{  marginRight: '10px',flex: '0 0 25%' }}>
                   <h5>{approver.name}:</h5>
                   <Select
+                      showSearch
                       value={approversOption.find((option) => option.value === approver.role)}
                       style={{ width: 200}}
                       onChange={(selectedOption) => handleApproverChange(selectedOption, index)}

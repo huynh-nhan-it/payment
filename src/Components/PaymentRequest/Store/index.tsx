@@ -3,13 +3,14 @@ import formReducer from "./formSlice";
 import tableReducer from "./tableSlice";
 import calReducer from "./calculateSlice";
 import approveReducer from "./approveSlice";
+import attachmentReducer from "./attachmentSlice";
 // import typeReducer from "./typeSlice";
 export type RootState = {
   form: ReturnType<typeof formReducer>;
   table: ReturnType<typeof tableReducer>;
   approve: ReturnType<typeof approveReducer>;
   cal: ReturnType<typeof calReducer>;
-  // type: ReturnType<typeof typeReducer>;
+  attachment: ReturnType<typeof attachmentReducer>;
 };
 
 export const store = configureStore({
@@ -18,8 +19,7 @@ export const store = configureStore({
     table: tableReducer,
     cal: calReducer,
     approve: approveReducer,
-    // type: typeReducer,
-    
+    attachment: attachmentReducer,    
   },
 });
 
