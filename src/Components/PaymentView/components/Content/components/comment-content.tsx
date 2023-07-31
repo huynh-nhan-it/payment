@@ -6,8 +6,9 @@ import { useState, useEffect } from "react";
 import ComponentComment from "./comment-component";
 import CommentForm from "./comment-form";
 import axios from "axios";
+import Spinner from "../../../../common/Loading";
 
-interface Comment {
+interface IComment {
   requestCode: string | undefined;
   userId: any,
   DetailRequestId: any 
@@ -32,7 +33,7 @@ interface feedBack {
   [key: string] : boolean
 }
 
-const Comment: React.FC<Comment> = ({ requestCode, userId, DetailRequestId}) => {
+const Comment: React.FC<IComment> = ({ requestCode, userId, DetailRequestId}) => {
   const [isFeedBack, setIsFeedBack] = useState(false);
   const [feedBack, setFeedBack] = useState<feedBack | {}>({});
   const [isLoading, setLoading] = useState(true);
@@ -57,6 +58,7 @@ const Comment: React.FC<Comment> = ({ requestCode, userId, DetailRequestId}) => 
           console.error(error);
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasFetchedData]);
   const handleFeedback = (index: any): void => {
     setIsFeedBack(true);
@@ -94,13 +96,13 @@ const Comment: React.FC<Comment> = ({ requestCode, userId, DetailRequestId}) => 
         </b>
       </Typography.Title>
       {isLoading ? (
-        <p>is Loading ...</p>
+        <Spinner></Spinner>
       ) : (
         <div className="comment">
           {isFeedBack ? "" : <CommentForm 
           isFeedBack={undefined}
           handleFeedback={undefined}
-          setHasFetchedData = {undefined}
+          setHasFetchedData = {HandleFetchData}
           index={undefined}
           userId={userId}
           DetailRequestId={DetailRequestId}

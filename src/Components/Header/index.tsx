@@ -49,7 +49,7 @@ const AppHeader = () => {
   }, []);
   // console.log(dataName);
   return (
-    <Header className="header">
+    <Header className="header" style={{zIndex: 1000}}>
       <div className="logo-name">
         <img
           alt="Logo1"

@@ -41,7 +41,7 @@ const App: React.FC = () => {
     else{
     dispatch(submitForm(formData, typeSave));
     console.log(formData, typeSave);
-    
+
     navigate("/request/payment");
   }
   };
@@ -51,33 +51,37 @@ const App: React.FC = () => {
     <div>
       <Layout>
         <HeaderRequest />
-        <Content>
+        <Content style={{ zIndex: 1 }}>
           <Layout>
             <Sider
               className="sider-request"
+              width={226}
               style={{
                 background: colorBgContainer,
                 padding: "64px 0",
                 position: "fixed",
+                zIndex: 2,
                 height: "100%",
                 borderRight: "solid #ccc 0.1px",
               }}
               collapsedWidth="0"
               collapsible
               collapsed={collapsed}
-              onCollapse={(value) => setCollapsed(value)}>
+              onCollapse={(value) => setCollapsed(value)}
+            >
               <Search
                 placeholder="input search text"
                 // onSearch={onSearch}
                 style={{
-                  width: 200,
+                  width: "100%",
                 }}
               />
               <NavbarRequest />
             </Sider>
             <Content
-              style={{ paddingLeft: collapsed ? "0" : "200px" }}
-              className="content-request">
+              style={{ paddingLeft: collapsed ? "0" : "226px" }}
+              className="content-request"
+            >
               <Header
                 style={{
                   minWidth: "100%",
@@ -86,32 +90,46 @@ const App: React.FC = () => {
                   zIndex: 1,
                   top: "64px",
                   backgroundColor: "#F5F6FA",
-                }}>
+                }}
+              >
                 <Row gutter={24} style={{ paddingLeft: "1.5%" }}>
                   <Col>
                     {" "}
-                    <a href="/request/payment" className="text-header">
+                    <Button href="/request/payment" className="text-header">
                       {" "}
-                      <TiArrowBackOutline style={{ marginRight: "5px" }} />{" "}
-                      Return
-                    </a>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <TiArrowBackOutline style={{ marginRight: "5px" }} />{" "}
+                        Return
+                      </div>
+                    </Button>
                   </Col>
                   <Col>
-                    <a className="text-header">
+                    <Button href="#" className="text-header">
                       {" "}
-                      <MdDrafts style={{ marginRight: "5px" }} onClick={ ()=> {
-                          handleFormSubmit("save-draft");
-                        }} /> Save Draft
-                    </a>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <MdDrafts
+                          style={{ marginRight: "5px" }}
+                          onClick={() => {
+                            handleFormSubmit("save-draft");
+                          }}
+                        />{" "}
+                        Save Draft{" "}
+                      </div>
+                    </Button>
                   </Col>
                   <Col>
-                  <a className="text-header">
+                    <Button href="#" className="text-header">
                       {" "}
-                      <BsFillSendFill style={{ marginRight: "5px" }} onClick={ ()=> {
-                          handleFormSubmit("create-request");
-                        }
-                          } /> Submit
-                    </a>                    
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <BsFillSendFill
+                          style={{ marginRight: "5px" }}
+                          onClick={() => {
+                            handleFormSubmit("create-request");
+                          }}
+                        />{" "}
+                        Submit{" "}
+                      </div>
+                    </Button>
                   </Col>
                 </Row>
               </Header>

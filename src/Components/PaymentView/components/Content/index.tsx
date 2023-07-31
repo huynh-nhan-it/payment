@@ -1,68 +1,27 @@
-import { Col, Row, theme, Modal } from "antd";
-import { Layout } from "antd";
+import { Col, Row, theme } from "antd";
 import React, { useEffect, useState } from "react";
 import { Typography } from "antd";
 import ViewTable from "./components/viewTable";
 import Comment from "./components/comment-content";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import request from "../../../../Services/User/getAccount";
+import { format } from 'date-fns';
+
+import {PaymentRequest } from "../../interface/IRequest";
 const { Text } = Typography;
-
-interface TableDetailRequest {
-  id: string;
-  invDate: string;
-  paymentContent: string;
-  amount: number;
-  invNo: number;
-  industry: string;
-  departmentOnTable: string;
-  note: string;
-}
-
-interface Approver {
-  id: string;
-  fullName: string;
-  email: string;
-  jobTitle: string;
-}
-
-
-interface PaymentRequest {
-  requestCode: string;
-  userName: string;
-  createAt: string;
-  status: string;
-  purpose: string;
-  department: string;
-  paymentFor: string;
-  supplier: string;
-  currency: string;
-  poNumber: number;
-  exchangeRate: number;
-  tableDetailRequest: TableDetailRequest[];
-  method: string;
-  approverIds: Approver[];
-}
 
 interface IViewContent {
   userId: any,
   DetailRequestId: any
+  PaymentRequest: PaymentRequest
 }
 
-const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId}) => {
+const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId, PaymentRequest}) => {
   const { requestCode } = useParams();
+  const [detail, setDetail] = useState<PaymentRequest | null>(null);
+  const formattedDateTimeCreateAt = detail?.createAt && format(new Date(detail.createAt), "dd/MM/yyyy HH:mm:ss");
+
   useEffect(() => {
-    const getDetailRequest = async () => {
-        const endpoint = "/DetailRequest/" + requestCode;
-        const response = await request.get(endpoint).then((res) => {
-          // console.log(res.data);
-            setDetail(res.data);
-        }
-        );
-    }
-    // const getAttachmentsRequest = async () => {
-    //     const endpoint = "/request/attachment/requestId=" + requestId;
+    setDetail(PaymentRequest) 
     //     const response = await request.get(endpoint).then((res) => {
     //         setAttachmentData(res.data.Data);
     //     }
@@ -77,10 +36,10 @@ const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId}) => {
     // }
     // getWokflowRequest();
     // getAttachmentsRequest();
-    getDetailRequest();
+    
 
-}, [])
-  const [detail, setDetail] = useState<PaymentRequest | null>(null);
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
   // useEffect(() => {
   //   axios
   //     .get(`http://localhost:5005/api/DetailRequest/${requestCode}`)
@@ -101,7 +60,7 @@ const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId}) => {
   // );
 
   return (
-    <div
+    <div>{(<div
       style={{
         margin: 0,
         paddingTop: 128,
@@ -125,12 +84,12 @@ const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId}) => {
           </Row>
           <Row className="child-row-info">
             <Col span={24}>
-              <b>Created at:{detail?.createAt}</b>
+              <b>Created at: {formattedDateTimeCreateAt}</b>
             </Col>
           </Row>
           <Row className="child-row-info">
             <Col span={24}>
-              <b>Status:{detail?.status}</b>
+              <b>Status: {detail?.status}</b>
             </Col>
           </Row>
         </div>
@@ -203,7 +162,7 @@ const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId}) => {
           </Col>
         </Row>
         <div className="row"></div>
-        <ViewTable></ViewTable>
+        <ViewTable detailTables = {detail?.tableDetailRequest}></ViewTable>
         <div className="row"></div>
         <div>
           <Row justify="space-between">
@@ -274,7 +233,7 @@ const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId}) => {
           <Comment requestCode = {requestCode} userId = {userId} DetailRequestId = {DetailRequestId}></Comment>
         </div>
       </div>
-    </div>
+    </div>)}</div>
   );
 };
 

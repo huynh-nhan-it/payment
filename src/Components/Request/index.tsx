@@ -39,6 +39,7 @@ const Request: React.FC = () => {
         <Content>
           <Layout>
             <Sider
+              width={226}
               className="sider-request"
               style={{
                 background: colorBgContainer,
@@ -55,13 +56,13 @@ const Request: React.FC = () => {
                 placeholder="input search text"
                 // onSearch={onSearch}
                 style={{
-                  width: 200,
+                  width: "100%",
                 }}
               />
               <NavbarRequest />
             </Sider>
             <Content
-              style={{ paddingLeft: collapsed ? "0" : "200px" }}
+              style={{ paddingLeft: collapsed ? "0" : "226px" }}
               className="content-request">
               <PaymentAll />
             </Content>

@@ -9,7 +9,13 @@ import Sider from "antd/es/layout/Sider";
 import NavbarRequest from "../Request/NavbarRequest";
 import Search from "antd/es/input/Search";
 import ModalStatus from "./components/ModalStatus";
+import "./css/index.css";
 import axios from "axios";
+import Spinner from "../common/Loading";
+import {PaymentRequest} from "./interface/IRequest"
+
+
+
 function ViewPayment(userId: any) {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -20,6 +26,7 @@ function ViewPayment(userId: any) {
   const [type, setType] = useState("");
   const [DetailRequestId, setDetailRequestId] = useState("");
   const [RequestId, setRequestId] = useState("");
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>({} as PaymentRequest);
   const [Loading, setLoading] = useState(true);
   useEffect(() => {
     axios
@@ -27,11 +34,13 @@ function ViewPayment(userId: any) {
       .then((respone) => {
         setDetailRequestId(respone.data.id);
         setRequestId(respone.data.requestId);
+        setPaymentRequest(respone.data);
         setLoading(false);
       })
       .catch((error) => {
         console.error(error);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   const showModal = (type: any) => {
@@ -42,7 +51,7 @@ function ViewPayment(userId: any) {
   const handleOk = (Reason: any, type: any) => {
     // console.log(Reason.resizableTextArea.textArea.textContent, type);
     setIsModalOpen(false);
-    if (type == "Delete") {
+    if (type === "Delete") {
       axios
         .delete(
           `http://localhost:5005/api/User/delete-request/?RequestId=${RequestId}`
@@ -91,7 +100,7 @@ function ViewPayment(userId: any) {
               .then((res) => {
                 setLoading(true);
                 setIsModalOpen(false);
-                window.location.href = "/request/payment";
+                window.location.reload();
               })
               .catch((error) => {
                 console.error(error);
@@ -110,36 +119,40 @@ function ViewPayment(userId: any) {
 
   return (
     <div>
-      {Loading ? (<p>Loading...</p>) : (<Layout>
+      {Loading ? (<Spinner></Spinner>) : (<Layout>
         <HeaderRequest />
-        <Content>
+        <Content style={{zIndex:1}}>
           <Layout>
             <Sider
+            width={226}
               className="sider-request"
               style={{
                 background: colorBgContainer,
                 padding: "64px 0",
                 position: "fixed",
-                height: "100%",
+                zIndex: 2,
+                height: "100vh",
                 borderRight: "solid #ccc 0.1px",
               }}
-              collapsedWidth="0"
               collapsible
+              collapsedWidth={0}
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}
             >
               <Search
                 placeholder="input search text"
                 // onSearch={onSearch}
+                className="search-request-view"
                 style={{
-                  width: 200,
+                  width: "100%",
                 }}
+                size="middle"
               />
               <NavbarRequest />
             </Sider>
 
             <Content
-              style={{ paddingLeft: collapsed ? "0" : "200px" }}
+              style={{ paddingLeft: collapsed ? "0" : "226px" }}
               className="content-request"
             >
               <ViewHeader
@@ -152,6 +165,7 @@ function ViewPayment(userId: any) {
                   <ViewContent
                     userId={userId.userId}
                     DetailRequestId={DetailRequestId}
+                    PaymentRequest={paymentRequest}
                   ></ViewContent>
                 )}{" "}
                 <ModalStatus

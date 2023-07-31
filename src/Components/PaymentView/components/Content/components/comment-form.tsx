@@ -3,20 +3,6 @@ import { UserOutlined, LinkOutlined } from "@ant-design/icons";
 import TextArea from "antd/lib/input/TextArea";
 import axios from "axios";
 
-interface Comments {
-  userModel: UserModel;
-  createAt: string | undefined;
-  content: string | undefined;
-  commentReplyList: [];
-}
-
-interface UserModel {
-  fullName: string | undefined;
-  email: string | undefined;
-  phoneNumber: string | undefined;
-  avatar: string | undefined;
-  jobTitle: string | undefined;
-}
 
 interface feedBack {
   [key: string]: boolean;
@@ -53,7 +39,7 @@ const CommentForm: React.FC<ICommentForm> = ({
         },
       })
       .then((response) => {
-        window.location.reload();
+        setHasFetchedData?.()
       })
       .catch((error) => {
         console.error(error);

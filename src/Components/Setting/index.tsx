@@ -32,17 +32,18 @@ const Setting = () => {
                 height: "100%",
                 borderRight: "solid #ccc 0.1px",
               }}
-              // collapsedWidth="0"
+              width={226}
+              collapsedWidth="0"
               collapsible
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}>
               <NavbarSetting />
             </Sider>
             <Content
-              style={{ paddingLeft: collapsed ? "0" : "200px" }}
+              style={{ paddingLeft: collapsed ? "0" : "226px" }}
               className="content-request">
               <div className="padding-top-64">
-                <h2 style={{ padding: " 10px 20px" }} className="display-flex">
+                <h2 style={{ padding: " 10px 45px" }} className="display-flex">
                   System
                 </h2>
                 <div className="display-flex">

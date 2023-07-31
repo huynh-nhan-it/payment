@@ -19,18 +19,20 @@ const StructureOrganization = () => {
     <div>
       <Layout>
         <HeaderRequest />
-        <Content>
+        <Content style={{zIndex: 1}}>
           <Layout>
             <Sider
               className="sider-request"
+              width={226}
               style={{
                 background: colorBgContainer,
                 padding: "64px 0",
                 position: "fixed",
                 height: "100%",
+                zIndex: 2,
                 borderRight: "solid #ccc 0.1px",
               }}
-              // collapsedWidth="0"
+              collapsedWidth="0"
               collapsible
               collapsed={collapsed}
               onCollapse={(value) => setCollapsed(value)}>
@@ -38,7 +40,7 @@ const StructureOrganization = () => {
             </Sider>
             <Content
               style={{
-                paddingLeft: collapsed ? "0" : "200px",
+                paddingLeft: collapsed ? "0" : "226px",
                 marginTop: "100px",
               }}
               className="content-request">

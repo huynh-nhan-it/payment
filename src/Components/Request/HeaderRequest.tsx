@@ -74,13 +74,16 @@ const HeaderRequest = () => {
           backgroundColor: "#167c82",
           display: "flex",
           alignItems: "center",
-        }}>
-        <div className="opus-logo-name">
-          <div className="opus-logo">
-            <Link to="/">
+        }}
+      >
+        <div
+          className="opus-logo-name"
+        >
+          <div className="opus-logo" style={{ width: "50px", flex: 1, display: "flex", alignItems: "center"}}>
+            <Link to="/" style={{paddingTop: "36%"}}>
               <img
                 src="https://o365.vn/wp-content/uploads/logo_w.png"
-                style={{ width: "50px", height: "30px" }}
+                style={{ width: "100%", height: "100%", objectFit: "contain"}}
               />
             </Link>
           </div>

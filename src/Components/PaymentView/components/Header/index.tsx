@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Button, Col, Row } from "antd";
 import { Layout } from "antd";
 import { TiArrowBackOutline, TiDeleteOutline } from "react-icons/ti";
 import "../../css/index.css";
@@ -38,6 +38,7 @@ const ViewHeader: React.FC<IHeader> = ({
       .catch((error) => {
         console.error(error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const role = localStorage.getItem("role");
   console.log(role);
@@ -55,66 +56,81 @@ const ViewHeader: React.FC<IHeader> = ({
       <Row gutter={24} style={{ paddingLeft: "1.5%" }}>
         <Col>
           {" "}
-          <a href="/request/payment" className="text-header">
+          <Button href="/request/payment" className="text-header">
             {" "}
+            <div style={{ display: "flex", alignItems: "center" }}>
             <TiArrowBackOutline style={{ marginRight: "5px" }} /> Return
-          </a>
+            </div>
+          </Button>
         </Col>
         <Col>
-          <a href="#" className="text-header">
+          <Button href="#" className="text-header">
             {" "}
+            <div style={{ display: "flex", alignItems: "center" }}>
             <BsFiletypePdf style={{ marginRight: "5px" }} /> Download file
-          </a>
+             {" "}
+            </div>
+          </Button>
         </Col>
-        {role && <Col>
-          <a
-            href="#"
-            className="text-header"
-            onClick={() => {
-              showModal("Delete");
-            }}
-          >
-            {" "}
-            <MdDeleteOutline style={{ marginRight: "5px" }} /> Delete
-          </a>
-        </Col>}
+        {role && (
+          <Col>
+            <Button
+              href="#"
+              className="text-header"
+              onClick={() => {
+                showModal("Delete");
+              }}
+            >
+              {" "}
+              <div style={{ display: "flex", alignItems: "center" }}>
+              <MdDeleteOutline style={{ marginRight: "5px" }} /> Delete
+              {" "}
+            </div>
+            </Button>
+          </Col>
+        )}
         <Col>
-          <a href="#" className="text-header">
+          <Button href="#" className="text-header">
             {" "}
-            <AiOutlineFundProjectionScreen
-              style={{ marginRight: "5px" }}
-            />{" "}
-            Progress
-          </a>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <AiOutlineFundProjectionScreen style={{ marginRight: "5px" }} />{" "}
+              Progress{" "}
+            </div>
+          </Button>
         </Col>
-        { checkApprove &&
-        (
+        {checkApprove && (
           <>
             <Col>
-              <a
+              <Button
                 href="#"
                 className="text-header"
                 onClick={() => showModal("Approved")}
               >
-                <FiCheck style={{ marginRight: "5px" }} /> Approve
-              </a>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <FiCheck style={{ marginRight: "5px" }} /> Approve
+                </div>
+              </Button>
             </Col>
             <Col>
-              <a
+              <Button
                 href="#"
                 className="text-header"
                 onClick={() => showModal("Rejected")}
               >
-                <TiDeleteOutline style={{ marginRight: "5px" }} /> Reject
-              </a>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <TiDeleteOutline style={{ marginRight: "5px" }} /> Reject
+                </div>
+              </Button>
             </Col>
           </>
         )}
         <Col>
-          <a href="#" className="text-header">
+          <Button href="#" className="text-header">
             {" "}
-            <AiOutlineShareAlt style={{ marginRight: "5px" }} /> Share
-          </a>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <AiOutlineShareAlt style={{ marginRight: "5px" }} /> Share
+            </div>
+          </Button>
         </Col>
       </Row>
     </Header>

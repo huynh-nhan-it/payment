@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import request from "../../../../../Services/User/getAccount";
+import { format } from 'date-fns';
 
 interface DataType {
   id: string;
@@ -26,42 +24,28 @@ interface TableDetailRequest {
   note: string;
 }
 
-interface Approver {
-  id: string;
-  fullName: string;
-  email: string;
-  jobTitle: string;
+
+interface IViewTable {
+  detailTables: TableDetailRequest[] | undefined;
 }
 
-interface PaymentRequest {
-  requestCode: string;
-  userName: string;
-  createAt: string;
-  status: string;
-  purpose: string;
-  department: string;
-  paymentFor: string;
-  supplier: string;
-  currency: string;
-  poNumber: number;
-  tableDetailRequest: TableDetailRequest[];
-  method: string;
-  approverIds: Approver[];
-}
-
-const ViewTable: React.FC = () => {
-  const [detailTable, setDetailTable] = useState<PaymentRequest | null>(null);
-  const { requestCode } = useParams();
+const ViewTable: React.FC<IViewTable> = ({detailTables}) => {
+  const [data, setData] = useState<TableDetailRequest[] | undefined>();
   useEffect(() => {
-    const getDetailRequest = async () => {
-      const endpoint = "/DetailRequest/" + requestCode;
-      const response = await request.get(endpoint).then((res) => {
-        // console.log(res.data);
-        setDetailTable(res.data);
-      });
-    };
-    getDetailRequest();
-  }, []);
+    let dataTb = detailTables?.map((detail) => {
+      return {
+        id: detail.id,
+        invDate: format(new Date(detail.invDate), 'dd/MM/yyyy'),
+        paymentContent: detail.paymentContent,
+        amount: detail.amount,
+        invNo: detail.invNo,
+        industry: detail.industry,
+        departmentOnTable: detail.departmentOnTable,
+        note: detail.note
+      };
+    });
+    setData(dataTb);
+  }, [detailTables]);
   const columns: ColumnsType<DataType> = [
     {
       key: "id",
@@ -118,7 +102,6 @@ const ViewTable: React.FC = () => {
   // console.log(requestCode);
 
   // const tb = detailTable.map(dt);
-  const data = detailTable?.tableDetailRequest;
 
   // console.log(data[0]);
   return (

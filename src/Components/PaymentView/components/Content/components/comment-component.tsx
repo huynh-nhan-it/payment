@@ -1,4 +1,4 @@
-import { SearchOutlined, UserOutlined } from "@ant-design/icons";
+import {UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row, Typography } from "antd";
 import React from "react";
 import { FcApproval } from "react-icons/fc";
@@ -49,7 +49,7 @@ const ComponentComment: React.FC<ExampleCommentProps> = ({
         <Col span={14} className="col-parent-comment">
           <Row justify="start" className="row-comment">
             <Col span={2} className="col-comment">
-              <Avatar size={40} src={comment?.userModel.avatar} icon={comment?.userModel.avatar ? "" : <UserOutlined></UserOutlined>}></Avatar>
+              <Avatar size={40} src={comment?.userModel.avatar} icon={comment?.userModel.avatar !== "" ? comment?.userModel.avatar : <UserOutlined></UserOutlined>}></Avatar>
             </Col>
             <Col span={16} className="col-comment">
               <div className="midle-content-comment">

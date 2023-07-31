@@ -13,6 +13,10 @@
 
 .text-header {
     color: #8894A1;
+    background: none; 
+    border: none; 
+    box-shadow: none;
+    padding: 0;
 }
 
 .parent-row-info {
@@ -92,3 +96,5 @@
     width: 58%;
     border-top: 1px solid rgb(233, 224, 224);
 }
+
+
