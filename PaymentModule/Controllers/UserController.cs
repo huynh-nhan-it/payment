@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PaymentModule.Services.IServices;
 using PaymentModule.Services.Implements;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace PaymentModule.Controllers
 {
@@ -74,21 +75,21 @@ namespace PaymentModule.Controllers
         {
            try
             {
-                Guid? departmentId = _departmentService.GetIdByDepartmentName(request.DepartmentName);
-                Guid? supplierId = _supplierService.GetIdBySupplierName(request.SupplierName);
-                Guid? curencyId = _currencyService.GetIdByCurrency(request.Currency);
-                Guid? paymentId = _paymentMethodService.GetIdByMethod(request.PaymentMethod);
+                Guid departmentId = _departmentService.GetIdByDepartmentName(request.DepartmentName);
+                Guid supplierId = _supplierService.GetIdBySupplierName(request.SupplierName);
+                Guid curencyId = _currencyService.GetIdByCurrency(request.Currency);
+                Guid paymentId = _paymentMethodService.GetIdByMethod(request.PaymentMethod);
                 var detailRequest = new DetailRequestEntity
                 {
                     Id = theId,
                     Purpose = request.Purpose,
                     PaymentFor = request.PaymentFor,
-                    PONumber = request.PONumber,
-                    DepartmentId = departmentId.HasValue ? departmentId.Value : Guid.Empty,
-                    SupplierId = supplierId.HasValue ? supplierId.Value : Guid.Empty,
-                    CurrencyId = curencyId.HasValue ? curencyId.Value : Guid.Empty,
+                    PONumber = request.PONumber.HasValue? request.PONumber.Value : 0,
+                    DepartmentId = departmentId,
+                    SupplierId = supplierId,
+                    CurrencyId = curencyId,
                     ExchangeRate = request.ExchangeRate.HasValue ? request.ExchangeRate.Value : 0d,
-                    PaymentMethodId = paymentId.HasValue ? paymentId.Value : Guid.Empty
+                    PaymentMethodId = paymentId,
                 };
 
                 return new ObjectResult(new { detailRequest = detailRequest, success = true, error = false });
@@ -105,8 +106,6 @@ namespace PaymentModule.Controllers
             var RequestId = prd.RequestId;
             string RequestCode = "";
             Guid PaymentRequestId = Guid.NewGuid();
-
-            //check payment request id xem có ở trạng thái Rejectedz hay không
 
             if (!string.IsNullOrWhiteSpace(RequestId))
             {
@@ -157,39 +156,83 @@ namespace PaymentModule.Controllers
                     }
                 }
             }
+            
             Guid theId = Guid.NewGuid();
-            string purpose = prd.Purpose;
-            string department = prd.Department;
-            string paymentfor = prd.PaymentFor;
-            string supplier = prd.Supplier; 
-            string currency = prd.Currency;
+            string? purpose = string.IsNullOrEmpty(prd.Purpose) ? "" : prd.Purpose; 
+            string? department = string.IsNullOrEmpty(prd.Department) ? "OPUS Company" : prd.Department; //important
+            string? paymentfor = string.IsNullOrEmpty(prd.PaymentFor) ? "" : prd.PaymentFor;
+            string? supplier = string.IsNullOrEmpty(prd.Supplier) ? "1041171-Công Ty TNHH Opus Solution" : prd.Supplier;  //important
+            string? currency = string.IsNullOrEmpty(prd.Currency) ? "VND" : prd.Currency;
             double? exchange = prd.ExchangeRate.HasValue ? prd.ExchangeRate.Value : 0d;
-            int ponumber = prd.PONumber;
-            IFormFileCollection files = prd.files;
-            string paymentmethod = prd.PaymentMethod;
+            int? ponumber = prd.PONumber.HasValue ? prd.PONumber : 0;
+            IFormFileCollection? files = prd.files;
+            string? paymentmethod = string.IsNullOrEmpty(prd.PaymentMethod) ? "" : prd.PaymentMethod;
             string typeSave = prd.typeSave;
+            double? suggestedAmount = prd.SuggestedAmount.HasValue ? prd.SuggestedAmount.Value : 0d;
+            double? tax = prd.Tax.HasValue ? prd.Tax.Value : 0d;
+            double? advanceAmount = prd.AdvanceAmount.HasValue ? prd.AdvanceAmount.Value : 0d;
+            double? totalPayment = prd.TotalPayment.HasValue ? prd.TotalPayment.Value : 0d;
 
-            double suggestedAmount = prd.SuggestedAmount;
-            double tax = prd.Tax;
-            double advanceAmount = prd.AdvanceAmount;
-            double totalPayment = prd.TotalPayment;
+            string s = @"[{
+            ""invDate"": """",
+            ""paymentContent"": """",
+            ""amount"": 0,
+            ""invNo"": 0,
+            ""industry"": """",
+            ""departmentBear"": ""Nothing selected"",
+            ""note"": """"
+        }]";
 
-            List<DetailTableDto> detailTables = JsonConvert.DeserializeObject<List<DetailTableDto>>((prd.DetailTable == "" || prd.DetailTable == null) ? "[]": prd.DetailTable); 
-            List<ApproverDto> approvers = JsonConvert.DeserializeObject<List<ApproverDto>>((prd.Approvers == "" || prd.Approvers == null) ? "[]" : prd.Approvers);
+            // Trích xuất đoạn JSON từ chuỗi s
+            JArray jsonArray = JArray.Parse(s);
+            JObject jsonObject = (JObject)jsonArray[0];
+
+            // Lấy ngày hiện tại
+            DateTime currentDate = DateTime.Now;
+
+            // Cộng thêm ngày/tháng/năm hiện tại vào trường "invDate"
+            DateTime invDate = jsonObject["invDate"].Value<string>() == ""
+                ? currentDate // Nếu trường "invDate" rỗng thì lấy ngày hiện tại
+                : DateTime.Parse(jsonObject["invDate"].Value<string>()).Add(currentDate.Date - currentDate);
+
+            // Cập nhật trường "invDate" trong đoạn JSON
+            jsonObject["invDate"] = invDate;
+
+            // Chuyển đoạn JSON đã cập nhật thành chuỗi và lưu vào biến "s"
+            s = jsonArray.ToString(Formatting.None);
+
+
+            List<DetailTableDto> detailTables = JsonConvert.DeserializeObject<List<DetailTableDto>>((prd.DetailTable == "" || prd.DetailTable == null) ? s : prd.DetailTable); 
+            List<ApproverDto> approvers = JsonConvert.DeserializeObject<List<ApproverDto>>((prd.Approvers == "" || prd.Approvers == null) ? "[ { \"fullName\": \"\", \"email\": \"daniel.wilson@example.com\", \"jobTitle\": \"\" }]" : prd.Approvers);
             string authorizationHeader = Request.Headers["Authorization"];
             string token = "";
-            string userId = "";
+            string userId = prd.UserId;
             var options = new JsonSerializerOptions{ WriteIndented = true, ReferenceHandler = ReferenceHandler.Preserve};
-       
 
-            /* if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
-             {
-                 string secretKey = _configuration["AppSettings:Token"];
-                 token = authorizationHeader.Substring("Bearer ".Length);
-                 userId = _userService.DecodeToken(token, secretKey);
-                 if (userId == "") { return BadRequest(new ObjectResult(new { success = false, error = true, message = "Process get token has error" })); }
-             }
-             else { return BadRequest(new { success = false, error = true, message = "Token not found in header" }); }*/
+
+      
+            string filePath = Path.Combine("data/request", theId.ToString());
+
+            if (prd.typeSave == "create-request" || prd.typeSave == "re-submit")
+            {
+                if (string.IsNullOrWhiteSpace(purpose)
+                    || string.IsNullOrWhiteSpace(department)
+                    || string.IsNullOrWhiteSpace(paymentfor)
+                    || string.IsNullOrWhiteSpace(supplier)
+                    || string.IsNullOrWhiteSpace(currency))
+                {
+                    if(currency != "VND")
+                    {
+                        return Ok("Please enter the required information Exchange Rate");
+                    }
+                    if(prd.typeSave == "re-submit" && string.IsNullOrWhiteSpace(RequestId))
+                    {
+                        return Ok("Re-submit Failed");
+                    }
+                    if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
+                    return Ok("Please enter the required information");
+                }
+            } 
 
 
             var detailRequestDto = new DetailRequestDto
@@ -224,18 +267,13 @@ namespace PaymentModule.Controllers
             var resultHandleAP = _detailRequestService.HandleApprovers(approvers, theId).Value as dynamic;
             var resultHandleFile = await handleFile(files, theId);
             var filesResults = resultHandleFile.Value as dynamic;  
-            string filePath = Path.Combine("data/request", theId.ToString());
 
             if (resultHandTotal?.success)
             {
                 _context.TotalPayments.Add(resultHandTotal?.totalPayment);
                 _context.SaveChanges();
             }
-            if (string.IsNullOrWhiteSpace(purpose) || string.IsNullOrWhiteSpace(department) || string.IsNullOrWhiteSpace(paymentfor) || string.IsNullOrWhiteSpace(supplier))
-            {
-                if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
-                return BadRequest("Please enter the required information");
-            }
+            
             if (resultHandDT?.error || resultHandleDR?.error || resultHandleAP?.error)
             {
                 if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }

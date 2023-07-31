@@ -32,17 +32,17 @@ namespace PaymentModule.Services.Implements
             {
                 return department.Name;
             }
-            return "";
+            return "VND";
         }
 
-        Guid? ICurrencyService.GetIdByCurrency(string currency)
+        Guid ICurrencyService.GetIdByCurrency(string currency)
         {
             var curr = _context.Currencies.FirstOrDefault(cu => cu.Name.Contains(currency) == true);
             if (curr != null)
             {
                 return curr.Id;
             }
-            return null;
+            return new Guid("6780461F-E22B-472E-A18E-6145FB7EDFD5");
         }
     }
 }

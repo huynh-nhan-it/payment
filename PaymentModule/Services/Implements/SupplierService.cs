@@ -11,14 +11,14 @@ namespace PaymentModule.Services.Implements
         {
             _context = context;
         }
-        Guid? ISupplierService.GetIdBySupplierName(string supplierName)
+        Guid ISupplierService.GetIdBySupplierName(string supplierName)
         {
             var supplier = _context.Suppliers.FirstOrDefault(sup => sup.Name.Contains(supplierName) == true);
             if (supplier != null)
             {
                 return supplier.Id;
             }
-            return null;
+            return new Guid("8E1FBDEB-07D2-4FBB-83E5-0115A22A2F3F");
         }
 
         List<string> ISupplierService.GetSupplierList()

@@ -21,7 +21,7 @@ namespace PaymentModule.Services.Implements
             return "";
         }
 
-        Guid? IPaymentMethodService.GetIdByMethod(string methodName)
+        Guid IPaymentMethodService.GetIdByMethod(string methodName)
         {
             var method = _context.PaymentMethods.FirstOrDefault(m => m.Name.Contains(methodName) == true);
 
@@ -29,7 +29,7 @@ namespace PaymentModule.Services.Implements
             {
                 return method.Id;
             }
-            return null;
+            return new Guid("CDAAD714-4E05-4158-A1AA-44109C62232F");
         }
     }
 }

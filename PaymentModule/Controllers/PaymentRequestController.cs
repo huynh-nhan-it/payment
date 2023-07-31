@@ -8,6 +8,8 @@ using PaymentModule.Entities;
 using PaymentModule.Models;
 using PaymentModule.Services.Implements;
 using PaymentModule.Services.IServices;
+using PdfSharpCore;
+using SixLabors.ImageSharp;
 
 
 namespace PaymentModule.Controllers
@@ -21,6 +23,7 @@ namespace PaymentModule.Controllers
         private readonly IUserService _userService;
         private readonly IPaymentRequestService _paymentRequestService;
         private readonly ConnectionStringSettings _connectionStringSettings;
+        private int page_size = 4;
 
         public PaymentRequestController(PaymentContext paymentContext, IStatusService statusRepository, IUserService userRepository, ConnectionStringSettings connectionStringSettings, IPaymentRequestService paymentRequestService)
         {
@@ -72,7 +75,7 @@ namespace PaymentModule.Controllers
                 }
                 if(page.HasValue)
                 {
-                    paymentRequests = paymentRequests.Skip((int)(page - 1) * 1).Take(1);
+                    paymentRequests = paymentRequests.Skip((int)(page - 1) * page_size).Take(page_size);
                 }
                 var paymentRequestList = paymentRequests.ToList().Select(PREntity => new PaymentRequestModel
                 {
@@ -91,7 +94,7 @@ namespace PaymentModule.Controllers
         }
 
         [HttpGet]
-        [Route("GenerateExcel")]
+        [Route("generate-excel")]
         public async Task<IActionResult> GenerateExcel()
         {
             List<PaymentRequestModel> PaymentRequestList = new List<PaymentRequestModel>();
@@ -140,7 +143,7 @@ namespace PaymentModule.Controllers
 
         }
 
-        [HttpGet("SendToMe")]
+        [HttpGet("send-to-me")]
         public IActionResult GetSendToMeRequest(Guid myId)
         {
             string selectQuery = "Select * From ApproverDetailRequest Where ApproverId = @myId";
@@ -178,7 +181,7 @@ namespace PaymentModule.Controllers
             return Ok(paymentRequestList);
         }
 
-        [HttpGet("SendToOthers")]
+        [HttpGet("send-to-others")]
         public IActionResult GetSendToOthersRequest(Guid myId)
         {
             var paymentRequestList = _context.PaymentRequests.Where(pr => pr.UserId.Equals(myId) && pr.IsDeleted == 1).ToList().Select(PREntity => new PaymentRequestModel
@@ -229,6 +232,27 @@ namespace PaymentModule.Controllers
                 }
             }
             return Ok(paymentList);
-        }       
-    }
+        }
+        
+        [HttpGet("total-page")] 
+        public IActionResult GetTotalPage()
+        {
+            try {
+                double totalPage = 0d;
+                if (_context.PaymentRequests.Count() % page_size == 0)
+                {
+                    totalPage = _context.PaymentRequests.Count() / page_size;
+                } else
+                {
+                    totalPage = Math.Floor((_context.PaymentRequests.Count() / page_size) * 1.0d) + 1;
+                }
+                 
+                return Ok(totalPage);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+        }
+      }
 }

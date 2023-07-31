@@ -18,5 +18,6 @@
         public List<DetailTableModel> TableDetailRequest { get; set; }
         public string Method { get; set; }
         public List<ApproverModel> ApproverIds { get; set; }
+        public List<string> AttachmentList { get; set; }
     }
 }

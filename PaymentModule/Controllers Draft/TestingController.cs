@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using PaymentModule.Context;
@@ -115,7 +115,7 @@ namespace PaymentModule.Controllers
             _context.PaymentRequests.Add(paymentRequest);
             _context.SaveChanges();
         }
-/*
+*//*
         [HttpGet("{RequestCode}")]
         public IActionResult GetDetailRequestByCode(string RequestCode)
         {
@@ -219,6 +219,7 @@ namespace PaymentModule.Controllers
              InsertApprovers(approverList, theId);
              InsertpaymentRequest(theId);
              return Ok(new { theId, detailRequestDto });
-         }*/
+         }*//*
     }
 }
+*/

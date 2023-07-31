@@ -172,16 +172,20 @@ namespace PaymentModule.Services.Implements
                 if(!string.IsNullOrEmpty(colunm.DepartmentBear))
                 {
                     departmentBearId = _departmentBearService.GetIdByDepartmentBear(colunm.DepartmentBear);
-                } 
+                } else
+                {
+                    departmentBearId = new Guid("D06925D4-A8DC-4216-9F4E-2598FAF8FACD");
+                }
+
                 var detailTableEntity = new DetailTableEntity
                 {
-                    InvDate = colunm.InvDate,
+                    InvDate = colunm.InvDate.HasValue ? colunm.InvDate.Value : DateTime.Now,
                     PaymentContent = colunm.PaymentContent,
-                    Amount = colunm.Amount,
-                    InvNo = colunm.InvNo,
-                    Industry = colunm.Industry,
+                    Amount = colunm.Amount.HasValue ? colunm.Amount.Value : 0,
+                    InvNo = colunm.InvNo.HasValue ? colunm.InvNo.Value : 0,
+                    Industry = string.IsNullOrEmpty(colunm.Industry)? "" : colunm.Industry,
                     DepartmentBearId = departmentBearId,
-                    Note = colunm.Note,
+                    Note = string.IsNullOrEmpty(colunm.Note) ? "" : colunm.Note,
                     DetailRequestId = requestId,
                 };
                 detailTableEntitys.Add(detailTableEntity);
@@ -196,10 +200,10 @@ namespace PaymentModule.Services.Implements
             {
                 var totalPayment = new TotalPaymentEntity
                 {
-                    SuggestedAmount = request.SuggestedAmount,
-                    Tax = request.Tax,
-                    AdvanceAmount = request.AdvanceAmount,
-                    TotalPayment = request.TotalPayment,
+                    SuggestedAmount = request.SuggestedAmount.HasValue ? request.SuggestedAmount.Value : 0,
+                    Tax = request.Tax.HasValue ? request.Tax.Value : 0,
+                    AdvanceAmount = request.AdvanceAmount.HasValue ? request.AdvanceAmount.Value : 0,
+                    TotalPayment = request.TotalPayment.HasValue ? request.TotalPayment.Value : 0,
                     DetailRequestID = theId,
                 };
 

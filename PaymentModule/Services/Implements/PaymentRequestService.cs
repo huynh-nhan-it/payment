@@ -57,7 +57,7 @@ namespace PaymentModule.Services.Implements
                 string resultRequestCode = RequestCode == "" ? "" : RequestCode;
                 Guid StatusOfTypeSave = new Guid();
 
-               if(type.Contains("create-request"))
+               if(type.Contains("create-request") || type.Contains("re-submit"))
                 {
                     StatusOfTypeSave = new Guid("80BCF31A-08AA-433D-879D-AB55E7730045");
                 } else if(type.Contains("save-draft"))
@@ -85,9 +85,9 @@ namespace PaymentModule.Services.Implements
                 var paymentRequest = new PaymentRequestEntity
                 {
                     Id = paymentRequestId,
-                    RequestCode = resultRequestCode, //Testing...
+                    RequestCode = resultRequestCode,
                     Purpose = _detailRequestService.GetPurposeById(requestId),
-                    StatusId = StatusOfTypeSave, //Approving
+                    StatusId = StatusOfTypeSave, 
                     UserId = new Guid(string.IsNullOrEmpty(userId) ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : userId), //Testing...
                     CreateAt = DateTime.Now,
                     IsDeleted = 1,

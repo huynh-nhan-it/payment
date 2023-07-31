@@ -56,80 +56,106 @@ namespace PaymentModule.Controllers
         {
             
             string connectionString = _connectionStringSettings.ConnectionString;
-            string selectQuery = "SELECT DISTINCT  dr.Id as drId, pr.Id as prId ,pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, dr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber,   dt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note,   pm.Id as PmId,   adr.ApproverId   FROM DetailRequests AS dr   INNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId INNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid INNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id  INNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId   where pr.RequestCode like @RequestCode";
-            List<PaymentRequestDetail> listPaymentRequestDetail = new List<PaymentRequestDetail>();
-            List<DetailTableModel> listDetailTable = new List<DetailTableModel>();
-            List<ApproverModel> ApproverList = new List<ApproverModel>(); //trả ra model, kiểm tra đầu vào dựa va
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            bool checkAttachment = false;
+            string selectQuery = "";
+            Guid detailRequestId = _detailRequestService.GetDRidByRequestCode(RequestCode);
+            if(detailRequestId !=  Guid.Empty)
             {
-                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                var attach = _context.Attachments.Select(attach => attach.DetailRequestId.Equals(detailRequestId));
+                if(attach != null)
                 {
-                    connection.Open();
-                    string requestCode = "%" + RequestCode + "%";
-                    command.Parameters.AddWithValue("@RequestCode", requestCode);
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    checkAttachment = true;
+                    selectQuery = "SELECT DISTINCT dr.Id as drId, pr.Id as prId ,pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId,  dr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber,  dt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note,    pm.Id as PmId,   atm.FilePath, adr.ApproverId   FROM DetailRequests AS dr    INNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId  INNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid  INNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id   INNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId  INNER JOIN Attachments as atm on dr.Id = atm.DetailRequestId  where pr.RequestCode like '%005%'";
+                } else
+                {
+                    selectQuery = "SELECT DISTINCT dr.Id as drId, pr.Id as prId ,pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, dr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber,   dt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note,   pm.Id as PmId,   adr.ApproverId   FROM DetailRequests AS dr   INNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId INNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid INNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id  INNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId   where pr.RequestCode like @RequestCode";
+
+                }
+                List<PaymentRequestDetail> listPaymentRequestDetail = new List<PaymentRequestDetail>();
+                List<DetailTableModel> listDetailTable = new List<DetailTableModel>();
+                List<ApproverModel> ApproverList = new List<ApproverModel>();
+                List<string> attachmentList = new List<string>();
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand(selectQuery, connection))
                     {
-                        while (reader.Read())
+                        connection.Open();
+                        string requestCode = "%" + RequestCode + "%";
+                        command.Parameters.AddWithValue("@RequestCode", requestCode);
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            var a = new DetailTableModel
+                            while (reader.Read())
                             {
-                                Id = (Guid)reader["DtId"],
-                                InvDate = (DateTime)reader["InvDate"],
-                                PaymentContent = (string)reader["PaymentContent"],
-                                Amount = (double)reader["Amount"],
-                                InvNo = (int)reader["InvNo"],
-                                Industry = (string)reader["Industry"],
-                                DepartmentOnTable = _departmentBearService.GetDepartmentBearById((Guid)reader["DepartmentBearId"]),
-                                Note = (string)reader["Note"],
-                            };
-
-                            if (listDetailTable.SingleOrDefault(dt => dt.Id.Equals(a.Id)) == null)
-                            {
-                                listDetailTable.Add(a);
-                            }
-                            string approverEmail = _userService.GetUserModelById((Guid)reader["ApproverId"]).Email;
-                            var app = ApproverList.SingleOrDefault(ap => ap.Email.Equals(approverEmail) == true);
-                            if (app == null)
-                            {
-                                var approver = new ApproverModel
+                                if(checkAttachment == true)
                                 {
-                                    FullName = _userService.GetUserModelById((Guid)reader["ApproverId"]).FullName,
-                                    Email = _userService.GetUserModelById((Guid)reader["ApproverId"]).Email,
-                                    JobTitle = _userService.GetUserModelById((Guid)reader["ApproverId"]).JobTitle
+                                    attachmentList.Add((string)reader["FilePath"]);
+                                }
+                                var a = new DetailTableModel
+                                {
+                                    Id = (Guid)reader["DtId"],
+                                    InvDate = (DateTime)reader["InvDate"],
+                                    PaymentContent = (string)reader["PaymentContent"],
+                                    Amount = (double)reader["Amount"],
+                                    InvNo = (int)reader["InvNo"],
+                                    Industry = (string)reader["Industry"],
+                                    DepartmentOnTable = _departmentBearService.GetDepartmentBearById((Guid)reader["DepartmentBearId"]),
+                                    Note = (string)reader["Note"],
                                 };
-                                ApproverList.Add(approver);
-                            }
-                            double exRate = 0d;
-                            if (reader["ExchangeRate"] != null && !DBNull.Value.Equals(reader["ExchangeRate"]))
-                            {
-                                exRate = (double)reader["ExchangeRate"];
-                            }
 
-                            var b = new PaymentRequestDetail
-                            {
-                                Id = (Guid)reader["drId"],
-                                requestId = (Guid)reader["prId"],
-                                RequestCode = (string)reader["RequestCode"],
-                                UserName = _userService.GetUserModelById((Guid)reader["UserId"]).FullName,
-                                CreateAt = (DateTime)reader["CreateAt"],
-                                Status = _statusService.GetStatusById((Guid)reader["StatusId"]),
-                                Purpose = (string)reader["Purpose"],
-                                Department = _departmentService.GetNameByDepartmentId((Guid)reader["DepartmentId"]), //
-                                PaymentFor = (string)reader["PaymentFor"],
-                                Supplier = _supplierService.GetSupplierNameById((Guid)reader["SupplierId"]), //
-                                Currency = _currencyService.GetCurrencyNameById((Guid)reader["CurrencyId"]), //
-                                ExchangeRate = exRate,
-                                PONumber = (int)reader["PONumber"],
-                                TableDetailRequest = listDetailTable,
-                                Method = _paymentMethodService.GetPaymentMethodById((Guid)reader["PmId"]), //
-                                ApproverIds = ApproverList, //
-                            };
-                            listPaymentRequestDetail.Add(b);
+                                if (listDetailTable.SingleOrDefault(dt => dt.Id.Equals(a.Id)) == null)
+                                {
+                                    listDetailTable.Add(a);
+                                }
+                                string approverEmail = _userService.GetUserModelById((Guid)reader["ApproverId"]).Email;
+                                var app = ApproverList.SingleOrDefault(ap => ap.Email.Equals(approverEmail) == true);
+                                if (app == null)
+                                {
+                                    var approver = new ApproverModel
+                                    {
+                                        FullName = _userService.GetUserModelById((Guid)reader["ApproverId"]).FullName,
+                                        Email = _userService.GetUserModelById((Guid)reader["ApproverId"]).Email,
+                                        JobTitle = _userService.GetUserModelById((Guid)reader["ApproverId"]).JobTitle
+                                    };
+                                    ApproverList.Add(approver);
+                                }
+                                double exRate = 0d;
+                                if (reader["ExchangeRate"] != null && !DBNull.Value.Equals(reader["ExchangeRate"]))
+                                {
+                                    exRate = (double)reader["ExchangeRate"];
+                                }
+                                
+                                var b = new PaymentRequestDetail
+                                {
+                                    Id = (Guid)reader["drId"],
+                                    requestId = (Guid)reader["prId"],
+                                    RequestCode = (string)reader["RequestCode"],
+                                    UserName = _userService.GetUserModelById((Guid)reader["UserId"]).FullName,
+                                    CreateAt = (DateTime)reader["CreateAt"],
+                                    Status = _statusService.GetStatusById((Guid)reader["StatusId"]),
+                                    Purpose = (string)reader["Purpose"],
+                                    Department = _departmentService.GetNameByDepartmentId((Guid)reader["DepartmentId"]), //
+                                    PaymentFor = (string)reader["PaymentFor"],
+                                    Supplier = _supplierService.GetSupplierNameById((Guid)reader["SupplierId"]), //
+                                    Currency = _currencyService.GetCurrencyNameById((Guid)reader["CurrencyId"]), //
+                                    ExchangeRate = exRate,
+                                    PONumber = (int)reader["PONumber"],
+                                    TableDetailRequest = listDetailTable,
+                                    Method = _paymentMethodService.GetPaymentMethodById((Guid)reader["PmId"]), //
+                                    ApproverIds = ApproverList, //
+                                    AttachmentList = attachmentList,
+                                };
+                                listPaymentRequestDetail.Add(b);
+                            }
                         }
                     }
                 }
+                return Ok(listPaymentRequestDetail[listPaymentRequestDetail.Count - 1]);
+            } else
+            {
+                return Ok("Không tìm thấy request id này");
             }
-            return Ok(listPaymentRequestDetail[listPaymentRequestDetail.Count - 1]);
+
+            
         }
 
         [HttpGet("Approver")]
