@@ -29,8 +29,10 @@ const App: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const id = localStorage.getItem('id');
 
-  const handleFormSubmit = (typeSave:any) => {
+  const handleFormSubmit = (typeSave:any, id: any) => {
+    
     //Gọi action submitForm
     if(formData.form.purpose ==''){
       showError.PurposeError();
@@ -54,7 +56,7 @@ const App: React.FC = () => {
       showError.NumberError();
     }
     else{
-    dispatch(submitForm(formData, typeSave));
+    dispatch(submitForm(formData, typeSave, id));
     console.log(formData, typeSave);
 
     navigate("/request/payment");
@@ -126,7 +128,7 @@ const App: React.FC = () => {
                         <MdDrafts
                           style={{ marginRight: "5px" }}
                           onClick={() => {
-                            handleFormSubmit("save-draft");
+                            handleFormSubmit("save-draft", id);
                           }}
                         />{" "}
                         Save Draft{" "}
@@ -140,7 +142,7 @@ const App: React.FC = () => {
                         <BsFillSendFill
                           style={{ marginRight: "5px" }}
                           onClick={() => {
-                            handleFormSubmit("create-request");
+                            handleFormSubmit("create-request", id);
                           }}
                         />{" "}
                         Submit{" "}

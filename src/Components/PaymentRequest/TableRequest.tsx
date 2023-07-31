@@ -178,7 +178,7 @@ interface Item {
     const tax = useSelector((state: RootState) => state.cal.tax);
     const advance_Amount = useSelector((state: RootState) => state.cal.advanceAmount);
     const total_Payment = useSelector((state: RootState) => state.cal.totalPayment);
-
+    
   
     useEffect(() => {
       // Chuyển đổi tabledetail thành chuỗi JSON và cập nhật ListApproveAPI

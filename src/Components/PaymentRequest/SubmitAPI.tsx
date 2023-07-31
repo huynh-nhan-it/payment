@@ -5,7 +5,7 @@ import { updatePurpose, updateDepartment, updatePaymentFor, updateSupplier, upda
 import { updatePayMethod, updateTotalAmount, updateTax, updateAdvanceAmount, updateTotalPayment } from './Store/calculateSlice';
 import { setSelectedFile } from './Store/attachmentSlice';
 
-export const submitForm = (formData: { form: any; table: any; approve: any; cal: any, attachment:any}, typeSave: any) => async (dispatch: (arg0: { payload: any; type: "form/updatePurpose" | "form/updateDepartment" | "form/updatePaymentFor" | "form/updateSupplier" | "form/updateCurrency" | "form/updateExchangeRate" | "form/updatePoPrNumber" | "table/setListDetailAPI" | "form/updatePayMethod" | "form/updateTotalAmount" | "form/updateTax" | "form/updateAdvanceAmount" | "form/updateTotalPayment" | "approve/setListApproveAPI" | "file/setSelectedFile"; }) => void) => {
+export const submitForm = (formData: { form: any; table: any; approve: any; cal: any, attachment:any}, typeSave: any, id: any) => async (dispatch: (arg0: { payload: any; type: "form/updatePurpose" | "form/updateDepartment" | "form/updatePaymentFor" | "form/updateSupplier" | "form/updateCurrency" | "form/updateExchangeRate" | "form/updatePoPrNumber" | "table/setListDetailAPI" | "form/updatePayMethod" | "form/updateTotalAmount" | "form/updateTax" | "form/updateAdvanceAmount" | "form/updateTotalPayment" | "approve/setListApproveAPI" | "file/setSelectedFile"; }) => void) => {
   try {
     const formState = formData.form;
     const tableState = formData.table;
@@ -29,7 +29,7 @@ export const submitForm = (formData: { form: any; table: any; approve: any; cal:
       files: selectedFiles,
       Approvers: approveState.ListApproveAPI,
       typeSave: typeSave,
-      UserId: "4468907D-4844-41A9-BD5E-0302001F0F7D",      
+      UserId: id,      
     };
    
     
