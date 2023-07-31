@@ -66,8 +66,10 @@ namespace PaymentModule.Controllers
             }
             string avt = userWithDetails.Avatar; //lấy avt cũ
             string[] avtString = avt.Split("/");
+            string[] sigString = userWithDetails.Signature.ImagePath.Split("/");
             string actStaticPath = "http://localhost:5005/";
-            for(int i = 1; i < avtString.Length; i++)
+            string signaturePath = "http://localhost:5005/";
+            for (int i = 1; i < avtString.Length; i++)
             {
                 if(i == avtString.Length - 1)
                 {
@@ -78,7 +80,19 @@ namespace PaymentModule.Controllers
                 }
                 
             }
-            var InfoUser = System.Text.Json.JsonSerializer.Serialize(new { userInfo = userWithDetails, avt = actStaticPath }, options);
+            for (int i = 1; i < sigString.Length; i++)
+            {
+                if (i == sigString.Length - 1)
+                {
+                    signaturePath += sigString[i];
+                }
+                else
+                {
+                    signaturePath += sigString[i] + "/";
+                }
+
+            }
+            var InfoUser = System.Text.Json.JsonSerializer.Serialize(new { userInfo = userWithDetails, avt = actStaticPath, sig = signaturePath }, options);
             string formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(InfoUser), Formatting.Indented);
             return Ok(formattedJson);
         }
