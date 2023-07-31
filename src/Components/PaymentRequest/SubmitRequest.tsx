@@ -56,16 +56,11 @@ const App: React.FC = () => {
     else{
     dispatch(submitForm(formData, typeSave));
     console.log(formData, typeSave);
-<<<<<<< Updated upstream
 
     navigate("/request/payment");
   }
-=======
-    //navigate("/request/payment");
-    
->>>>>>> Stashed changes
   };
-}
+
 
   return (
 
@@ -165,6 +160,7 @@ const App: React.FC = () => {
       </Layout>
     </div>
   );
-};
+}
+
 
 export default App;
