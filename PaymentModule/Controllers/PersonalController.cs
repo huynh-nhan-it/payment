@@ -221,7 +221,7 @@ namespace PaymentModule.Controllers
             {
                 SignatureToUpdate.QRcode = signature.QRcode;
                 SignatureToUpdate.dateTime = DateTime.Now;
-                SignatureToUpdate.ImagePath = result.fileNamePath == null ? SignatureToUpdate.ImagePath : result.fileNamePath;
+                SignatureToUpdate.ImagePath = result.fileNamePath == "" ? SignatureToUpdate.ImagePath : result.fileNamePath;
 
                 _context.Signatures.Update(SignatureToUpdate);
                 return new ObjectResult(new { SignatureToUpdate, success = true, error = false, message = "Cập nhật thông tin Signature thành công" });
