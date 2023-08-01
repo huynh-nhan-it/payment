@@ -5,7 +5,11 @@
 
 .employee-avatar-name-edit{
     display: flex;
-    padding-top: 40px;
+    padding: 40px 20px;
+}
+
+.employee-avatar-name-edit span{
+    width: auto !important;
 }
 
 .name-employee{

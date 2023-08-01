@@ -33,7 +33,6 @@ const InforUser = () => {
   const [avatar, setAvatar] = useState<Blob | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
-
   const id = localStorage.getItem("id");
 
   useEffect(() => {
@@ -45,15 +44,26 @@ const InforUser = () => {
         );
 
         setDataEmployee(res.data.userInfo);
+        console.log(res.data.userInfo.Additional);
         if (res.data.avt) {
           setDataAvatar(res.data.avt);
         }
         if (res.data.sig) {
           setSignaturePath(res.data.sig);
         }
-        // console.log(res.data.userInfo.Avatar);
-
-        setDataSignature(res.data.userInfo.Signature);
+        if (res.data.userInfo.Signature) {
+          const sanitizedSignatureData: Record<string, string> = {};
+          Object.entries(res.data.userInfo.Signature).forEach(
+            ([key, value]) => {
+              if (typeof value === "string") {
+                sanitizedSignatureData[key] = value;
+              } else {
+                sanitizedSignatureData[key] = "";
+              }
+            }
+          );
+          setDataSignature(sanitizedSignatureData);
+        }
         if (res.data.userInfo.Additional) {
           const sanitizedAdditionalData: Record<string, string> = {};
           Object.entries(res.data.userInfo.Additional).forEach(
@@ -97,8 +107,15 @@ const InforUser = () => {
     getUserInfor();
   }, [id]);
 
-  console.log(dataSignature);
+  const currentDate = new Date();
 
+  // Lấy thông tin ngày, tháng, năm và giờ, phút, giây từ đối tượng Date
+  const day = currentDate.getDate(); // Ngày (1-31)
+  const month = currentDate.getMonth() + 1; // Tháng (0-11), cộng thêm 1 vì tháng bắt đầu từ 0
+  const year = currentDate.getFullYear(); // Năm (đầy đủ bốn chữ số)
+  const hours = currentDate.getHours(); // Giờ (0-23)
+  const minutes = currentDate.getMinutes(); // Phút (0-59)
+  const time = `${day}/${month}/${year} ${hours}:${minutes}`;
   const newDataOverview = {
     "First name": dataEmployee?.FirstName,
     "Last name": dataEmployee?.LastName,
@@ -108,13 +125,14 @@ const InforUser = () => {
   };
   const mergedObject = { ...newDataOverview, ...dataOverview };
 
-  // const newDataSignature = {
-  //   'imgpath': dataSignature
-  // }
-  const mergedObjectSignature = { ...dataSignature, signaturePath };
-  // console.log(mergedObjectSignature);
+  const newDataSignture = {
+    signaturePath: signaturePath,
+    email: dataEmployee?.Email,
+  };
+  const mergedObjectSignature = { ...dataSignature, ...newDataSignture };
   const [editable, setEditable] = useState(false);
 
+  console.log(mergedObjectSignature);
   const dataEditUserInfo = {
     overview: {
       EmployeeType: dataOverview["EmployeeType"],
@@ -243,6 +261,7 @@ const InforUser = () => {
   const token = localStorage.getItem("authToken");
 
   const handleClickSave = async () => {
+    // window.location.reload()
     setEditable(false);
 
     const formData = new FormData();
@@ -404,46 +423,42 @@ const InforUser = () => {
         </div>
       </Header>
       <div className="employee-avatar-name-edit">
-        <h2 className="name-employee">
-          <span>
-            {!editable ? (
-              <img className="avatar-employee" src={dataAvatar}></img>
-            ) : (
-              <ImgCrop rotationSlider>
-                <Upload
-                  listType="picture-circle"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  beforeUpload={beforeUpload}
-                  onChange={handleAvatarChange}>
-                  {dataAvatar ? (
-                    !avatar ? (
-                      <img
-                        className="avatar-employee"
-                        src={dataAvatar}
-                        alt="avatar"
-                        style={{ width: "100%" }}
-                      />
-                    ) : (
-                      <img
-                        className="avatar-employee"
-                        src={URL.createObjectURL(avatar)}
-                        alt="avatar"
-                        style={{ width: "100%" }}
-                      />
-                    )
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload>
-              </ImgCrop>
-            )}
-            {/* <Avatar data={dataAvatar} setData={setDataAvatar} /> */}
+        {!editable ? (
+          <img
+            className="avatar-employee"
+            src={avatar ? URL.createObjectURL(avatar) : dataAvatar}></img>
+        ) : (
+          <ImgCrop rotationSlider>
+            <Upload
+              listType="picture-circle"
+              // className="avatar-uploader"
+              showUploadList={false}
+              beforeUpload={beforeUpload}
+              onChange={handleAvatarChange}>
+              {dataAvatar ? (
+                !avatar ? (
+                  <img
+                    className="avatar-employee"
+                    src={dataAvatar}
+                    alt="avatar"
+                  />
+                ) : (
+                  <img
+                    className="avatar-employee"
+                    src={URL.createObjectURL(avatar)}
+                    alt="avatar"
+                  />
+                )
+              ) : (
+                uploadButton
+              )}
+            </Upload>
+          </ImgCrop>
+        )}
+        <h2 className="name-employee">{dataName}</h2>
+        {/* <Avatar data={dataAvatar} setData={setDataAvatar} /> */}
 
-            {/* <Avatar data={dataAvatar} setData={setDataAvatar} /> */}
-          </span>
-          {dataName}
-        </h2>
+        {/* <Avatar data={dataAvatar} setData={setDataAvatar} /> */}
         <div onClick={handleClickEdit} className="edit-employee">
           {!editable && <TbUserEdit />}
         </div>
@@ -451,8 +466,8 @@ const InforUser = () => {
       <Tabs
         style={{ padding: "16px" }}
         defaultActiveKey="1"
+        // defaultActiveKey={String(currentTab)}
         items={items}
-        // onChange={onChange}
       />
     </div>
   );
