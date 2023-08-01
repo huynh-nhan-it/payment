@@ -176,12 +176,12 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
           onClick: () => handleRowClick(record.requestCode),
         })}
         rowKey="requestCode"
-        // pagination={{
-        //   pageSize:10,
-        //   current: currentPage,
-        //   total: totalPage, // Replace with the total number of records from the API
-        //   onChange: (page) => handleSetCurrentPage(page),
-        // }}
+        pagination={{
+          pageSize:10,
+          current: currentPage,
+          total: totalPage, // Replace with the total number of records from the API
+          onChange: (page) => handleSetCurrentPage(page),
+        }}
         scroll={{ x: "max-content" }}
       />
     </>

@@ -1,9 +1,11 @@
 .avatar-employee{
     width: 100px;
+    border-radius: 50%;
 }
 
 .employee-avatar-name-edit{
     display: flex;
+    padding-top: 40px;
 }
 
 .name-employee{

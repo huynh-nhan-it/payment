@@ -28,6 +28,7 @@ const Employee: React.FC = () => {
                 height: "100%",
                 borderRight: "solid #ccc 0.1px",
               }}
+              width={226}
               collapsedWidth="0"
               collapsible
               collapsed={collapsed}
@@ -35,7 +36,7 @@ const Employee: React.FC = () => {
               <NavbarSetting />
             </Sider>
             <Content
-              style={{ paddingLeft: collapsed ? "0" : "200px" }}
+              style={{ paddingLeft: collapsed ? "0" : "226px" }}
               className="content-request">
               <InforUser />
             </Content>

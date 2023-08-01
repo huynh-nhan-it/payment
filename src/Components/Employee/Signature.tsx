@@ -27,7 +27,6 @@ interface SignatureProps {
 }
 
 const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
-  console.log(data);
   const formItems = Object.entries(data).map(([key, value]) => ({
     label: key,
     value: value,
@@ -37,20 +36,15 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
     setInputText(value);
 
     updatedData[label] = value;
-
+    updatedData['ImagePath'] = ''
     setData(updatedData);
   };
-  console.log(formItems);
   console.log(data);
   const [inputText, setInputText] = useState<string>("");
   const [selectedFont, setSelectedFont] = useState<any>(fontOptions[0]); // Lựa chọn font chữ mặc định
   const [selectedImage, setSelectedImage] = useState<
     string | ArrayBuffer | null
   >(null);
-
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setInputText(event.target.value);
-  // };
 
   const handleFontChange = (selectedOption: any) => {
     setSelectedFont(selectedOption);
@@ -69,18 +63,14 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
       };
       reader.readAsDataURL(file);
     }
-    const fileName = file?.name;
-    console.log(fileName);
     const updatedData: MyObject = { ...data };
 
-    updatedData[label] = `data/image/signature/a3e4d297-29ae-42f8-a2f7-9d511f31b0b9/${file?.name}`;
+    updatedData[label] =file;
     updatedData['QRcode'] = ''
     setData(updatedData);
-    // setData(fileName)
-    // setData(fileName, )
   };
 
-  console.log(data);
+  // console.log(data?.signaturePath);
   // console.log(selectedFont);
   const items: TabsProps["items"] = [
     {
@@ -98,7 +88,7 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
                       <Input
                         type="text"
                         id="inputText"
-                        value={inputText}
+                        value={data.QRcode}
                         onChange={(e) =>
                           handleInputChange(e.target.value, item.label)
                         }
@@ -111,6 +101,7 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
               <div>
                 <label>Signature Style</label>
                 <Select
+                key={selectedFont}
                   style={{ width: "100%" }}
                   id="fontSelect"
                   options={fontOptions}
@@ -120,7 +111,7 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
               </div>
             </Col>
           </Row>
-          {inputText && (
+          {data.QRcode && (
             <Row style={{ paddingTop: 20 }}>
               <Col span={12} offset={6}>
                 <div
@@ -133,7 +124,7 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
                   <div style={{ padding: "10px" }}>
                     <QRCode
                       style={{ width: "100px", height: "100px" }}
-                      value={inputText}
+                      value={data.QRcode}
                     />
                   </div>
                   <div
@@ -146,7 +137,7 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
                         fontFamily: selectedFont,
                         fontSize: 35,
                       }}>
-                      {inputText}
+                      {data.QRcode}
                     </h1>
                   </div>
                 </div>
@@ -219,15 +210,74 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
     <div>
       {isEditable ? (
         <Tabs
+        // key={items.keys}
           style={{ padding: "16px" }}
           defaultActiveKey="1"
           items={items}
-          onChange={onChange}
+          // onChange={onChange}
         />
       ) : (
         <div>
-          <img src={`${data["ImagePath"]}`} alt="qr"></img>
+          {data.QRcode && (
+            <Row style={{ paddingTop: 20 }}>
+              <Col span={12} offset={6}>
+                <div
+                  style={{
+                    width: "400px",
+                    height: "200px",
+                    background: "#fff",
+                    display: "flex",
+                  }}>
+                  <div style={{ padding: "10px" }}>
+                    <QRCode
+                      style={{ width: "100px", height: "100px" }}
+                      value={data.QRcode}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      marginTop: "1rem",
+                      fontFamily: selectedFont,
+                    }}>
+                    <h1
+                      style={{
+                        fontFamily: selectedFont,
+                        fontSize: 35,
+                      }}>
+                      {data.QRcode}
+                    </h1>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          )}
           
+          {data?.signaturePath && (
+            <Row style={{ paddingTop: 20 }}>
+              <Col span={12} offset={6}>
+                <div
+                  style={{
+                    height: "200px",
+                    background: "#fff",
+                    display: "flex",
+                  }}>
+                  <div style={{ padding: "10px" }}>
+                    <QRCode
+                      style={{ width: "100px", height: "100px" }}
+                      value={data?.signaturePath}
+                    />
+                  </div>
+                  <div style={{ marginTop: "1rem" }}>
+                    <img
+                      src={data?.signaturePath as string}
+                      alt="Uploaded"
+                      style={{ width: "200px" }}
+                    />
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          )}
         </div>
       )}
     </div>
