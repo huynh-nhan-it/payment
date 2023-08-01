@@ -65,7 +65,7 @@ namespace PaymentModule.Controllers
                 if(attach != null)
                 {
                     checkAttachment = true;
-                    selectQuery = "SELECT DISTINCT dr.Id as drId, pr.Id as prId ,pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId,  dr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber,  dt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note,    pm.Id as PmId,   atm.FilePath, adr.ApproverId   FROM DetailRequests AS dr    INNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId  INNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid  INNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id   INNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId  INNER JOIN Attachments as atm on dr.Id = atm.DetailRequestId  where pr.RequestCode like '%005%'";
+                    selectQuery = "SELECT DISTINCT dr.Id as drId, pr.Id as prId ,pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId,  dr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber,  dt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note,    pm.Id as PmId,   atm.FilePath, adr.ApproverId   FROM DetailRequests AS dr    INNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId  INNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid  INNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id   INNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId  INNER JOIN Attachments as atm on dr.Id = atm.DetailRequestId  where pr.RequestCode like @RequestCode";
                 } else
                 {
                     selectQuery = "SELECT DISTINCT dr.Id as drId, pr.Id as prId ,pr.RequestCode, pr.UserId, pr.CreateAt, pr.StatusId, dr.Purpose, dr.DepartmentId, dr.PaymentFor, dr.SupplierId, dr.CurrencyId, dr.ExchangeRate , dr.PONumber,   dt.Id as DtId, dt.InvDate, dt.PaymentContent, dt.Amount, dt.InvNo, dt.Industry, dt.DepartmentBearId, dt.Note,   pm.Id as PmId,   adr.ApproverId   FROM DetailRequests AS dr   INNER JOIN DetailTables AS dt ON dr.id = dt.DetailRequestId INNER JOIN PaymentRequests AS pr ON dr.id = pr.detailrequestid INNER JOIN PaymentMethods AS pm ON dr.PaymentMethodId = pm.id  INNER JOIN ApproverDetailRequest AS adr ON dr.Id = adr.DetailRequestId   where pr.RequestCode like @RequestCode";
@@ -88,7 +88,11 @@ namespace PaymentModule.Controllers
                             {
                                 if(checkAttachment == true)
                                 {
-                                    attachmentList.Add((string)reader["FilePath"]);
+                                    string fullPath = (string)reader["FilePath"];
+                                    string deteleWwwroot = fullPath.Split("/")[1];
+                                    string finalPath = "http://localhost:5005/" + deteleWwwroot.Replace("\\", "/");
+                                   
+                                    attachmentList.Add(finalPath);
                                 }
                                 var a = new DetailTableModel
                                 {
