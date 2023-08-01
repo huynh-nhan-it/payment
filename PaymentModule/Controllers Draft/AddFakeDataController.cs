@@ -34,7 +34,8 @@ namespace PaymentModule.Controllers
         [HttpPost("fake-data-user")]
         public IActionResult GetAllCommentByDRid()
         {
-            return Ok(ReadApproverDataFile("C:\\Users\\84961\\Desktop\\Intern_Opus_Solution\\project\\payment\\PaymentModule\\data\\Approver.txt"));
+            string filePath = Path.Combine("data", "Approver.txt");
+            return Ok(ReadApproverDataFile(filePath));
             
         }
 

@@ -72,7 +72,8 @@ namespace PaymentModule.Services.Implements
         Guid IDetailRequestService.GetDRidByRequestCode(string requestCode)
         {
             Guid detailRequestId = new Guid();
-            var paymentRequest = _context.PaymentRequests.SingleOrDefault(pr => pr.RequestCode.Contains(requestCode) == true);
+            var paymentRequests = _context.PaymentRequests.ToList();
+            var paymentRequest = _context.PaymentRequests.FirstOrDefault(pr => pr.RequestCode.Equals(requestCode));
             if(paymentRequest != null)
             {
                 detailRequestId = paymentRequest.DetailRequestId;

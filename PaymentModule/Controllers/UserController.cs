@@ -231,9 +231,6 @@ namespace PaymentModule.Controllers
                     if (Directory.Exists(filePath)) { Directory.Delete(filePath, true); }
                     return Ok("Please enter the required information");
                 }
-            } else
-            {
-                return Ok(prd.files);
             }
 
 

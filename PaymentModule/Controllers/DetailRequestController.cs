@@ -1,4 +1,4 @@
-﻿
+﻿    
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -61,7 +61,7 @@ namespace PaymentModule.Controllers
             Guid detailRequestId = _detailRequestService.GetDRidByRequestCode(RequestCode);
             if(detailRequestId !=  Guid.Empty)
             {
-                var attach = _context.Attachments.Select(attach => attach.DetailRequestId.Equals(detailRequestId));
+                var attach = _context.Attachments.SingleOrDefault(attach => attach.DetailRequestId.Equals(detailRequestId));
                 if(attach != null)
                 {
                     checkAttachment = true;
