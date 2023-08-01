@@ -31,6 +31,15 @@ export const PoPrError = () => {
   messageApi.error('Please Enter PO/PR Number !');
 };
 
+export const ApproverError = () => {
+  const messageApi = message;
+  messageApi.error('Please Select At Least 1 Approver !');
+};
+
+export const TableError = () => {
+  const messageApi = message;
+  messageApi.error('Please Enter At Least 1 Request Payment !');
+};
 export const NumberError = () => {
   notification.error({
     message: 'Number Error :(',

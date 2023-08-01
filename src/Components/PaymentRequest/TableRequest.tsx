@@ -633,6 +633,7 @@ interface Item {
   <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}></span>
     <InputNumber
       style={{width:200}}
+      maxLength={15}
       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
       value={advanceAmount}
       onChange={handleAdvanceAmount}

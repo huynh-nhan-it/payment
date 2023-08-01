@@ -55,6 +55,12 @@ const App: React.FC = () => {
     else if((formData.form.exchangeRate || formData.form.poPrNumber)<0){
       showError.NumberError();
     }
+    else if(formData.approve==null){
+      showError.ApproverError();
+    }
+    else if(formData.table==null){
+      showError.TableError();
+    }
     else{
     dispatch(submitForm(formData, typeSave, id));
     console.log(formData, typeSave);
