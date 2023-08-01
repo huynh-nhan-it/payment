@@ -63,6 +63,15 @@ const App: React.FC = () => {
   }
   };
 
+  const handleFormSubmitDraft = (typeSave:any, id: any) =>{
+    dispatch(submitForm(formData, typeSave, id));
+    console.log(formData, typeSave);
+
+    navigate("/request/payment");
+  }
+
+  
+
 
   return (
 
@@ -128,7 +137,7 @@ const App: React.FC = () => {
                         <MdDrafts
                           style={{ marginRight: "5px" }}
                           onClick={() => {
-                            handleFormSubmit("save-draft", id);
+                            handleFormSubmitDraft("save-draft", id);
                           }}
                         />{" "}
                         Save Draft{" "}
