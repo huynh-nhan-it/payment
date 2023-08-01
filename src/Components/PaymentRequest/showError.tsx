@@ -37,3 +37,10 @@ export const NumberError = () => {
     description: 'You already entered a Invalid Number, please enter agian !',
   });
 };
+
+export const SelectError = () => {
+  notification.error({
+    message: 'Selection Error :(',
+    description: 'You just selected Missing Data, Please fill in the data and Try Again',
+  });
+};

@@ -59,7 +59,9 @@ const NavbarDepartment = () => {
   };
   console.log(manager);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
-
+  const id = localStorage.getItem('id');
+  const [departmentName, setDepartmentName] = useState('');
+  
   return (
     <Row>
       <Col span={8}>
