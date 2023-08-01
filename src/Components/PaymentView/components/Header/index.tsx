@@ -16,12 +16,14 @@ const { Header } = Layout;
 
 interface IHeader {
   showModal: (type: any) => void;
+  showModalShare: () => void;
   userId: any;
   DetailRequestId: any;
 }
 
 const ViewHeader: React.FC<IHeader> = ({
   showModal,
+  showModalShare,
   userId,
   DetailRequestId,
 }) => {
@@ -125,7 +127,7 @@ const ViewHeader: React.FC<IHeader> = ({
           </>
         )}
         <Col>
-          <Button href="#" className="text-header">
+          <Button href="#" className="text-header" onClick={() => {showModalShare()}}>
             {" "}
             <div style={{ display: "flex", alignItems: "center" }}>
               <AiOutlineShareAlt style={{ marginRight: "5px" }} /> Share

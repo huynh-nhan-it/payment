@@ -1,15 +1,10 @@
 import { Form, Input as AntdInput, Modal } from "antd";
 import { TextAreaRef } from "antd/es/input/TextArea";
 import { useRef } from "react";
+import { IModal } from "../../interface/IModal";
 
-interface IModalStatus {
-  isModalOpen: boolean;
-  handleOk?: (value: any, type: any) => void;
-  handleCancel?: () => void;
-  type: string
-}
 
-const ModalStatus: React.FC<IModalStatus> = ({
+const ModalStatus: React.FC<IModal> = ({
   isModalOpen,
   handleOk,
   handleCancel,
