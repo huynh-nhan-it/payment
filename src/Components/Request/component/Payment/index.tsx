@@ -9,9 +9,7 @@ const PaymentAll: React.FC = () => {
   return (
     <Provider store={store}>
       <div style={{ paddingTop: "64px" }}>
-        {/* <HeaderPayment/> */}
         <Payment />
-        {/* <DropdownFilter/> */}
       </div>
     </Provider>
   );

@@ -68,7 +68,6 @@ const ViewContent: React.FC<IViewContent> = ({userId, DetailRequestId, PaymentRe
       <div
         style={{
           paddingLeft: 16,
-
           background: colorBgContainer,
         }}>
         <div className="parent-row-info">

@@ -162,7 +162,8 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, "data.xlsx");
   };
-
+  
+  console.log(data);
   const handleRowClick = (requestCode: string) => {
     navigate(`/request/payment/view/${requestCode}`);
   };
@@ -176,12 +177,12 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
           onClick: () => handleRowClick(record.requestCode),
         })}
         rowKey="requestCode"
-        pagination={{
-          pageSize:10,
-          current: currentPage,
-          total: totalPage, // Replace with the total number of records from the API
-          onChange: (page) => handleSetCurrentPage(page),
-        }}
+        // pagination={{
+        //   pageSize:5,
+        //   current: currentPage,
+        //   total: totalPage, // Replace with the total number of records from the API
+        //   onChange: (page) => handleSetCurrentPage(page),
+        // }}
         scroll={{ x: "max-content" }}
       />
     </>
