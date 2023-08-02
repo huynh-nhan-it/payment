@@ -74,7 +74,7 @@ function ViewPayment(userId: any) {
           `http://localhost:5005/api/User/accept-or-not`,
           {
             approverId: userId.userId,
-            requestId: RequestId,
+            requestId: DetailRequestId,
             action: type,
           },
           {

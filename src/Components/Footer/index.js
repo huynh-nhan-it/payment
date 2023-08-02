@@ -1,6 +1,6 @@
 import React from "react";
 import "./Footer.css";
-const TopFooter = ({ title, decription }) => {
+export const TopFooter = ({ title, decription }) => {
   return (
     <div className="topfooter">
       <p className="topfooter-title">{title}</p>
@@ -22,4 +22,3 @@ export function BottomFooter({ title, decription }) {
   );
 }
 
-export default TopFooter;

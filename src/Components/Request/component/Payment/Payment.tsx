@@ -9,6 +9,7 @@ import { RootState } from "./store";
 import HeaderPayment from "./Header";
 import * as XLSX from "xlsx";
 import request from "../../../../Services/User/getAccount";
+import { formatDate } from "../../../../Utils/formatDate";
 
 interface PaymentRequestList {
   id: string;
@@ -102,13 +103,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   //       console.error(error);
   //     });
   // }, [data]);
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}/${month < 10 ? "0" + month : month}/${year}`;
-  };
+  
   const navigate = useNavigate();
 
   const columns: ColumnsType<PaymentRequestList> = [

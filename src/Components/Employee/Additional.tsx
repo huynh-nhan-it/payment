@@ -3,6 +3,7 @@ import "./employee.css";
 import { DatePicker, Form, Input } from "antd";
 import dayjs from "dayjs";
 import { AdditionalInfor } from "./Interface";
+import { formatDate } from "../../Utils/formatDate";
 
 interface MyObject {
   [key: string]: any;
@@ -29,13 +30,6 @@ const Additional: React.FC<AdditionalProps> = ({
     setData(updatedData);
   };
 
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}/${month < 10 ? "0" + month : month}/${year}`;
-  };
   return (
     <div>
       <Form>

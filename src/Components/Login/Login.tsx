@@ -90,6 +90,7 @@ const Login: React.FC = () => {
   // console.log(error);
   useEffect(() => {
     if (token) {
+      window.location.href='/'
       navigate("/");
     }
   }, [token]);

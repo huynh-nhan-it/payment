@@ -96,7 +96,7 @@ const Person: React.FC = () => {
     const getUserInfor = async () => {
       const endpoint = "/Personal/EmployeeInfo?Id=" + id;
       const response = await request.get(endpoint).then((res) => {
-        setDataName(res.data.userInfo.FirstName + ' ' +res.data.userInfo.LastName);
+        setDataName(res.data.userInfo.FirstName + ' ' + res.data.userInfo.LastName);
         // setData(res.data)
       });
     };
@@ -157,7 +157,16 @@ const Person: React.FC = () => {
       }
       return (
         <Menu.Item key={item.key}>
-          <Link to={`/setting/system/${item.name}`}>{item.label}</Link>
+
+          {item.name === 'signout' ? <Link to={`/setting/system/${item.name}`} onClick={(e)=>
+          {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = '/login'
+          }}>{item.label}</Link>
+            :
+            <Link to={`/setting/system/${item.name}`}>{item.label}</Link>
+          }
         </Menu.Item>
       );
     });

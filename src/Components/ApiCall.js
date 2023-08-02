@@ -8,7 +8,7 @@ import { Col, Row } from "antd";
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import CardContent from "./Card";
-import TopFooter, { BottomFooter } from "./Footer";
+import { TopFooter, BottomFooter } from "./Footer";
 import "./ApiCall.css";
 import AppHeader from "./Header";
 import { MdApproval, MdPayment } from "react-icons/md";
