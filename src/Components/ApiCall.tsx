@@ -40,9 +40,11 @@ import { TfiTimer } from "react-icons/tfi";
 import { FaPersonDress, FaFileContract } from "react-icons/fa6";
 import { RiComputerLine } from "react-icons/ri";
 import { Link, Route, Routes } from "react-router-dom";
+import { ListData } from "../Interface/opusHomepage";
+import { IconBaseProps } from "react-icons/lib";
 
-const ApiCall = () => {
-  const [data, setData] = useState([]);
+const ApiCall: React.FC = () => {
+  const [data, setData] = useState<ListData[]>([]);
   const url =
     "https://tasken.io/api/api/landingpage/tenant/8dc6957b-4869-4877-a511-6563f990d59e/landing-pages";
   const payload = "vi-Vn";
@@ -57,7 +59,7 @@ const ApiCall = () => {
     },
   };
 
-  // console.log(iconname);
+  // console.log(dataList);
 
   axios
     .post(url, payload, config)
@@ -69,7 +71,7 @@ const ApiCall = () => {
     .catch((error) => {
       console.error("Error:", error);
     });
-  const icons = [
+  const icons: IconBaseProps[] = [
     <BiGitPullRequest />,
     <AiOutlineFundProjectionScreen />,
     <BsFolder />,
@@ -114,10 +116,16 @@ const ApiCall = () => {
     item.type === "buttonContent" ? item.icon : ""
   );
   const icon = iconname.filter((icon) => icon !== "");
-  const mergedObject = {};
+  // const mergedObject = {};
+  // icon.forEach((name, index) => {
+  //   mergedObject[name] = icons[index];
+  // });
+  const mergedObject: { [key: string]: IconBaseProps } = {};
   icon.forEach((name, index) => {
     mergedObject[name] = icons[index];
   });
+  //  
+
   const { Footer } = Layout;
 
   // #337ab7

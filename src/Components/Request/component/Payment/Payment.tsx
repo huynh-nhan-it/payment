@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import axios from "axios";
 import { ConnectedProps, connect } from "react-redux";
-import { RootState } from "./store";
+import { RootState } from "../store/store";
 import HeaderPayment from "./Header";
 import * as XLSX from "xlsx";
 import request from "../../../../Services/User/getAccount";
@@ -21,9 +21,9 @@ interface PaymentRequestList {
 }
 
 interface DataListProps extends ConnectedProps<typeof connector> {
-  // Thêm các props khác nếu cần
 }
-const Payment: React.FC<DataListProps> = ({ filteredData }) => {
+const Payment: React.FC<DataListProps> = ({ filteredData, searchData }) => {
+  console.log(searchData.keyword);
   // `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`
   const [data, setData] = useState([]);
   const [purpose, setPurpose] = useState("");
@@ -90,6 +90,8 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     // console.log(page);
     setCurrentPage(page)
   };
+
+
   // console.log(currentPage);
   // useEffect(() => {
   //   axios
@@ -103,7 +105,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
   //       console.error(error);
   //     });
   // }, [data]);
-  
+
   const navigate = useNavigate();
 
   const columns: ColumnsType<PaymentRequestList> = [
@@ -157,7 +159,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, "data.xlsx");
   };
-  
+
   console.log(data);
   const handleRowClick = (requestCode: string) => {
     navigate(`/request/payment/view/${requestCode}`);
@@ -188,6 +190,7 @@ const Payment: React.FC<DataListProps> = ({ filteredData }) => {
 const mapStateToProps = (state: RootState) => {
   return {
     filteredData: state.filter,
+    searchData: state.search
   };
 };
 

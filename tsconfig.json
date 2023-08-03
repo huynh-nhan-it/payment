@@ -19,6 +19,6 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/Components/ApiCall.js"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/Components/ApiCall.tsx", "src/Components/Card/index.js"],
   "exclude": ["node_modules"]
 }

@@ -1,7 +1,7 @@
 import { Card, Col, Row } from "antd";
 import "./CardContent.css";
 
-function CardContent({className,icon,title, decription }) {
+function CardContent({id, className,icon,title, decription }) {
   return (
 
     <Card

@@ -26,3 +26,14 @@ export const resetFilter = () => {
     type: "RESET_FILTER",
   };
 };
+
+export const applySearch = (
+  keyword: string
+) => {
+  return {
+    type: "APPLY_SEARCH",
+    payload: {
+      keyword
+    }
+  }
+}

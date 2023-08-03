@@ -11,9 +11,9 @@ import {
 } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { RiArrowDownSFill } from "react-icons/ri";
-import { RootState } from "./store";
+import { RootState } from "../store/store";
 import { connect, ConnectedProps } from "react-redux";
-import { applyFilter, resetFilter } from "./actions";
+import { applyFilter, resetFilter } from "../actions/actions";
 import dayjs, { Dayjs } from "dayjs";
 
 interface FilterFormProps extends ConnectedProps<typeof connector> {}
