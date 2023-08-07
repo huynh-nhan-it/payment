@@ -3,14 +3,14 @@ import "../../../css/index.css";
 import { MdOutlineGroups } from "react-icons/md";
 import { Affix, Col, Input, List, Row, Tabs } from "antd";
 import { getDepartments } from "../../../../../../../../Services/PaymentRequest/apiForm";
-import { getDepartmentUsers } from "../../../../../../../../Services/Organizations/apiDepartmentUsers";
-
+import { getCheckManager, getDepartmentUsers } from "../../../../../../../../Services/Organizations/apiDepartmentUsers";
 const NavbarDepartment = () => {
   interface User {
     fullName: string;
     email: string;
     jobTitle: string;
   }
+  
   const [departmentData, setDepartmentData] = useState<string[]>([]);
   const [manager, setManager] = useState<User | null>(null);
   const [supervisor, setSupervisor] = useState<User[]>();
@@ -37,11 +37,59 @@ const NavbarDepartment = () => {
   const [underDepartment, setUnderDepartmen] = useState<any | null>(null);
   const [contactDepartment, setContactDepartmen] = useState<any | null>(null);
   const [codeDepartment, setCodeDepartmen] = useState<any | null>(null);
-
+  const [checkDisplay, setCheckDisplay] = useState('');
   const handleDepartmentClick = async (department: any) => {
     setNameDepartment(department);
+    setDepartmentName(department);
 
     try {
+      const check = await getCheckManager(id, department);
+      if(check == true){
+        setCheckDisplay('block');
+        const myEdit: HTMLElement | null = document.getElementById("edit");
+        if (myEdit) {
+          myEdit.style.display = "block";
+        }
+        const myAdd: HTMLElement | null = document.getElementById("add");
+        if (myAdd) {
+          myAdd.style.display = "block";
+        }
+        const myDelete: HTMLElement | null = document.getElementById("delete");
+        if (myDelete) {
+          myDelete.style.display = "block";
+        }
+        const myView: HTMLElement | null = document.getElementById("view");
+        if (myView) {
+          myView.style.display = "block";
+        }
+        const myAddMember: HTMLElement | null = document.getElementById("addMember");
+        if (myAddMember) {
+          myAddMember.style.display = "block";
+        }
+      }
+      else {
+        const myEdit: HTMLElement | null = document.getElementById("edit");
+        if (myEdit) {
+          myEdit.style.display = "none";
+        }
+        const myAdd: HTMLElement | null = document.getElementById("add");
+        if (myAdd) {
+          myAdd.style.display = "none";
+        }
+        const myDelete: HTMLElement | null = document.getElementById("delete");
+        if (myDelete) {
+          myDelete.style.display = "none";
+        }
+        const myView: HTMLElement | null = document.getElementById("view");
+        if (myView) {
+          myView.style.display = "none";
+        }
+        const myAddMember: HTMLElement | null = document.getElementById("addMember");
+        if (myAddMember) {
+          myAddMember.style.display = "none";
+        }
+      }
+      
       // Gọi hàm getDepartmentUsers để lấy danh sách người dùng của phòng ban
       const data = await getDepartmentUsers(department);
       setDecriptionDepartment(data.description);
@@ -52,6 +100,15 @@ const NavbarDepartment = () => {
       setManager(data.manager);
       setSupervisor(data.supervisors);
       setEmployees(data.employees);
+
+      const myInput: HTMLInputElement | null = document.getElementById("myInputData") as HTMLInputElement;
+
+if (myInput) {
+  // Lấy giá trị của input
+  myInput.value = department;
+
+  // Dùng giá trị đã lấy được
+}
     } catch (error) {
       console.error(error);
     }
@@ -61,7 +118,9 @@ const NavbarDepartment = () => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const id = localStorage.getItem('id');
   const [departmentName, setDepartmentName] = useState('');
-  
+
+
+
   return (
     <Row>
       <Col span={8}>

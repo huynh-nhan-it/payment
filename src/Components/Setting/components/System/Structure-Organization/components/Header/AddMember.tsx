@@ -9,7 +9,10 @@ interface Member{
   email: string;
   jobTitle: string;
 }
-const AddMemberForm: React.FC = () => {
+interface AddMemberFormProps {
+  departmentNameAdd: string;
+}
+const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
     const [departmentData, setDepartmentData] = useState<string[]>([]);
     const [memberData, setMemberData] = useState<Member[]>([]);
   
@@ -135,7 +138,8 @@ const AddMemberForm: React.FC = () => {
             </Select>
           </Form.Item>
           <Form.Item label="Department" style={{fontWeight: "bold", display: "flex", justifyContent: "flex-end" }}>
-            <Select
+            <input id="departmentAdd" value={departmentNameAdd} />
+            {/* <Select
               showSearch
               style={{ width: 200}}
               key="department"
@@ -147,7 +151,7 @@ const AddMemberForm: React.FC = () => {
                         </option>
                         ))}
                                                           
-            </Select>
+            </Select> */}
 
           </Form.Item>
           <Form.Item label="Position" style={{fontWeight: "bold", display: "flex", justifyContent: "flex-end" }}>

@@ -11,7 +11,7 @@ export const submitForm = (formData: { form: any; table: any; approve: any; cal:
     const tableState = formData.table;
     const approveState = formData.approve;
     const calState = formData.cal;
-    const selectedFiles = formData.attachment.selectedFile; // Lấy file đã chọn từ state attachment
+    const attachmentState = formData.attachment; // Lấy file đã chọn từ state attachment
     const payload = {
       Purpose: formState.purpose,
       Department: formState.department,
@@ -26,7 +26,7 @@ export const submitForm = (formData: { form: any; table: any; approve: any; cal:
       Tax: calState.tax,
       AdvanceAmount: calState.advanceAmount,
       TotalPayment: calState.totalPayment,
-      files: selectedFiles,
+      files: attachmentState.selectedFile,
       Approvers: approveState.ListApproveAPI,
       typeSave: typeSave,
       UserId: id,      

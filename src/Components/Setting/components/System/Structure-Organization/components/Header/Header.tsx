@@ -11,9 +11,18 @@ import AddMemberForm from "./AddMember";
 
 const { Header } = Layout;
 
-const HeaderOrganize: React.FC = () => {
+const HeaderOrganize: React.FC = () => {  
 
+let data = "";
+const myInput: HTMLInputElement | null = document.getElementById("myInputData") as HTMLInputElement;
 
+if (myInput) {
+  // Lấy giá trị của input
+  const inputValue: string = myInput.value;
+
+  // Dùng giá trị đã lấy được
+  data = inputValue; // In ra "Giá trị mặc định" (hoặc giá trị mà bạn đã nhập vào input)
+}
   return (
     <Header
     style={{
@@ -26,19 +35,23 @@ const HeaderOrganize: React.FC = () => {
     }} >
 
       <Row gutter={24} style={{paddingLeft: '1.5%'}}>
-        <Col > <a href="/setting/system/department/add" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/> Add Department</a></Col>
+        
+        <Col > <a style={{display: 'none'}} id="add" href="/setting/system/department/add" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/> Add Department</a></Col>
         <Col>
-        <a href="#" className="text-header"> <FaPen style={{ marginRight: '5px' }}/> Edit Department</a>
+        <a style={{display: 'none'}} id="edit" href="#" className="text-header"> <FaPen style={{ marginRight: '5px' }}/> Edit Department</a>
 
         </Col>
         <Col>
-        <a href="#" className="text-header"> <RiDeleteBin6Line style={{ marginRight: '5px' }}/> Delete Department</a>
+        <a style={{display: 'none'}} id="delete" href="#" className="text-header"> <RiDeleteBin6Line style={{ marginRight: '5px' }}/> Delete Department</a>
         </Col>
         <Col>
-        <div className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/><AddMemberForm/></div>
+        <div style={{display: 'none'}} id="addMember" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/>
+        <input style={{display: 'none'}} id="myInputData" value="defaultValue"/>
+        <AddMemberForm departmentNameAdd = {data} />
+        </div>
         </Col>
         <Col>
-        <a href="#" className="text-header"> <RiOrganizationChart style={{ marginRight: '5px' }}/> View orgchart</a>
+        <a style={{display: 'none'}} href="#" id="view" className="text-header"> <RiOrganizationChart style={{ marginRight: '5px' }}/> View orgchart</a>
         </Col>
         <Col>
         <a href="#" className="text-header"> <TiArrowBackOutline style={{ marginRight: '5px' }}/> Return</a>
