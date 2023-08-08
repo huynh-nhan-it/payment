@@ -7,6 +7,7 @@ import ComponentComment from "./comment-component";
 import CommentForm from "./comment-form";
 import axios from "axios";
 import Spinner from "../../../../common/Loading";
+import { openNotificationWithIcon } from "../../../common/notify";
 
 interface IComment {
   requestCode: string | undefined;
@@ -44,14 +45,7 @@ const Comment: React.FC<IComment> = ({
   const [stateForm, setStateForm] = useState<Comments[] | []>([]);
   const [hasFetchedData, setHasFetchedData] = useState(false);
   const [api, contextHolder] = notification.useNotification();
-
-  const openNotificationWithIcon = (type: any) => {
-    api['success']({
-      message: 'Notification Title',
-      description:
-        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-    });
-  };
+  
   useEffect(() => {
     if (!hasFetchedData) {
       axios
@@ -60,7 +54,6 @@ const Comment: React.FC<IComment> = ({
         )
         .then((response) => {
           setStateForm(response.data);
-          setLoading(false);
           const updatedFeedback = response.data.reduce(
             (acc: any, child: any, index: any) => {
               acc[index] = false;
@@ -69,7 +62,9 @@ const Comment: React.FC<IComment> = ({
             {}
           );
           setFeedBack(updatedFeedback);
-          setHasFetchedData(true); // Đánh dấu đã lấy dữ liệu
+          setHasFetchedData(true);
+            setLoading(false);
+          // Đánh dấu đã lấy dữ liệu
         })
         .catch((error) => {
           console.error(error);
@@ -89,6 +84,11 @@ const Comment: React.FC<IComment> = ({
 
   const HandleFetchData = (): void => {
     setHasFetchedData(false);
+    openNotificationWithIcon('success', api, {
+      message: 'Comment successfully',
+      description:
+        'Your comment has been updated',
+    });
   };
 
   const closeFeedBack = (index: any): void => {
@@ -100,6 +100,7 @@ const Comment: React.FC<IComment> = ({
   };
   return (
     <div className="region-comments">
+      {contextHolder}
       <Typography.Title level={2} style={{ textAlign: "left" }}>
         <CommentOutlined style={{ fontSize: "22px", paddingRight: 10 }} />
         <b

@@ -1,4 +1,4 @@
-import { Layout, theme } from "antd";
+import { Layout, notification, theme } from "antd";
 import ViewHeader from "./components/Header";
 import ViewContent from "./components/Content";
 import React, { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import Spinner from "../common/Loading";
 import { PaymentRequest } from "./interface/IRequest";
 import ModalShare from "./components/Modal/ModalShare";
 import ModalProgress from "./components/Modal/ModalProgress";
+import { openNotificationWithIcon } from "./common/notify";
 
 function ViewPayment(userId: any) {
   const {
@@ -27,6 +28,8 @@ function ViewPayment(userId: any) {
   const [collapsed, setCollapsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [DetailRequestId, setDetailRequestId] = useState("");
+  const [api, contextHolder] = notification.useNotification();
+  const [hasFetchedData, setHasFetchedData] = useState(false);
   const [isModalOpenShare, setIsModalOpenShare] = useState(false);
   const [isModalOpenProgress, setIsModalOpenProgress] = useState(false);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>(
@@ -34,20 +37,22 @@ function ViewPayment(userId: any) {
   );
 
   useEffect(() => {
-    axios
+    if(!hasFetchedData) {
+      axios
       .get(`http://localhost:5005/api/DetailRequest/${requestCode}`)
       .then((respone) => {
         setDetailRequestId(respone.data.id);
         setRequestId(respone.data.requestId);
         setPaymentRequest(respone.data);
+        setHasFetchedData(true);
         setLoading(false);
       })
       .catch((error) => {
         console.error(error);
       });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  }, [hasFetchedData]);
   //Handle modal delete, reject and approve
   const showModal = (type: any) => {
     setType(type);
@@ -66,7 +71,14 @@ function ViewPayment(userId: any) {
         .then((respone) => {
           if (respone.data.success) {
             setLoading(true);
-            window.location.href = "/request/payment";
+            openNotificationWithIcon('success', api, {
+              message: type + ' successfully',
+              description:
+                'Your ' + type + ' has been updated',
+            });
+            setTimeout(() => {
+              window.location.href = "/request/payment";
+            }, 3000);
           }
           setIsModalOpen(false);
         })
@@ -109,7 +121,12 @@ function ViewPayment(userId: any) {
               .then((res) => {
                 setLoading(true);
                 setIsModalOpen(false);
-                window.location.reload();
+                setHasFetchedData(false);
+                openNotificationWithIcon('success', api, {
+                  message: type + ' successfully',
+                  description:
+                    'Your ' + type + ' has been updated',
+                });
               })
               .catch((error) => {
                 console.error(error);
@@ -165,8 +182,14 @@ function ViewPayment(userId: any) {
           }
         )
         .then((respone) => {
+          setLoading(true);
+          setHasFetchedData(false);
           setIsModalOpenShare(false);
-          window.location.reload();
+          openNotificationWithIcon('success', api, {
+            message: 'Share successfully',
+            description:
+              'Your share has been updated',
+          });
         })
         .catch((err) => {
           console.error(err);
@@ -185,15 +208,13 @@ function ViewPayment(userId: any) {
     setIsModalOpenProgress(true);
   };
 
-  const handleOkProgress = () => {
-    setIsModalOpenProgress(false);
-  };
-
+  
   const handleCancelProgress = () => {
     setIsModalOpenProgress(false);
   };
   return (
     <div>
+      {contextHolder}
       {Loading ? (
         <Spinner></Spinner>
       ) : (
