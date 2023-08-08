@@ -77,14 +77,14 @@ namespace PaymentModule.Controllers
                 {
                     paymentRequests = paymentRequests.Skip((int)(page - 1) * page_size).Take(page_size);
                 }
-                var paymentRequestList = paymentRequests.ToList().Select(PREntity => new PaymentRequestModel
+                var paymentRequestList = paymentRequests.ToList().Where(PREntity => PREntity.IsDeleted == 1).Select(PREntity => new PaymentRequestModel
                 {
                     RequestCode = PREntity.RequestCode,
                     Purpose = PREntity.Purpose,
                     CreatedBy = _userService.GetUserModelById(PREntity.UserId).FullName,
                     CreatedDate = PREntity.CreateAt,
                     Status = _statusRepository.GetStatusById(PREntity.StatusId),
-                });
+                }).OrderByDescending(p => p.RequestCode);
                 return Ok(paymentRequestList.ToList());
             }
             catch (Exception ex)
