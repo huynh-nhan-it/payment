@@ -38,10 +38,11 @@ namespace PaymentModule.Controllers
         public IActionResult GetInforEmployee(Guid Id)
         {
             string token = "";
-            var userId = Id.ToString() == "" ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : Id.ToString();
+            var userId = Id.ToString() == "00000000-0000-0000-0000-000000000000" ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : Id.ToString();
             string authorizationHeader = Request.Headers["Authorization"];
             var options = new JsonSerializerOptions { WriteIndented = true, ReferenceHandler = ReferenceHandler.Preserve };
-
+            string actStaticPath = "";
+            string signaturePath = "";
 
             /*if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
             {
@@ -64,33 +65,41 @@ namespace PaymentModule.Controllers
             {
                 return BadRequest("User was not found");
             }
-            string avt = userWithDetails.Avatar; //lấy avt cũ
-            string[] avtString = avt.Split("/");
-            string[] sigString = userWithDetails.Signature.ImagePath.Split("/");
-            string actStaticPath = "http://localhost:5005/";
-            string signaturePath = "http://localhost:5005/";
-            for (int i = 1; i < avtString.Length; i++)
+            
+            if (userId != "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9")
             {
-                if(i == avtString.Length - 1)
-                {
-                    actStaticPath += avtString[i];
-                } else
-                {
-                    actStaticPath += avtString[i] + "/";
-                }
-                
-            }
-            for (int i = 1; i < sigString.Length; i++)
-            {
-                if (i == sigString.Length - 1)
-                {
-                    signaturePath += sigString[i];
-                }
-                else
-                {
-                    signaturePath += sigString[i] + "/";
-                }
+                string avt = userWithDetails.Avatar; //lấy avt cũ
+                string[] avtString = avt.Split("/");
+                if (userWithDetails.Signature != null) {
+                    string[] sigString = userWithDetails.Signature.ImagePath.Split("/");
+                    actStaticPath = "http://localhost:5005/";
+                    signaturePath = "http://localhost:5005/";
+                    for (int i = 1; i < avtString.Length; i++)
+                    {
+                        if (i == avtString.Length - 1)
+                        {
+                            actStaticPath += avtString[i];
+                        }
+                        else
+                        {
+                            actStaticPath += avtString[i] + "/";
+                        }
 
+                    }
+                    for (int i = 1; i < sigString.Length; i++)
+                    {
+                        if (i == sigString.Length - 1)
+                        {
+                            signaturePath += sigString[i];
+                        }
+                        else
+                        {
+                            signaturePath += sigString[i] + "/";
+                        }
+
+                    }
+                }
+               
             }
             var InfoUser = System.Text.Json.JsonSerializer.Serialize(new { userInfo = userWithDetails, avt = actStaticPath, sig = signaturePath }, options);
             string formattedJson = JsonConvert.SerializeObject(JsonConvert.DeserializeObject(InfoUser), Formatting.Indented);
@@ -208,6 +217,7 @@ namespace PaymentModule.Controllers
 
         private async Task<ObjectResult> HandleSignature(SignatureDto signature, Guid Id)
         {
+            
             var HandleImagePath = await _personalService.HandleFile(signature.ImageSignature, Id, "Signature");
             var result = HandleImagePath.Value as dynamic;
 
