@@ -10,3 +10,9 @@ export interface IModalShare {
     handleOkShare?: (value: any) => void;
     handleCancelShare?: () => void;
 }
+
+export interface IModalProgress {
+    isModalOpenProgress?: boolean;
+    handleCancelProgress?: () => void;
+    DetailRequestId?: string
+}

@@ -98,3 +98,8 @@
 }
 
 
+.upload {
+    display: flex !important;
+    justify-content: start !important;
+    align-items: start !important;
+}

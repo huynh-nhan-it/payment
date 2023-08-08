@@ -24,6 +24,7 @@ const CommentForm: React.FC<ICommentForm> = ({
   userId, 
   DetailRequestId
 }) => {
+  const [form] = Form.useForm(); // Khởi tạo form
   const onFinish = (values: any) => {
     console.log("Submitted values:", values);
     const data = {
@@ -39,6 +40,7 @@ const CommentForm: React.FC<ICommentForm> = ({
         },
       })
       .then((response) => {
+        form.resetFields();
         setHasFetchedData?.()
       })
       .catch((error) => {
@@ -56,7 +58,7 @@ const CommentForm: React.FC<ICommentForm> = ({
   };
 
   return (
-    <Form onFinish={onFinish}>
+    <Form onFinish={onFinish} form={form}>
       <Row>
         <Col md={12} sm={24} xs={24} className="comment-default">
           <Row justify="start" gutter={12}>
@@ -126,11 +128,13 @@ const CommentForm: React.FC<ICommentForm> = ({
           <Form.Item name="files">
             <Row justify="start">
               <Col style={{ paddingLeft: "4.2%" }}>
+                <div className="upload">
                 <Upload {...props}>
-                  <Button type="primary" icon={<LinkOutlined />} style={{}}>
+                  <Button type="primary" icon={<LinkOutlined />} >
                     Upload
                   </Button>
                 </Upload>
+                </div>
               </Col>
               <Col style={{ paddingLeft: "1.5%" }}>(Maximum 20MB per file)</Col>
             </Row>

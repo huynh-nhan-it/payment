@@ -66,7 +66,6 @@ const ComponentComment: React.FC<ExampleCommentProps> = ({
                   {comment?.content}
                 </span>
               </div>
-              <div className="midle-content-comment">Note: .</div>
             </Col>
             <Col span={6} className="te-r">
               {handleFeedback ? (

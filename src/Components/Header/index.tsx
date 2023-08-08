@@ -41,6 +41,7 @@ const AppHeader = () => {
       const endpoint = "/Personal/EmployeeInfo?Id=" + id;
       const response = await request.get(endpoint).then((res) => {
         setDataName(res.data.userInfo.FirstName + ' ' +res.data.userInfo.LastName);
+        localStorage.setItem('name', res.data.userInfo.FirstName + ' ' +res.data.userInfo.LastName);
         // setData(res.data)
       });
     };

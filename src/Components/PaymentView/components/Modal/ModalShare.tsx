@@ -4,12 +4,8 @@ import { IModalShare } from "../../interface/IModal";
 import type { SelectProps } from 'antd';
 import axios from "axios";
 import Spinner from "../../../common/Loading";
+import { IUser } from "../../interface/IUser";
 
-interface IUser {
-  fullName: string;
-  email: string;
-  jobTitle: string;
-}
 
 const ModalShare: React.FC<IModalShare> = ({
   isModalOpenShare,
@@ -21,7 +17,7 @@ const ModalShare: React.FC<IModalShare> = ({
   const [options, setOptions] = useState<SelectProps['options']>([]);
 
   const handleChange = (value: any) => {
-    setUsers([value]);
+    setUsers(value);
   };
 
   useEffect(() => {
@@ -56,6 +52,8 @@ const ModalShare: React.FC<IModalShare> = ({
             handleOkShare?.(users)
           }}
           onCancel={handleCancelShare}
+          okText="Share"
+          cancelText="Close"
         >
           <Select
             mode="multiple"

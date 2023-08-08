@@ -4,7 +4,6 @@ import type { ColumnsType } from "antd/es/table";
 import { format } from 'date-fns';
 
 interface DataType {
-  id: string;
   invDate: string;
   paymentContent: string;
   amount: number;
@@ -14,7 +13,6 @@ interface DataType {
   note: string;
 }
 interface TableDetailRequest {
-  id: string;
   invDate: string;
   paymentContent: string;
   amount: number;
@@ -34,7 +32,6 @@ const ViewTable: React.FC<IViewTable> = ({detailTables}) => {
   useEffect(() => {
     let dataTb = detailTables?.map((detail) => {
       return {
-        id: detail.id,
         invDate: format(new Date(detail.invDate), 'dd/MM/yyyy'),
         paymentContent: detail.paymentContent,
         amount: detail.amount,
@@ -47,12 +44,7 @@ const ViewTable: React.FC<IViewTable> = ({detailTables}) => {
     setData(dataTb);
   }, [detailTables]);
   const columns: ColumnsType<DataType> = [
-    {
-      key: "id",
-      title: <span style={{ color: "#A3A6B4" }}>Inv/Rec date</span>,
-      align: "center",
-      dataIndex: "id",
-    },
+    
     {
       key: "invDate",
       title: <span style={{ color: "#A3A6B4" }}>Inv/Rec date</span>,

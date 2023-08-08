@@ -14,22 +14,25 @@ import axios from "axios";
 import Spinner from "../common/Loading";
 import { PaymentRequest } from "./interface/IRequest";
 import ModalShare from "./components/Modal/ModalShare";
+import ModalProgress from "./components/Modal/ModalProgress";
 
 function ViewPayment(userId: any) {
-  const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const { requestCode } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpenShare, setIsModalOpenShare] = useState(false);
   const [type, setType] = useState("");
-  const [DetailRequestId, setDetailRequestId] = useState("");
+  const [Loading, setLoading] = useState(true);
   const [RequestId, setRequestId] = useState("");
+  const [collapsed, setCollapsed] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [DetailRequestId, setDetailRequestId] = useState("");
+  const [isModalOpenShare, setIsModalOpenShare] = useState(false);
+  const [isModalOpenProgress, setIsModalOpenProgress] = useState(false);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>(
     {} as PaymentRequest
   );
-  const [Loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios
       .get(`http://localhost:5005/api/DetailRequest/${requestCode}`)
@@ -45,6 +48,7 @@ function ViewPayment(userId: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //Handle modal delete, reject and approve
   const showModal = (type: any) => {
     setType(type);
     setIsModalOpen(true);
@@ -52,6 +56,7 @@ function ViewPayment(userId: any) {
 
   const handleOk = (Reason: any, type: any) => {
     // console.log(Reason.resizableTextArea.textArea.textContent, type);
+    const name = localStorage.getItem('name');
     setIsModalOpen(false);
     if (type === "Delete") {
       axios
@@ -91,7 +96,7 @@ function ViewPayment(userId: any) {
               detailRequestId: DetailRequestId,
               content:
                 type +
-                ` by ${userId.userId} \n Note: ` +
+                ` by ${name} - Note: ` +
                 Reason.resizableTextArea.textArea.textContent,
               createdAt: new Date(Date.now()).toISOString(),
             };
@@ -121,47 +126,52 @@ function ViewPayment(userId: any) {
     setIsModalOpen(false);
   };
 
+
+  //Handle modal share
   const showModalShare = () => {
     setIsModalOpenShare(true);
   };
 
+  const processData = async (value: any) => {
+    const ReceiverList = [];
+    console.log(value);
+    for (let i = 0; i < value.length; i++) {
+      const attApprover = value[i].toString().split(' - ');
+      ReceiverList.push({
+        fullName: attApprover[1],
+        email: attApprover[0],
+        jobTitle: attApprover[2],
+      });
+    }
+  
+    return ReceiverList;
+  };
+
   const handleOkShare = async (value: any) => {
-    // if (value.length > 0) {
-    //   const ReceiverList = await Promise.all(
-    //     value.map(async (item: any) => {
-    //       let temp = item.toString();
-    //       let Listapprover = temp.split(" - ");
-    //       let approvers = {
-    //         fullName: Listapprover[1],
-    //         email: Listapprover[0],
-    //         jobTitle: Listapprover[2],
-    //       };
-    //       return approvers;
-    //     })
-    //   );
-    //   const data = {
-    //     SenderId: userId.userId,
-    //     ReceiverList: ReceiverList,
-    //     RequestCode: requestCode,
-    //   };
-    //   axios
-    //     .post(
-    //       "http://localhost:5005/api/PaymentRequest/shared-request",
-    //       data,
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     )
-    //     .then((respone) => {
-    //       setIsModalOpenShare(false);
-    //       window.location.reload();
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //     });
-    // }
+
+    if (value.length > 0) {
+      const ReceiverList = await processData(value);
+      const data = [
+        ...ReceiverList,
+      ];
+      axios
+        .post(
+          `http://localhost:5005/api/PaymentRequest/shared-request?SenderId=${userId.userId}&RequestCode=${requestCode}`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((respone) => {
+          setIsModalOpenShare(false);
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
 
     setIsModalOpenShare(false);
   };
@@ -170,6 +180,18 @@ function ViewPayment(userId: any) {
     setIsModalOpenShare(false);
   };
 
+  //Handle modal Progress
+  const showModalProgress = () => {
+    setIsModalOpenProgress(true);
+  };
+
+  const handleOkProgress = () => {
+    setIsModalOpenProgress(false);
+  };
+
+  const handleCancelProgress = () => {
+    setIsModalOpenProgress(false);
+  };
   return (
     <div>
       {Loading ? (
@@ -214,6 +236,7 @@ function ViewPayment(userId: any) {
                 <ViewHeader
                   showModal={showModal}
                   showModalShare={showModalShare}
+                  showModalProgress={showModalProgress}
                   userId={userId.userId}
                   DetailRequestId={DetailRequestId}
                 ></ViewHeader>
@@ -236,6 +259,9 @@ function ViewPayment(userId: any) {
                     handleOkShare={handleOkShare}
                     handleCancelShare={handleCancelShare}
                   ></ModalShare>
+                  <ModalProgress  isModalOpenProgress={isModalOpenProgress}
+                    handleCancelProgress={handleCancelProgress}
+                    DetailRequestId={DetailRequestId} ></ModalProgress>
                 </div>
               </Content>
             </Layout>

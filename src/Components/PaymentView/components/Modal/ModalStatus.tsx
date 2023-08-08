@@ -20,6 +20,8 @@ const ModalStatus: React.FC<IModal> = ({
         onOk={() => {
           handleOk?.(Reason.current, type)
         }}
+        okText={type}
+        cancelText="Close"
         onCancel={handleCancel}
       >
           {type == "Delete" ? "Bạn có muốn xóa request này không ?" : <Form.Item rules={[{ required: true }]}>

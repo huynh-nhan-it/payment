@@ -17,6 +17,7 @@ const { Header } = Layout;
 interface IHeader {
   showModal: (type: any) => void;
   showModalShare: () => void;
+  showModalProgress: () => void;
   userId: any;
   DetailRequestId: any;
 }
@@ -24,6 +25,7 @@ interface IHeader {
 const ViewHeader: React.FC<IHeader> = ({
   showModal,
   showModalShare,
+  showModalProgress,
   userId,
   DetailRequestId,
 }) => {
@@ -43,7 +45,6 @@ const ViewHeader: React.FC<IHeader> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const role = localStorage.getItem("role");
-  console.log(role);
   return (
     <Header
       style={{
@@ -92,7 +93,9 @@ const ViewHeader: React.FC<IHeader> = ({
           </Col>
         )}
         <Col>
-          <Button href="#" className="text-header">
+          <Button href="#" className="text-header" onClick={() => {
+            showModalProgress();
+          }}>
             {" "}
             <div style={{ display: "flex", alignItems: "center" }}>
               <AiOutlineFundProjectionScreen style={{ marginRight: "5px" }} />{" "}
@@ -108,6 +111,7 @@ const ViewHeader: React.FC<IHeader> = ({
                 className="text-header"
                 onClick={() => showModal("Approved")}
               >
+                 {" "}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <FiCheck style={{ marginRight: "5px" }} /> Approve
                 </div>
@@ -119,6 +123,7 @@ const ViewHeader: React.FC<IHeader> = ({
                 className="text-header"
                 onClick={() => showModal("Rejected")}
               >
+                 {" "}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <TiDeleteOutline style={{ marginRight: "5px" }} /> Reject
                 </div>
