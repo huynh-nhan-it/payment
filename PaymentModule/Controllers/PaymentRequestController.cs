@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using PaymentModule.Context;
 using PaymentModule.DTOs;
 using PaymentModule.Entities;
@@ -10,7 +13,9 @@ using PaymentModule.Services.Implements;
 using PaymentModule.Services.IServices;
 using PdfSharpCore;
 using SixLabors.ImageSharp;
-
+using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PaymentModule.Controllers
 {
@@ -254,5 +259,73 @@ namespace PaymentModule.Controllers
                 return Ok(ex.Message);
             }
         }
-      }
+
+
+        private async Task<string> CheckRightsOfApprover(Guid ApproverId, Guid DetailRequestId)
+        {
+            string selectQuery = "select * from ApproverDetailRequest where DetailRequestId = @DetailRequestId and ApproverId = @ApproverId";
+            using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
+            {
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    connection.Open();
+                    command.Parameters.AddWithValue("@DetailRequestId", DetailRequestId);
+                    command.Parameters.AddWithValue("@ApproverId", ApproverId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string status = (string)reader["Status"];
+                            return status;
+                        }
+
+                    }
+                }
+            }
+            return "Trạng thái không phù hợp";
+        }
+
+        [HttpGet("Progress")]
+
+        public async Task<IActionResult> getProgress(Guid DetailRequestId)
+        {
+            var detailRequest = await _context.DetailRequests.Include(d => d.Approvers).FirstOrDefaultAsync(d => d.Id.Equals(DetailRequestId));
+            var requestEntity = await _context.PaymentRequests.FirstOrDefaultAsync(p => p.DetailRequestId.Equals(DetailRequestId));
+
+            if (requestEntity != null)
+            {
+
+                var User = await _context.Users.FirstOrDefaultAsync(u => u.Id.Equals(requestEntity.UserId));
+                var Progress = new List<ProgressModel>();
+                var ListApprover = detailRequest.Approvers;
+                Progress.Add(new ProgressModel
+                {
+                    FullName = User.FirstName + " " + User.LastName,
+                    Email = User.Email,
+                    JobTitle = User.JobTitle,
+                    Avatar = User.Avatar,
+                    Status = "Sender"
+                });
+                
+                foreach(var item in ListApprover)
+                {
+                    var status = await CheckRightsOfApprover(item.Id, detailRequest.Id);
+                    Progress.Add(new ProgressModel
+                    {
+                        FullName = item.FirstName + " " + item.LastName,
+                        Email = item.Email,
+                        JobTitle = item.JobTitle,
+                        Avatar = item.Avatar,
+                        Status = status
+                    }) ;
+                }
+                
+
+                return Ok(new { success = true, error = false, message = "Progress đã được xác thực", data = Progress.ToList() });
+
+            }
+            return BadRequest(new { success = false, error = true, message = "Id không chính xác", data = ""});
+        }
+    }
 }
