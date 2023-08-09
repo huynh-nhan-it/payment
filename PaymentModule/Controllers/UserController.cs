@@ -348,10 +348,10 @@ namespace PaymentModule.Controllers
                 else if (status.Contains("Rejected"))
                 //nếu approver chọn Rejected => set status trong payment-request => Rejected & tất cả status của requets đó trong approver-detail-table thành Rejected => kết thúc thuật toán
                 {
+                    ChangeState(approverId, requestId, "ApproverDetailRequest", status);
                     //Viết hàm cập nhật status bên payment request
                     ChangePRStatus(requestId, new Guid("8845CC80-77F7-4F7B-B23D-CA994B8D07A4"));
                     //Viết hàm cập nhật all status bên approver-detail-table thành Rejected 
-                    ChangeAllStatusReject(requestId);
                     return Ok(new { mess = "ALL REJECTED" });
                 }
             }
@@ -544,6 +544,7 @@ namespace PaymentModule.Controllers
                 {
                     Request.IsDeleted = 0;
                     _context.PaymentRequests.Update(Request);
+                    _context.SaveChanges();
                     return Ok(new { success = true, error = false, message = "Delete Request successful" });
                 }
                 catch (Exception e)

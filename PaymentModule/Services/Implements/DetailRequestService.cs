@@ -29,8 +29,8 @@ namespace PaymentModule.Services.Implements
         List<CommentModel> IDetailRequestService.GetCommentList(Guid DetailRequestId)
         {
             List<CommentModel> cmtModelList = new List<CommentModel>();
-            List<CommentEntity> cmtEntiList = _context.Comments.ToList();
-            foreach(var cmtEnti in cmtEntiList)
+            List<CommentEntity> cmtEntiList = _context.Comments.OrderByDescending(comment => comment.CreateAt).ToList();
+            foreach (var cmtEnti in cmtEntiList)
             {
                 if(cmtEnti.DetailRequestId.Equals(DetailRequestId) == true && cmtEnti.ParentId.Equals(new Guid()) == true)
                 {
