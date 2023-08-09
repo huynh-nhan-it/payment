@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import "../../../css/index.css";
 import { MdOutlineGroups } from "react-icons/md";
 import { Affix, Col, Input, List, Row, Tabs } from "antd";
@@ -127,7 +127,7 @@ if (myInput) {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const id = localStorage.getItem('id');
 
-
+  
   
   return (
     <><Row>
@@ -248,7 +248,7 @@ if (myInput) {
       </Col>
     </Row><DepartmentContext.Provider value={{ departmentName, setDepartmentName }}>
         {/* Render Component C ở đây */}
-        <AddMemberForm />
+        <AddMemberForm departmentName={departmentName} />
       </DepartmentContext.Provider></>
   );
 };

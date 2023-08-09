@@ -4,16 +4,18 @@ import { Layout } from "antd";
 import {ImWindows} from 'react-icons/im';
 import {TiArrowBackOutline} from 'react-icons/ti';
 import '../../css/index.css';
-import React from "react";
+import React, { useContext } from "react";
 import { FaPen, FaRegPenToSquare } from "react-icons/fa6";
 import { RiDeleteBin6Line, RiOrganizationChart } from "react-icons/ri";
 import AddMemberForm from "./AddMember";
+import context from "antd/es/app/context";
+import { DepartmentContext } from "../Content/Navbar";
 
 const { Header } = Layout;
 
 const HeaderOrganize: React.FC = () => {  
 
-
+  const context = useContext(DepartmentContext);
 
   return (
     <Header
@@ -38,7 +40,7 @@ const HeaderOrganize: React.FC = () => {
         </Col>
         <Col>
         <div style={{display: 'none'}} id="addMember" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/>
-        <AddMemberForm/>
+        <AddMemberForm departmentName={context?.departmentName}/>
         </div>
         </Col>
         <Col>
