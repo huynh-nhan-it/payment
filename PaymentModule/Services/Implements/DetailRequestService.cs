@@ -37,6 +37,7 @@ namespace PaymentModule.Services.Implements
                     var userModel = _userService.GetUserModelById(cmtEnti.UserId);
                     var CommentModel = new CommentModel
                     {
+                        UserCommentId = cmtEnti.UserId,
                         UserModel = userModel,
                         CreateAt = cmtEnti.CreateAt,
                         Content = cmtEnti.Content,
