@@ -35,7 +35,7 @@ function App() {
             <Route path="setting" element={<Setting />}></Route>
             <Route
               path="setting/system/department"
-              element={<StructureOrganization />}></Route>
+              element={<StructureOrganization  />}></Route>
             <Route
               path="request/payment/view/:requestCode"
               element={<ViewPayment userId={userId}></ViewPayment>}></Route>

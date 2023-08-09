@@ -13,16 +13,8 @@ const { Header } = Layout;
 
 const HeaderOrganize: React.FC = () => {  
 
-let data = "";
-const myInput: HTMLInputElement | null = document.getElementById("myInputData") as HTMLInputElement;
 
-if (myInput) {
-  // Lấy giá trị của input
-  const inputValue: string = myInput.value;
 
-  // Dùng giá trị đã lấy được
-  data = inputValue; // In ra "Giá trị mặc định" (hoặc giá trị mà bạn đã nhập vào input)
-}
   return (
     <Header
     style={{
@@ -46,8 +38,7 @@ if (myInput) {
         </Col>
         <Col>
         <div style={{display: 'none'}} id="addMember" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/>
-        <input style={{display: 'none'}} id="myInputData" value="defaultValue"/>
-        <AddMemberForm departmentNameAdd = {data} />
+        <AddMemberForm/>
         </div>
         </Col>
         <Col>

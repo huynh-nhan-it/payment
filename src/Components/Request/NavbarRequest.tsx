@@ -36,13 +36,15 @@ const items: MenuItem[] = [
 ];
 
 const NavbarRequest: React.FC = () => {
+  const id = localStorage.getItem('id');
   const onClick: MenuProps['onClick'] = (e) => {
     // console.log('click ', e.key);
     if(e.key==='1-1'){
       console.log("object");
       // setData(dataAll)
     }else if(e.key==='1-2'){
-      // setData(dataSendToMe)
+      console.log(id)
+      //setData(dataSentToMe)
     }
   };
   return (

@@ -1,45 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { getDepartments } from "../../../../../../../Services/PaymentRequest/apiForm";
 import { getApprover } from "../../../../../../../Services/PaymentRequest/apiApprover";
-import { Button, Dropdown, Form, Menu, Select, Space } from "antd";
+import { Button, Dropdown, Form, Input, Menu, Select, Space } from "antd";
 import { SelectError } from "../../../../../../PaymentRequest/showError";
+import { DepartmentContext } from "../Content/Navbar";
+
 interface Member{
   fullName: string;
   email: string;
   jobTitle: string;
 }
-interface AddMemberFormProps {
-  departmentNameAdd: string;
-}
-const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
+
+const AddMemberForm: React.FC = () => {
     const [departmentData, setDepartmentData] = useState<string[]>([]);
     const [memberData, setMemberData] = useState<Member[]>([]);
+    const context = useContext(DepartmentContext);
+    const fetchData = async () => {
+      try {
+        const memberResponse = await getApprover();  
+        const departmentResponse = await getDepartments();
   
-  useEffect(() => {
-    fetchData();
+        setMemberData(memberResponse);
+        setDepartmentData(departmentResponse);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    useEffect(() => {
+      fetchData();
+  
+    }, []);
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [position, setPosition] = useState("");
+  const [member, setMember] = useState<Member | null>(null);
 
-  }, []);
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  if (!context) {
+    // Xử lý trường hợp context là undefined (nếu cần)
+    return null;
+  }
+
+  const { departmentName, setDepartmentName } = context;
+
+  
+  
 
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
   };
 
-  const fetchData = async () => {
-    try {
-      const memberResponse = await getApprover();  
-      const departmentResponse = await getDepartments();
-
-      setMemberData(memberResponse);
-      setDepartmentData(departmentResponse);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const [departmentName, setDepartmentName] = useState("");
-  const [position, setPosition] = useState("");
-  const [member, setMember] = useState<Member | null>(null);
+  
+ console.log("ok"+departmentName)
+  
 
   const handleSubmit = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
@@ -138,7 +150,7 @@ const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
             </Select>
           </Form.Item>
           <Form.Item label="Department" style={{fontWeight: "bold", display: "flex", justifyContent: "flex-end" }}>
-            <input id="departmentAdd" value={departmentNameAdd} />
+            <Input style={{width:200}} id="departmentAdd" value={departmentName}  disabled/>
             {/* <Select
               showSearch
               style={{ width: 200}}

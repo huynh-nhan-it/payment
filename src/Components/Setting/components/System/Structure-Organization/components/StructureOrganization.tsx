@@ -44,7 +44,7 @@ const StructureOrganization = () => {
                 marginTop: "100px",
               }}
               className="content-request">
-              <HeaderOrganize />
+              <HeaderOrganize/>
               <NavbarDepartment />
             </Content>
           </Layout>
