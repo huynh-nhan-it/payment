@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
+import axios from "axios";
 import { ConnectedProps, connect } from "react-redux";
 import { RootState } from "../store/store";
 import HeaderPayment from "./Header";
@@ -21,23 +22,20 @@ interface PaymentRequestList {
 
 interface DataListProps extends ConnectedProps<typeof connector> {
 }
-const Payment: React.FC<DataListProps> = ({ filteredData, searchData }) => {
-  console.log(searchData.keyword);
-  // `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`
-  const [data, setData] = useState([]);
+const Payment: React.FC<DataListProps> = ({ filteredData, searchData, navbarData }) => {
+  const [initialData, setInitialData] = useState<PaymentRequestList[]>([]);
+  const [dataSendToMe, setDataSendToMe] = useState<PaymentRequestList[]>([]);
+  const [dataSendToOther, setDataSendToOther] = useState<PaymentRequestList[]>([]);
+  const [dataShareWithMe, setDataShareWithMe] = useState<PaymentRequestList[]>([]);
+  const [data, setData] = useState<PaymentRequestList[]>(initialData);
   const [purpose, setPurpose] = useState("");
   const [requestCode, setRequestCode] = useState("");
   const [createdDateFrom, setCreatedDateFrom] = useState("");
   const [createDateTo, setCreateDateTo] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [status, setStatus] = useState("");
-  // console.log(filteredData);
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
-  // useEffect((data) => {
-  //   fetchData();
-  // }, [data]);
 
   useEffect(() => {
     setPurpose(filteredData.purpose);
@@ -48,34 +46,43 @@ const Payment: React.FC<DataListProps> = ({ filteredData, searchData }) => {
     setStatus(filteredData.status);
   });
 
-  // const fetchData =() => {
-  //   axios
-  //   .get(
-  //     `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${page}`
-  //   )
-  //     // .get(`http://localhost:5005/api/PaymentRequest/?page=${page}`)
-  //     .then((response) => {
-  //       setData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
-  // console.log(filteredData.createdDateFrom);
+  const id = localStorage.getItem('id')
   useEffect(() => {
     const getPaymentList = async () => {
       const endpoint = `PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}`;
-      // console.log(endpoint);
       const response = await request.get(endpoint).then((res) => {
-        // console.log(res.data);
         setTotalPage(res.data.length)
         setData(res.data);
-        console.log(res.data);
+        setInitialData(res.data)
       });
     };
 
+    const getSendToMe = async () => {
+      const endpoint = `PaymentRequest/send-to-me?myId=${id}`;
+      const response = await request.get(endpoint).then((res) => {
+        setDataSendToMe(res.data)
+      });
+    };
+
+    const getSendToOther = async () => {
+      const endpoint = `PaymentRequest/send-to-others?myId=${id}`;
+      const response = await request.get(endpoint).then((res) => {
+        setDataSendToOther(res.data)
+      });
+    };
+
+    const getShareWithMe = async () => {
+      const endpoint = `PaymentRequest/shared-with-me?myId=${id}`;
+      const response = await request.get(endpoint).then((res) => {
+        setDataShareWithMe(res.data)
+      });
+    };
+
+    getSendToMe();
+    getSendToOther();
     getPaymentList();
+    getShareWithMe();
+
   }, [
     purpose,
     requestCode,
@@ -84,26 +91,66 @@ const Payment: React.FC<DataListProps> = ({ filteredData, searchData }) => {
     createdBy,
     status,
   ]);
-  console.log(totalPage);
+
+  // console.log(navbarData.key);
+
+  // console.log(totalPage);
   const handleSetCurrentPage = (page: any) => {
     // console.log(page);
     setCurrentPage(page)
   };
 
+  useEffect(() => {
+    const dataFilter = initialData?.filter(item => {
+      const searchableFields = ['purpose', 'requestCode', 'createdBy', 'status'];
+      // console.log(item[searchableFields]);
+      console.log(searchableFields);
+      return searchableFields.some(field =>
+        item.purpose.toLowerCase().includes(searchData.keyword.toLowerCase()) || item.requestCode.toLowerCase().includes(searchData.keyword.toLowerCase()) || item.createdBy.toLowerCase().includes(searchData.keyword.toLowerCase()) || item.status.toLowerCase().includes(searchData.keyword.toLowerCase())
+      );
+    });
+    setData(dataFilter);
+  }, [searchData.keyword])
 
-  // console.log(currentPage);
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `http://localhost:5005/api/PaymentRequest/?Purpose=${purpose}&RequestCode=${requestCode}&from=${createdDateFrom}&to=${createDateTo}&Creater=${createdBy}&Status=${status}&page=${currentPage}`
-  //     )
-  //     .then((response) => {
-  //       setData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, [data]);
+  useEffect(() => {
+    if (navbarData.key === '1-1') {
+      setData(initialData)
+    }
+    else if (navbarData.key === '1-2') {
+      setData(dataSendToMe)
+    } else if (navbarData.key === '1-3') {
+      setData(dataSendToOther)
+    } else if (navbarData.key === '1-4') {
+      setData(dataShareWithMe)
+    } 
+    else if(navbarData.key==='2-1'){
+      const dataDraft = initialData?.filter(item => {
+        return item.status === 'Draft'
+      })
+      setData(dataDraft)
+    }
+    else if (navbarData.key === '2-2') {
+      const dataApproving = initialData?.filter(item => {
+        return item.status === 'Approving'
+      })
+      setData(dataApproving)
+    }
+    else if (navbarData.key === '2-3') {
+      const dataApproved = initialData?.filter(item => {
+        return item.status === 'Approved'
+      })
+      setData(dataApproved)
+    }
+    else if (navbarData.key === '2-4') {
+      const dataRejected = initialData?.filter(item => {
+        return item.status === 'Rejected'
+      })
+      setData(dataRejected)
+    }
+
+
+    // console.log(dataApproving);
+  }, [navbarData.key])
 
   const navigate = useNavigate();
 
@@ -159,10 +206,11 @@ const Payment: React.FC<DataListProps> = ({ filteredData, searchData }) => {
     XLSX.writeFile(workbook, "data.xlsx");
   };
 
-  console.log(data);
+  // console.log(data);
   const handleRowClick = (requestCode: string) => {
     navigate(`/request/payment/view/${requestCode}`);
   };
+
   return (
     <>
       <HeaderPayment exportData={handleExportExcel}></HeaderPayment>
@@ -189,7 +237,8 @@ const Payment: React.FC<DataListProps> = ({ filteredData, searchData }) => {
 const mapStateToProps = (state: RootState) => {
   return {
     filteredData: state.filter,
-    searchData: state.search
+    searchData: state.search,
+    navbarData: state.key
   };
 };
 
