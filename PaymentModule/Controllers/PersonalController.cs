@@ -229,6 +229,8 @@ namespace PaymentModule.Controllers
 
             if (SignatureToUpdate != null)
             {
+                SignatureToUpdate.Signature = signature.Signature;
+                SignatureToUpdate.Type = signature.type;
                 SignatureToUpdate.QRcode = signature.QRcode;
                 SignatureToUpdate.dateTime = DateTime.Now;
                 SignatureToUpdate.ImagePath = result.fileNamePath == "" ? SignatureToUpdate.ImagePath : result.fileNamePath;

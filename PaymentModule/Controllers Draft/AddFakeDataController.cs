@@ -34,7 +34,7 @@ namespace PaymentModule.Controllers
         [HttpPost("fake-data-user")]
         public IActionResult GetAllCommentByDRid()
         {
-            string filePath = Path.Combine("data", "Approver.txt");
+            string filePath = Path.Combine("wwwroot", "Approver.txt");
             return Ok(ReadApproverDataFile(filePath));
             
         }

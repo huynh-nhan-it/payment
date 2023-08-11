@@ -261,7 +261,7 @@ namespace PaymentModule.Controllers
         }
 
 
-        private async Task<string> CheckRightsOfApprover(Guid ApproverId, Guid DetailRequestId)
+        private async Task<ObjectResult> CheckRightsOfApprover(Guid ApproverId, Guid DetailRequestId)
         {
             string selectQuery = "select * from ApproverDetailRequest where DetailRequestId = @DetailRequestId and ApproverId = @ApproverId";
             using (SqlConnection connection = new SqlConnection(_connectionStringSettings.ConnectionString))
@@ -277,13 +277,15 @@ namespace PaymentModule.Controllers
                         while (reader.Read())
                         {
                             string status = (string)reader["Status"];
-                            return status;
+                            int queue = (int)reader["Queue"];
+                            
+                            return new ObjectResult(new {status = status, queue = queue});
                         }
 
                     }
                 }
             }
-            return "Trạng thái không phù hợp";
+            return new ObjectResult(new { mess = "Error" });
         }
 
         [HttpGet("Progress")]
@@ -310,19 +312,22 @@ namespace PaymentModule.Controllers
                 
                 foreach(var item in ListApprover)
                 {
-                    var status = await CheckRightsOfApprover(item.Id, detailRequest.Id);
+                    var CheckStatus = await CheckRightsOfApprover(item.Id, detailRequest.Id);
+                    var value = CheckStatus.Value as dynamic;
                     Progress.Add(new ProgressModel
                     {
                         FullName = item.FirstName + " " + item.LastName,
                         Email = item.Email,
                         JobTitle = item.JobTitle,
                         Avatar = item.Avatar,
-                        Status = status
-                    }) ;
+                        Status = value?.status,
+                        Queue = value?.queue,
+                    });
                 }
                 
 
-                return Ok(new { success = true, error = false, message = "Progress đã được xác thực", data = Progress.ToList() });
+                return Ok(new { success = true, error = false, message = "Progress đã được xác thực", data = Progress.OrderBy(item => item.Queue).ToList()
+            });
 
             }
             return BadRequest(new { success = false, error = true, message = "Id không chính xác", data = ""});

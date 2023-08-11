@@ -6,6 +6,7 @@ using PaymentModule.DTOs;
 using PaymentModule.Entities;
 using PaymentModule.Models;
 using PaymentModule.Services.IServices;
+using System.Globalization;
 
 namespace PaymentModule.Services.Implements
 {
@@ -101,13 +102,14 @@ namespace PaymentModule.Services.Implements
             Guid userId = comment.UserId;
             Guid detailRequestId = comment.DetailRequestId;
             string content = comment.Content;
-            DateTime createdAt = comment.CreatedAt;
-            Guid? parentId = comment.ParentId;
-            Guid replyCmtId = new Guid();
-            if (parentId.HasValue) 
+            Guid? parentId = comment.parentId;
+            Guid replyCmtId = Guid.Empty;
+
+            if (parentId.HasValue)
             {
                 replyCmtId = parentId.Value;
             }
+            DateTime createdAt = DateTime.Parse(comment.CreatedAt, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal); 
             var cmtEnti = new CommentEntity
             {
                 UserId = userId,

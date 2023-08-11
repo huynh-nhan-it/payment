@@ -102,7 +102,7 @@ namespace PaymentModule.Services.Implements
                     UserId = new Guid(string.IsNullOrEmpty(userId) ? "A3E4D297-29AE-42F8-A2F7-9D511F31B0B9" : userId),
                     DetailRequestId = requestId,
                     Content = "Submit the request " + resultRequestCode + " for approval",
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now.ToString(),
                 };
                 _detailRequestService.PostComment(CmtDto);
                 return new ObjectResult(new { success = true, error = false, message = "Insert payment request success" });
