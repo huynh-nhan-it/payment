@@ -8,6 +8,7 @@ import { IUser } from "../../interface/IUser";
 
 
 const ModalShare: React.FC<IModalShare> = ({
+  userId,
   isModalOpenShare,
   handleOkShare,
   handleCancelShare,
@@ -21,11 +22,12 @@ const ModalShare: React.FC<IModalShare> = ({
   };
 
   useEffect(() => {
-    axios.get(`http://localhost:5005/api/Approver`)
+    axios.get(`http://localhost:5005/api/Approver?myId=${userId}`)
       .then((response) => {
         const data = response.data;
-        const newOptions = data.map((item: any) => {
+        const newOptions = data.map((item: any, index: number) => {
           return {
+            key: index,
             lable: item?.fullName,
             value: item?.email.trim() + ' - ' + item.fullName.trim() + ' - ' + item.jobTitle.trim()
           }

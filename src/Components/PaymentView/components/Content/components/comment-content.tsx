@@ -1,5 +1,4 @@
-import { Typography, notification } from "antd";
-import { CommentOutlined } from "@ant-design/icons";
+import { Row, Typography, notification } from "antd";
 import "../../../css/index.css";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -8,27 +7,16 @@ import CommentForm from "./comment-form";
 import axios from "axios";
 import Spinner from "../../../../common/Loading";
 import { openNotificationWithIcon } from "../../../common/notify";
+import { BsWechat } from "react-icons/bs";
+import { Comments } from "../../../interface/IComments";
 
 interface IComment {
   requestCode: string | undefined;
   userId: any;
+  userDetailRequest: string | undefined
   DetailRequestId: any;
 }
 
-interface Comments {
-  userModel: UserModel;
-  createAt: string | undefined;
-  content: string | undefined;
-  commentReplyList: [];
-}
-
-interface UserModel {
-  fullName: string | undefined;
-  email: string | undefined;
-  phoneNumber: string | undefined;
-  avatar: string | undefined;
-  jobTitle: string | undefined;
-}
 
 interface feedBack {
   [key: string]: boolean;
@@ -37,6 +25,7 @@ interface feedBack {
 const Comment: React.FC<IComment> = ({
   requestCode,
   userId,
+  userDetailRequest,
   DetailRequestId,
 }) => {
   const [isFeedBack, setIsFeedBack] = useState(false);
@@ -45,7 +34,6 @@ const Comment: React.FC<IComment> = ({
   const [stateForm, setStateForm] = useState<Comments[] | []>([]);
   const [hasFetchedData, setHasFetchedData] = useState(false);
   const [api, contextHolder] = notification.useNotification();
-  
   useEffect(() => {
     if (!hasFetchedData) {
       axios
@@ -84,6 +72,7 @@ const Comment: React.FC<IComment> = ({
 
   const HandleFetchData = (): void => {
     setHasFetchedData(false);
+    setIsFeedBack(false);
     openNotificationWithIcon('success', api, {
       message: 'Comment successfully',
       description:
@@ -102,7 +91,8 @@ const Comment: React.FC<IComment> = ({
     <div className="region-comments">
       {contextHolder}
       <Typography.Title level={2} style={{ textAlign: "left" }}>
-        <CommentOutlined style={{ fontSize: "22px", paddingRight: 10 }} />
+        <Row justify={"start"} align={"middle"}>
+        <BsWechat color="#088395" style={{ fontSize: "7vh", paddingRight: 10 }} />
         <b
           style={{
             fontSize: "22px",
@@ -112,6 +102,7 @@ const Comment: React.FC<IComment> = ({
         >
           Comments
         </b>
+        </Row>
       </Typography.Title>
       {isLoading ? (
         <Spinner></Spinner>
@@ -143,12 +134,13 @@ const Comment: React.FC<IComment> = ({
                 <div className="row"></div>
                 <div className="row"></div>
                 <ComponentComment
-                  children={[]}
+                  children={child.commentReplyList}
                   form={
                     <CommentForm
                       isFeedBack={feedBack}
                       handleFeedback={closeFeedBack}
                       setHasFetchedData={HandleFetchData}
+                      userCommentId = {child.commentId}
                       index={index}
                       userId={userId}
                       DetailRequestId={DetailRequestId}
@@ -156,6 +148,7 @@ const Comment: React.FC<IComment> = ({
                   }
                   isFeedBack={feedBack}
                   handleFeedback={handleFeedback}
+                  userDetailRequest={userDetailRequest}
                   comment={child}
                   index={index}
                 ></ComponentComment>

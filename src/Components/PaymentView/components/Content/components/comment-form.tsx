@@ -1,5 +1,5 @@
 import { Form, Row, Col, Avatar, Button, Upload, UploadProps } from "antd";
-import { UserOutlined, LinkOutlined } from "@ant-design/icons";
+import { LinkOutlined } from "@ant-design/icons";
 import TextArea from "antd/lib/input/TextArea";
 import axios from "axios";
 
@@ -11,6 +11,7 @@ interface ICommentForm {
   isFeedBack?: feedBack ;
   handleFeedback?: (index: any) => void;
   setHasFetchedData?: () => void;
+  userCommentId? : string;
   index?: any;
   userId?: any;
   DetailRequestId?: any;
@@ -20,19 +21,22 @@ const CommentForm: React.FC<ICommentForm> = ({
   isFeedBack,
   handleFeedback,
   setHasFetchedData,
+  userCommentId,
   index,
   userId, 
   DetailRequestId
 }) => {
   const [form] = Form.useForm(); // Khởi tạo form
   const onFinish = (values: any) => {
-    console.log("Submitted values:", values);
+    const now = new Date();
     const data = {
       userId: userId,
       detailRequestId: DetailRequestId,
       content: values["content-comment"],
-      createdAt: new Date(Date.now()).toISOString()
+      createdAt: now.toISOString(),
+      parentId: userCommentId,
     };
+    console.log(data);
     axios
       .post(`http://localhost:5005/api/Comment`, data, {
         headers: {
@@ -47,7 +51,14 @@ const CommentForm: React.FC<ICommentForm> = ({
         console.error(error);
       });
   };
-
+  
+  // {
+  //   "userId": "499dc793-6987-4377-896a-1f8dc2f17f1a",
+  //   "detailRequestId": "b2bb1bf7-ec6d-4498-8595-023356e550e7",
+  //   "content": "test",
+  //   "createdAt": "2023-08-09T13:15:00.540Z",
+  //   "parentId": "6ab2ed25-0c35-43a5-b16c-6064fe13fad8"
+  // }
   const props: UploadProps = {
     action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     onChange({ file, fileList }) {
@@ -69,7 +80,7 @@ const CommentForm: React.FC<ICommentForm> = ({
               xs={2}
               style={{ textAlign: "left", marginTop: "1.5%" }}
             >
-              <Avatar size="large" icon={<UserOutlined />} />
+              <Avatar size="large" src={'https://xsgames.co/randomusers/avatar.php?g=pixel&key=${10000}'}/>
             </Col>
             <Col
               span={18}
@@ -99,7 +110,8 @@ const CommentForm: React.FC<ICommentForm> = ({
                     Save
                   </Button>
                   <Button
-                    type="dashed"
+                    type="default"
+                    style={{backgroundColor: "#D8D9DA"}}
                     htmlType="reset"
                     disabled={false}
                     onClick={() => handleFeedback?.(index)}

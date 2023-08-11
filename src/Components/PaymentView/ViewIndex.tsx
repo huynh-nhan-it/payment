@@ -276,6 +276,7 @@ function ViewPayment(userId: any) {
                     type={type}
                   ></ModalStatus>
                   <ModalShare
+                    userId={userId.userId}
                     isModalOpenShare={isModalOpenShare}
                     handleOkShare={handleOkShare}
                     handleCancelShare={handleCancelShare}

@@ -61,7 +61,6 @@ const ModalProgress: React.FC<IModalProgress> = ({
             items: [items],
           };
         });
-        console.log(progress);
         setApprovers(progress);
         setIsloading(false);
       })

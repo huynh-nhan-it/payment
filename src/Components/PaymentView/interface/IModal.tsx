@@ -6,6 +6,7 @@ export interface IModal {
 }
 
 export interface IModalShare {
+    userId: string;
     isModalOpenShare?: boolean;
     handleOkShare?: (value: any) => void;
     handleCancelShare?: () => void;

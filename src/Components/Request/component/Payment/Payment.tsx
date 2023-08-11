@@ -3,7 +3,6 @@ import { useState } from "react";
 import { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
-import axios from "axios";
 import { ConnectedProps, connect } from "react-redux";
 import { RootState } from "../store/store";
 import HeaderPayment from "./Header";

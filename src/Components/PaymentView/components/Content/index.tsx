@@ -5,10 +5,11 @@ import ViewTable from "./components/viewTable";
 import Comment from "./components/comment-content";
 import { useParams } from "react-router-dom";
 import { format } from "date-fns";
-
+import { reactIcon } from "../../common/type";
 import { PaymentRequest } from "../../interface/IRequest";
-const { Text } = Typography;
+import { formattedNumber } from "../../common/handleF";
 
+const { Text } = Typography;
 interface IViewContent {
   userId: any;
   DetailRequestId: any;
@@ -25,7 +26,7 @@ const ViewContent: React.FC<IViewContent> = ({
   const formattedDateTimeCreateAt =
     detail?.createAt &&
     format(new Date(detail.createAt), "dd/MM/yyyy HH:mm:ss");
-
+  
   useEffect(() => {
     setDetail(PaymentRequest);
     //     const response = await request.get(endpoint).then((res) => {
@@ -63,7 +64,6 @@ const ViewContent: React.FC<IViewContent> = ({
   // const paymentDetail = detail.find(
   //   (pr) => pr === requestCode
   // );
-
   return (
     <div>
       {
@@ -234,7 +234,7 @@ const ViewContent: React.FC<IViewContent> = ({
                     </Col>
                     <Col span={10} style={{ textAlign: "left" }}>
                       {" "}
-                      <Text>1,000,000,000,000</Text>
+                      <Text>{formattedNumber(PaymentRequest.suggestedAmount)}</Text>
                     </Col>
                   </Row>
                   <Row style={{ marginBottom: 16 }}>
@@ -244,7 +244,7 @@ const ViewContent: React.FC<IViewContent> = ({
                     </Col>
                     <Col span={10} style={{ textAlign: "left" }}>
                       {" "}
-                      <Text>0</Text>
+                      <Text>{formattedNumber(PaymentRequest.tax)}</Text>
                     </Col>
                   </Row>
                   <Row style={{ marginBottom: 16 }}>
@@ -254,7 +254,7 @@ const ViewContent: React.FC<IViewContent> = ({
                     </Col>
                     <Col span={10} style={{ textAlign: "left" }}>
                       {" "}
-                      <Text>0</Text>
+                      <Text>{formattedNumber(PaymentRequest.advanceAmount)}</Text>
                     </Col>
                   </Row>
                   <Row style={{ marginBottom: 16 }}>
@@ -264,7 +264,7 @@ const ViewContent: React.FC<IViewContent> = ({
                     </Col>
                     <Col span={10} style={{ textAlign: "left" }}>
                       {" "}
-                      <Text> 1,000,000,000,000</Text>
+                      <Text>{formattedNumber(PaymentRequest.totalPayment)}</Text>
                     </Col>
                   </Row>
                 </Col>
@@ -274,6 +274,31 @@ const ViewContent: React.FC<IViewContent> = ({
             <div>
               <Text strong style={{ textAlign: "left", display: "block" }}>
                 Attachment(s)
+                <div style={{height: "1%"}}></div>
+                {PaymentRequest?.attachmentList.map((child: any) => {
+                  let nameFile = child.split('/');
+                  let typeFile = nameFile[nameFile.length - 1].split('.');
+                  return (<React.Fragment>
+                    <br />
+                    <Row justify={"start"}>
+                    <div style={{width: "25%"}}>
+                    <a
+                      href={child}
+                    >
+                      <Row align={"middle"}>
+                        
+                      {reactIcon[typeFile[typeFile.length - 1]] === undefined ? reactIcon['undefinedFile'] : reactIcon[typeFile[typeFile.length - 1]]}
+                      <div style={{width: "1%"}}></div>
+                      {nameFile[nameFile.length - 1]}
+                      </Row>
+                    </a>
+                    </div>
+                    <p>{formattedDateTimeCreateAt}</p>
+                    <div style={{width: "2%"}}></div>
+                    <p>{PaymentRequest.userName}</p>
+                    </Row>
+                  </React.Fragment>)
+                })}
               </Text>
             </div>
             <div className="row"></div>
@@ -283,6 +308,7 @@ const ViewContent: React.FC<IViewContent> = ({
               <Comment
                 requestCode={requestCode}
                 userId={userId}
+                userDetailRequest={detail?.userId}
                 DetailRequestId={DetailRequestId}
               ></Comment>
             </div>

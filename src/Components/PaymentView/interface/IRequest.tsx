@@ -18,10 +18,12 @@ interface Approver {
 
 export interface PaymentRequest {
   id: string;
+  userId: string;
   requestId: string;
   requestCode: string;
   userName: string;
   createAt: string;
+  attachmentList: string[];
   status: string;
   purpose: string;
   department: string;
@@ -33,4 +35,8 @@ export interface PaymentRequest {
   tableDetailRequest: TableDetailRequest[];
   method: string;
   approverIds: Approver[];
+  suggestedAmount: number;
+  tax: number;
+  advanceAmount: number;
+  totalPayment: number;
 }

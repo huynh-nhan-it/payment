@@ -1,32 +1,18 @@
-import {UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row, Typography } from "antd";
 import React from "react";
-import { FcApproval } from "react-icons/fc";
-import { IoReturnUpBack } from "react-icons/io5";
 import "../../../css/index.css";
 import { format } from 'date-fns';
+import {GiReturnArrow} from "react-icons/gi"
+import { BsCheckCircleFill } from "react-icons/bs";
+import { Comments } from "../../../interface/IComments";
 const { Text } = Typography;
 
-interface Comments {
-  userModel: UserModel;
-  createAt: string | undefined;
-  content: string | undefined;
-  commentReplyList: [];
-}
-
-interface UserModel {
-  fullName: string | undefined;
-  email: string | undefined;
-  phoneNumber: string | undefined;
-  avatar: string | undefined;
-  jobTitle: string | undefined;
-}
-
 interface ExampleCommentProps {
-  children?: Array<React.ReactNode>;
+  children?: [];
   form?: React.ReactNode;
   isFeedBack?: feedBack;
   handleFeedback?: (index: any) => void;
+  userDetailRequest?: string;
   comment?: Comments,
   index?: any
 }
@@ -40,16 +26,19 @@ const ComponentComment: React.FC<ExampleCommentProps> = ({
   form,
   isFeedBack,
   handleFeedback,
+  userDetailRequest,
   comment,
   index
 }) => {
-  const formattedDateTime = comment?.createAt && format(new Date(comment.createAt), "dd/MM/yyyy HH:mm:ss");  return (
+  const avatar = `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`
+  const formattedDateTime = comment?.createAt && format(new Date(comment.createAt), "dd/MM/yyyy HH:mm:ss");
+    return (
     <div>
       <Row>
         <Col span={14} className="col-parent-comment">
           <Row justify="start" className="row-comment">
             <Col span={2} className="col-comment">
-              <Avatar size={40} src={comment?.userModel.avatar} icon={comment?.userModel.avatar !== "" ? comment?.userModel.avatar : <UserOutlined></UserOutlined>}></Avatar>
+              <Avatar size={40} src={comment?.userModel.avatar !== "" ? comment?.userModel.avatar : avatar}></Avatar>
             </Col>
             <Col span={16} className="col-comment">
               <div className="midle-content-comment">
@@ -59,7 +48,9 @@ const ComponentComment: React.FC<ExampleCommentProps> = ({
                 </Text>
 
                 <Text className="pr-8">{formattedDateTime}</Text>
-                <FcApproval fontSize={"20px"}></FcApproval>
+                <div style={{width:"1%"}}></div>
+                {comment?.userCommentId === userDetailRequest ? <BsCheckCircleFill color="#38E54D" fontSize={"20px"}></BsCheckCircleFill>: ""}
+                
               </div>
               <div className="midle-content-comment">
                 <span>
@@ -71,9 +62,9 @@ const ComponentComment: React.FC<ExampleCommentProps> = ({
               {handleFeedback ? (
                 <Button
                   onClick={() => handleFeedback(index)}
-                  type="dashed"
+                  type="link"
                   shape="circle"
-                  icon={<IoReturnUpBack></IoReturnUpBack>}
+                  icon={<GiReturnArrow size={"70%"}></GiReturnArrow>}
                 ></Button>
               ) : (
                 ""
@@ -93,7 +84,7 @@ const ComponentComment: React.FC<ExampleCommentProps> = ({
           ""
         )}
         {children?.map((child, index) => (
-          <React.Fragment key={index}>{child}</React.Fragment>
+          <React.Fragment key={index}><ComponentComment comment={child} userDetailRequest={userDetailRequest}></ComponentComment></React.Fragment>
         ))}
       </div>
     </div>
