@@ -130,6 +130,7 @@ namespace PaymentModule.Controllers
                                 var b = new PaymentRequestDetail
                                 {
                                     Id = (Guid)reader["drId"],
+                                    UserId = (Guid)reader["UserId"],
                                     requestId = (Guid)reader["prId"],
                                     RequestCode = (string)reader["RequestCode"],
                                     UserName = _userService.GetUserModelById((Guid)reader["UserId"]).FullName,
