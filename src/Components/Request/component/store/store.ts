@@ -3,11 +3,13 @@
 import { createStore, combineReducers } from "redux";
 import filterReducer from "../reducers/filterReducer";
 import searchReducer from "../reducers/searchReducer";
+import navbarReducer from "../reducers/navbarReducer";
 
 // Khởi tạo state gốc
 const rootReducer = combineReducers({
   filter: filterReducer,
   search: searchReducer,
+  key: navbarReducer
 });
 
 // Tạo Redux store

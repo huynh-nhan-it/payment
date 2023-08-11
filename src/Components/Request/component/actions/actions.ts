@@ -37,3 +37,12 @@ export const applySearch = (
     }
   }
 }
+
+export const applyNavbar = ( key: string) =>{
+  return{
+    type: "APPLY_NAVBAR",
+    payload:{
+      key
+    }
+  }
+}

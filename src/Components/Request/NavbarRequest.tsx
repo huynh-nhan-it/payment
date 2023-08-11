@@ -1,8 +1,10 @@
 import { Menu, MenuProps } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { BsFolder2Open } from "react-icons/bs";
 import { BiBarChartAlt } from "react-icons/bi";
-
+import { applyNavbar } from "./component/actions/actions";
+import { ConnectedProps, connect } from "react-redux";
+import { RootState } from "../PaymentRequest/Store";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -32,21 +34,20 @@ const items: MenuItem[] = [
     getItem("Approved", "2-3"),
     getItem("Rejected", "2-4"),
   ]),
-  getItem("Reports", "11", <BiBarChartAlt />),
+  getItem("Reports", "3", <BiBarChartAlt />),
 ];
 
-const NavbarRequest: React.FC = () => {
-  const id = localStorage.getItem('id');
+
+
+
+interface NavbarProps extends ConnectedProps<typeof connector> {}
+const NavbarRequest: React.FC<NavbarProps> = ({applyNavbar}) => {
+  const [navbarKey, setNavbarKey] = useState('')
   const onClick: MenuProps['onClick'] = (e) => {
-    // console.log('click ', e.key);
-    if(e.key==='1-1'){
-      console.log("object");
-      // setData(dataAll)
-    }else if(e.key==='1-2'){
-      console.log(id)
-      //setData(dataSentToMe)
-    }
+    // setNavbarKey()
+    applyNavbar(e.key)
   };
+  // console.log(navbarKey);
   return (
     <Menu
       onClick={onClick}
@@ -56,5 +57,19 @@ const NavbarRequest: React.FC = () => {
       items={items}></Menu>
   );
 };
-export default NavbarRequest;
+
+const mapStateToProps = (state: RootState) => {
+  return {};
+};
+
+// Hàm mapDispatchToProps để map các action creators thành props của component
+const mapDispatchToProps = {
+  applyNavbar
+};
+
+// Kết nối component với Redux store
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(NavbarRequest);
+
 
