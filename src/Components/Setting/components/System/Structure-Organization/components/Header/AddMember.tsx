@@ -1,71 +1,78 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { getDepartments } from "../../../../../../../Services/PaymentRequest/apiForm";
 import { getApprover } from "../../../../../../../Services/PaymentRequest/apiApprover";
-import { Button, Dropdown, Form, Menu, Select, Space } from "antd";
+import { Button, Dropdown, Form, Input, Menu, Select, Space } from "antd";
 import { SelectError } from "../../../../../../PaymentRequest/showError";
+import { DepartmentContext } from "../Content/Navbar";
+
 interface Member{
   fullName: string;
   email: string;
   jobTitle: string;
 }
-interface AddMemberFormProps {
-  departmentNameAdd: string;
-}
-const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
+
+const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ departmentName }) => {
     const [departmentData, setDepartmentData] = useState<string[]>([]);
     const [memberData, setMemberData] = useState<Member[]>([]);
+    const context = useContext(DepartmentContext);
+    const fetchData = async () => {
+      try {
+        const memberResponse = await getApprover();  
+        const departmentResponse = await getDepartments();
   
-  useEffect(() => {
-    fetchData();
+        setMemberData(memberResponse);
+        setDepartmentData(departmentResponse);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    useEffect(() => {
+      fetchData();
+  
+    }, []);
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [position, setPosition] = useState("");
+  const [member, setMember] = useState<Member | null>(null);
 
-  }, []);
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  
+  
+  
 
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
   };
 
-  const fetchData = async () => {
-    try {
-      const memberResponse = await getApprover();  
-      const departmentResponse = await getDepartments();
+  
+  
 
-      setMemberData(memberResponse);
-      setDepartmentData(departmentResponse);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const [departmentName, setDepartmentName] = useState("");
-  const [position, setPosition] = useState("");
-  const [member, setMember] = useState<Member | null>(null);
+  
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
-    event.preventDefault();
-    if(departmentName==""|| position==""||member==null)
-    {
-      SelectError();
-    }
-    else if (member) {
-      const data = {
-        fullName: member.fullName,
-        email: member.email,
-        jobTitle: member.jobTitle,
-      };
+  // const handleSubmit = (event: { preventDefault: () => void; }) => {
+  //   event.preventDefault();
+  //   if( position==""||member==null)
+  //   {
+  //     SelectError();
+  //   }
+  //   else if (member) {
+  //     const data = {
+  //       fullName: member.fullName,
+  //       email: member.email,
+  //       jobTitle: member.jobTitle,
+  //     };
     
 
-    axios
-      .post(`http://localhost:5005/api/Department/add-member?DepartmentName=${departmentName}&Position=${position}`, data)
-      .then((response) => {
-        console.log("Response from API:", response.data);
-        // Xử lý dữ liệu trả về nếu cần thiết
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    }
-  };
+  //   axios
+  //     .post(`http://localhost:5005/api/Department/add-member?DepartmentName=${departmentName}&Position=${position}`, data)
+  //     .then((response) => {
+  //       console.log("Response from API:", response.data);
+  //       // Xử lý dữ liệu trả về nếu cần thiết
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  //   }
+  // };
   const handleFormClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Stop event propagation
   };
@@ -84,10 +91,10 @@ const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
     
   };
 
-  const handleDepartmentChange = (value: string) =>{
-    setDepartmentName(value);
-    console.log(value);
-  }
+  // const handleDepartmentChange = (value: string) =>{
+  //   setDepartmentName(value);
+  //   console.log(value);
+  // }
 
   const handlePositionChange = (value: string) =>{
     setPosition(value);
@@ -110,6 +117,11 @@ const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
     );
   };
 
+  
+  console.log("Department Name from Context:", context?.departmentName);
+
+
+
   const menu = (
     <Menu style={{ right: "-26px", top: "10px" }}>
       <Menu.Item key="form">
@@ -118,9 +130,9 @@ const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
           style={{ width: 320 }}
           className="padding-bottom-12">
           <Form.Item style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button type="primary" ghost onClick={handleSubmit}>
+            {/* <Button type="primary" ghost onClick={handleSubmit}>
               Add Member
-            </Button>
+            </Button> */}
           </Form.Item>
           <Form.Item label="Select Member" style={{fontWeight: "bold", display: "flex", justifyContent: "flex-end" }}>
             <Select
@@ -138,7 +150,7 @@ const AddMemberForm: React.FC<AddMemberFormProps> = ({departmentNameAdd}) => {
             </Select>
           </Form.Item>
           <Form.Item label="Department" style={{fontWeight: "bold", display: "flex", justifyContent: "flex-end" }}>
-            <input id="departmentAdd" value={departmentNameAdd} />
+            <Input style={{width:200}} id="departmentAdd" value={context?.departmentName || 'check'}  disabled/>
             {/* <Select
               showSearch
               style={{ width: 200}}

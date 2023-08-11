@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import "../../../css/index.css";
 import { MdOutlineGroups } from "react-icons/md";
 import { Affix, Col, Input, List, Row, Tabs } from "antd";
 import { getDepartments } from "../../../../../../../../Services/PaymentRequest/apiForm";
 import { getCheckManager, getDepartmentUsers } from "../../../../../../../../Services/Organizations/apiDepartmentUsers";
+import AddMemberForm from "../../Header/AddMember";
+import HeaderOrganize from "../../Header/Header";
+
+interface DepartmentContextProps {
+  departmentName: string;
+  setDepartmentName: (name: string) => void;
+}
+export const DepartmentContext = createContext<DepartmentContextProps | undefined>(undefined);
 const NavbarDepartment = () => {
+  const [departmentName, setDepartmentName] = useState('');
   interface User {
     fullName: string;
     email: string;
@@ -117,12 +126,11 @@ if (myInput) {
   console.log(manager);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const id = localStorage.getItem('id');
-  const [departmentName, setDepartmentName] = useState('');
 
-
-
+  
+  
   return (
-    <Row>
+    <><Row>
       <Col span={8}>
         <div className="navbar-department">
           <div className="search-department">
@@ -164,46 +172,38 @@ if (myInput) {
                 <Tabs.TabPane tab="Information" key="1">
                   <List>
                     <List.Item>
-                      {
-                        <tr>
-                          <td className="title-details">Description</td>
-                          <td className="content-details">
-                            <p>{descriptionDepartment}</p>
-                          </td>
-                        </tr>
-                      }
+                      {<tr>
+                        <td className="title-details">Description</td>
+                        <td className="content-details">
+                          <p>{descriptionDepartment}</p>
+                        </td>
+                      </tr>}
                     </List.Item>
                     <List.Item>
-                      {
-                        <tr>
-                          <td className="title-details">
-                            Under the department
-                          </td>
-                          <td className="content-details">
-                            <p>{underDepartment}</p>
-                          </td>
-                        </tr>
-                      }
+                      {<tr>
+                        <td className="title-details">
+                          Under the department
+                        </td>
+                        <td className="content-details">
+                          <p>{underDepartment}</p>
+                        </td>
+                      </tr>}
                     </List.Item>
                     <List.Item>
-                      {
-                        <tr>
-                          <td className="title-details">Contact Info</td>
-                          <td className="content-details">
-                            <p>{contactDepartment}</p>
-                          </td>
-                        </tr>
-                      }
+                      {<tr>
+                        <td className="title-details">Contact Info</td>
+                        <td className="content-details">
+                          <p>{contactDepartment}</p>
+                        </td>
+                      </tr>}
                     </List.Item>
                     <List.Item>
-                      {
-                        <tr>
-                          <td className="title-details">Code</td>
-                          <td className="content-details">
-                            <p>{codeDepartment}</p>
-                          </td>
-                        </tr>
-                      }
+                      {<tr>
+                        <td className="title-details">Code</td>
+                        <td className="content-details">
+                          <p>{codeDepartment}</p>
+                        </td>
+                      </tr>}
                     </List.Item>
                   </List>
                 </Tabs.TabPane>
@@ -243,9 +243,13 @@ if (myInput) {
               </Tabs>
             </>
           )}
+
         </div>
       </Col>
-    </Row>
+    </Row><DepartmentContext.Provider value={{ departmentName, setDepartmentName }}>
+        {/* Render Component C ở đây */}
+        <AddMemberForm departmentName={departmentName} />
+      </DepartmentContext.Provider></>
   );
 };
 

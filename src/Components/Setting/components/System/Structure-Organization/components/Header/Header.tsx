@@ -4,25 +4,19 @@ import { Layout } from "antd";
 import {ImWindows} from 'react-icons/im';
 import {TiArrowBackOutline} from 'react-icons/ti';
 import '../../css/index.css';
-import React from "react";
+import React, { useContext } from "react";
 import { FaPen, FaRegPenToSquare } from "react-icons/fa6";
 import { RiDeleteBin6Line, RiOrganizationChart } from "react-icons/ri";
 import AddMemberForm from "./AddMember";
+import context from "antd/es/app/context";
+import { DepartmentContext } from "../Content/Navbar";
 
 const { Header } = Layout;
 
 const HeaderOrganize: React.FC = () => {  
 
-let data = "";
-const myInput: HTMLInputElement | null = document.getElementById("myInputData") as HTMLInputElement;
+  const context = useContext(DepartmentContext);
 
-if (myInput) {
-  // Lấy giá trị của input
-  const inputValue: string = myInput.value;
-
-  // Dùng giá trị đã lấy được
-  data = inputValue; // In ra "Giá trị mặc định" (hoặc giá trị mà bạn đã nhập vào input)
-}
   return (
     <Header
     style={{
@@ -46,8 +40,7 @@ if (myInput) {
         </Col>
         <Col>
         <div style={{display: 'none'}} id="addMember" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/>
-        <input style={{display: 'none'}} id="myInputData" value="defaultValue"/>
-        <AddMemberForm departmentNameAdd = {data} />
+        <AddMemberForm departmentName={context?.departmentName}/>
         </div>
         </Col>
         <Col>
