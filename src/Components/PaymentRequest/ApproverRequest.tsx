@@ -6,6 +6,7 @@ import { getApprover } from "../../Services/PaymentRequest/apiApprover";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./Store";
 import { setListApproveAPI } from "./Store/approveSlice";
+import { setListDetailAPI } from "./Store/tableSlice";
 const { Content } = Layout;
 
 const ApproverRequest: React.FC = () => {
@@ -27,8 +28,12 @@ const ApproverRequest: React.FC = () => {
   
   useEffect(() => {
     // Chuyển đổi selectedApprovers thành chuỗi JSON và cập nhật ListApproveAPI
+    if(selectedApprovers.length ===0){
+      dispatch(setListDetailAPI(""))
+    }
+    else {
     const jsonString = JSON.stringify(selectedApprovers);
-    dispatch(setListApproveAPI(jsonString));
+    dispatch(setListApproveAPI(jsonString));}
   }, [selectedApprovers, dispatch]);
 
 

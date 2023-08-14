@@ -55,7 +55,7 @@ const App: React.FC = () => {
     else if((formData.form.exchangeRate || formData.form.poPrNumber)<0){
       showError.NumberError();
     }
-    else if(formData.approve==null){
+    else if(formData.approve.ListApproveAPI===null){
       showError.ApproverError();
     }
     else if(formData.table==null){
@@ -64,6 +64,7 @@ const App: React.FC = () => {
     else{
     dispatch(submitForm(formData, typeSave, id));
     console.log(formData, typeSave);
+    
 
     navigate("/request/payment");
   }
@@ -72,7 +73,7 @@ const App: React.FC = () => {
   const handleFormSubmitDraft = (typeSave:any, id: any) =>{
     dispatch(submitForm(formData, typeSave, id));
     console.log(formData, typeSave);
-
+    console.log(formData.approve.ListApproveAPI)
     navigate("/request/payment");
   }
 
