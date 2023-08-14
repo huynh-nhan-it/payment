@@ -9,6 +9,7 @@ import Setting from "./Components/Setting";
 import StructureOrganization from "./Components/Setting/components/System/Structure-Organization/components/StructureOrganization";
 import SubmitRequest from "./Components/PaymentRequest";
 import Register from "./Components/Login/Register";
+import LoginPage from "./Components/Login";
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
         <Routes>
           <Route
             path="/login"
-            element={!userId ? <Login /> : <Navigate to="/" />}
+            element={!userId ? <LoginPage /> : <Navigate to="/" />}
           />
           <Route
             path="/register"

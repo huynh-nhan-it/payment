@@ -177,11 +177,10 @@ const Payment: React.FC<DataListProps> = ({ filteredData, searchData, navbarData
       render: (text: string, record: PaymentRequestList) => {
         const formattedDate = formatDate(text);
         const statusColors: any = {
-          Approved: "#4BA747",
-          Draft: "#2F85EF",
+          Draft: "#FFA500",
           Rejected: "#FF0000",
-          Approving: "#FFA500",
-          Done: 'rgb(22, 124, 130)'
+          Approving: "#2F85EF",
+          Done: '#4BA747'
         };
         const backgroundColor = statusColors[record.status] || "#000000"; // Default color if status not found
 
