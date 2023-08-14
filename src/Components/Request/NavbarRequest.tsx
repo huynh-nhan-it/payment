@@ -5,6 +5,7 @@ import { BiBarChartAlt } from "react-icons/bi";
 import { applyNavbar } from "./component/actions/actions";
 import { ConnectedProps, connect } from "react-redux";
 import { RootState } from "../PaymentRequest/Store";
+import './request.css'
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(

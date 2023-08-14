@@ -6,7 +6,17 @@
 
 .export-file {
     display: inline-flex;
+    padding: 10px;
+    margin: 10px;
     align-items: center;
+    border: #DFE8F1 solid 1px;
+}
+
+.create-new {
+    padding: 10px;
+    margin: 10px;
+    align-items: center;
+    border: #DFE8F1 solid 1px;
 }
 
 .export-file:hover {
@@ -17,11 +27,11 @@
     display: flex;
 }
 
-.padding-10 {
+/* .padding-10 {
     margin: 10px;
     padding: 10px;
     border: #DFE8F1 solid 1px;
-}
+} */
 
 
 .bg-header-payment {
@@ -48,9 +58,10 @@
 .filter {
     display: inline-flex;
     align-items: center;
-    padding-left: 10px;
+    padding: 10px;
+    margin: 10px;
     color: #8894A1;
-
+    border: #DFE8F1 solid 1px;
 }
 
 .filter:hover {}
@@ -102,3 +113,38 @@
 .height-100 {
     height: 100%;
 }
+
+@media only screen and (max-width: 600px) {
+    .header-payment {}
+
+    .payment-request {
+        display: none;
+    }
+
+    .payment-all {}
+
+    .content-request {
+        padding: auto;
+    }
+
+    .payment-list {
+        margin: 0 16px;
+    }
+
+    .export-file, .filter, .create-new {
+        padding: 0px;
+        height: 40px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}

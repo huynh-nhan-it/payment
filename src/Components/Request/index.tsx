@@ -26,10 +26,11 @@ import NavbarRequest from "./NavbarRequest";
 import { ConnectedProps, Provider, connect } from "react-redux";
 import store, { RootState } from "./component/store/store"
 import { applySearch } from "./component/actions/actions";
+import './request.css'
 
-interface SearchProps extends ConnectedProps<typeof connector> {}
+interface SearchProps extends ConnectedProps<typeof connector> { }
 
-const Request: React.FC<SearchProps> = ({applySearch}) => {
+const Request: React.FC<SearchProps> = ({ applySearch }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [valueSearch, setValueSearch] = useState('')
   const {

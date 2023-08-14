@@ -7,7 +7,7 @@ import store from "../store/store";
 
 const PaymentAll: React.FC = () => {
   return (
-    <div style={{ paddingTop: "64px" }}>
+    <div className="payment-all" style={{ paddingTop: "64px" }}>
       <Payment />
     </div>
   );

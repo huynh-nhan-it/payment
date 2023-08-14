@@ -70,20 +70,15 @@ const HeaderRequest = () => {
     <div>
       <Header
         className="header-request"
-        style={{
-          backgroundColor: "#167c82",
-          display: "flex",
-          alignItems: "center",
-        }}
+       
       >
         <div
           className="opus-logo-name"
         >
-          <div className="opus-logo" style={{ width: "50px", flex: 1, display: "flex", alignItems: "center"}}>
-            <Link to="/" style={{paddingTop: "36%"}}>
+          <div className="opus-logo">
+            <Link to="/">
               <img
                 src="https://o365.vn/wp-content/uploads/logo_w.png"
-                style={{ width: "100%", height: "100%", objectFit: "contain"}}
               />
             </Link>
           </div>
@@ -106,6 +101,9 @@ const HeaderRequest = () => {
           </div>
           <div className="person-request">
             <Person />
+          </div>
+          <div className="avatar-header">
+            {/* <Person /> */}
           </div>
         </div>
       </Header>
