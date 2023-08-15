@@ -9,24 +9,38 @@
     align-items: center;
 }
 
-.opus-logo {}
+.opus-logo {
+    width: 50px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
 
+
+.opus-logo img {
+    width: 50px;
+    height: 100%;
+    object-fit: contain;
+}
+.opus-logo a{
+    padding-top: 36%;
+}
 .opus-logo-name {
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
-    font-style: bold; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-style: bold;
     font-size: large;
 }
 
 .company-name {
     color: #fff;
     padding: 0 10px;
-    border-right: #fff 0.1px solid;
 }
 
-.eOffice{
+.eOffice {
+    border-left: #fff 0.1px solid;
     color: #fff;
     padding: 0 10px;
 }
@@ -53,17 +67,52 @@
     height: 500px;
 }
 
-.header-request svg{
+.header-request svg {
     color: #fff;
 }
 
 .person-request:hover,
 .setting-request:hover,
 .notification-request:hover,
-.help-request:hover{
+.help-request:hover {
     background-color: #79BD43 !important;
 }
 
-.icon-person svg{
+.icon-person svg {
     font-size: 20px;
 }
+
+
+@media only screen and (max-width: 600px) {
+    .sider-request {
+        /* display: none; */
+    }
+
+    .content-request {}
+
+   
+    .header-request{
+        line-height: unset;
+    }
+    .right-request{
+        display: none;
+    }
+    .eOffice{
+        display: none;
+    }
+    .opus-logo a{
+        padding-top: 0;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}
