@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, Input, Popconfirm, Table,InputNumber,Typography, UploadProps, List, message, notification } from 'antd';
 import { Layout, Menu, theme, DatePicker,Select, MenuProps } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
@@ -461,8 +461,7 @@ interface Item {
       return taxAmount;
     };
     const calculateTotalAmount = () => {
-      const sum = tableData.reduce((total, item) => total + item.amount, 0);
-      
+      const sum = tableData.reduce((total, item) => total + item.amount, 0);      
       setTotalAmount(sum);
     };
     useEffect(() => {
@@ -472,8 +471,8 @@ interface Item {
     const handleAdvanceAmount = (value: number | null) => {
       if (value !== null) {
       setAdvanceAmount(value);
-      const newTotalAmount = totalAmount + calculateTax() - value;
-      setTotalAmount(newTotalAmount);
+      // const newTotalAmount = totalAmount + calculateTax() - value;
+      // setTotalAmount(newTotalAmount);
     }
     };
   
@@ -486,6 +485,7 @@ interface Item {
       calculateTotal();
        
     }, [totalAmount, taxPercentage, advanceAmount]);
+
     
   
     const [showBankAccountForm, setShowBankAccountForm] = useState(false);
@@ -640,7 +640,7 @@ interface Item {
     />
     </div>
   <div style={{ marginBottom: '16px', fontWeight: 'bold', fontSize: '18px' }}>
-    Total Payment: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{formatNumberWithCommas(totalAmount)}</span>
+    Total Payment: <span style={{ textAlign: 'right', display: 'inline-block', minWidth: '100px' }}>{formatNumberWithCommas(total)}</span>
   </div>  
 </Form>
 </Col>
