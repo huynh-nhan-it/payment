@@ -1,20 +1,4 @@
-// import React from "react";
-// import PaymentAll from "./Payment";
-// import NavbarRequest from "./NavbarRequest";
-// import './request.css'
-
-// const Request = () => {
-//   return (
-//     <div className="wrapper">
-//       <NavbarRequest />
-//       <PaymentAll />
-//     </div>
-//   );
-// };
-
-// export default Request;
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import PaymentAll from "./component/Payment";
 import { Layout, theme } from "antd";
@@ -23,10 +7,11 @@ import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import Search from "antd/es/input/Search";
 import NavbarRequest from "./NavbarRequest";
-import { ConnectedProps, Provider, connect } from "react-redux";
-import store, { RootState } from "./component/store/store"
+import { ConnectedProps, connect } from "react-redux";
+import { RootState } from "./component/store/store"
 import { applySearch } from "./component/actions/actions";
 import './request.css'
+import AppFooter from "./component/Footer/footer";
 
 interface SearchProps extends ConnectedProps<typeof connector> { }
 
@@ -40,12 +25,31 @@ const Request: React.FC<SearchProps> = ({ applySearch }) => {
     setValueSearch(e)
   }
   applySearch(valueSearch)
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+
+    handleResize(); // Kiểm tra trạng thái ban đầu
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   // console.log(valueSearch);
   return (
     <div>
-      <Layout>
+      <Layout style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
         <HeaderRequest />
-        <Content>
+        <Content
+        style={{ flex: 1, overflow: 'auto' }}
+        >
           <Layout>
             <Sider
               width={226}
@@ -77,6 +81,7 @@ const Request: React.FC<SearchProps> = ({ applySearch }) => {
             </Content>
           </Layout>
         </Content>
+        <AppFooter/>
       </Layout>
     </div>
   );

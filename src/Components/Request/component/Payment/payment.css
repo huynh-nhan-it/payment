@@ -32,7 +32,9 @@
     padding: 10px;
     border: #DFE8F1 solid 1px;
 } */
-
+.form-filter{
+    width:300px;
+}
 
 .bg-header-payment {
     background-color: #fff;
@@ -114,6 +116,9 @@
     height: 100%;
 }
 
+.payment-list {
+    margin: 0 16px;
+}
 @media only screen and (max-width: 600px) {
     .header-payment {}
 
@@ -127,13 +132,13 @@
         padding: auto;
     }
 
-    .payment-list {
-        margin: 0 16px;
-    }
-
     .export-file, .filter, .create-new {
         padding: 0px;
         height: 40px;
+        /* line-height: 40px; */
+    }
+    .form-filter{
+        width: 250px;
     }
 }
 

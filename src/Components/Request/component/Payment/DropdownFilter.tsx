@@ -9,12 +9,11 @@ import {
   DatePicker,
   Space,
 } from "antd";
-import { DownOutlined } from "@ant-design/icons";
 import { RiArrowDownSFill } from "react-icons/ri";
 import { RootState } from "../store/store";
 import { connect, ConnectedProps } from "react-redux";
 import { applyFilter, resetFilter } from "../actions/actions";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 interface FilterFormProps extends ConnectedProps<typeof connector> {}
 
@@ -64,12 +63,11 @@ const DropdownFilter: React.FC<FilterFormProps> = ({
   const dayjsDateTo = createdDateTo ? dayjs(createdDateTo, "YYYY-MM-DD") : null;
 
   const menu = (
-    <Menu style={{ right: "-26px", top: "10px" }}>
+    <Menu style={{ right: "-100px", top: "10px" }}>
       <Menu.Item key="form">
         <Form
           onClick={handleFormClick}
-          style={{ width: "300px" }}
-          className="padding-bottom-12">
+          className="padding-bottom-12 form-filter">
           <Form.Item label="Filter">
             <Button
               onClick={handleReset}
@@ -160,10 +158,10 @@ const DropdownFilter: React.FC<FilterFormProps> = ({
 
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
-      <a style={{ color: "#8894A1" }} onClick={toggleFormVisibility}>
+      <div style={{ color: "#8894A1" }} onClick={toggleFormVisibility}>
         <Space>Filter</Space>
         <RiArrowDownSFill />{" "}
-      </a>
+      </div>
     </Dropdown>
   );
 };

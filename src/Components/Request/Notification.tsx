@@ -1,22 +1,11 @@
-import React, { useState } from "react";
-import { Space, Dropdown, Menu } from "antd";
+import React from "react";
+import { Space, Dropdown } from "antd";
 import { IoCloseSharp, IoNotifications } from "react-icons/io5";
 
 import type { MenuProps } from "antd";
 import "./request.css";
 
 const Notification: React.FC = () => {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-  };
-
-  const handleFormSubmit = (values: any) => {
-    console.log("Form values:", values);
-    // Perform desired actions with form values
-    setIsFormVisible(false); // Hide the form after submission
-  };
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -43,20 +32,15 @@ const Notification: React.FC = () => {
     <Dropdown
       menu={{
         items,
-        style: {
-          height: "500px",
-          width: "300px",
-          marginTop: "12px",
-          right: "-200px",
-        },
+        style: {marginTop:"12px"},
+        className:"dropdown-help",
       }}
-      className="dropdown-help"
       trigger={["click"]}>
-      <a onClick={(e) => e.preventDefault()}>
+      <div onClick={(e) => e.preventDefault()}>
         <Space>
           <IoNotifications />{" "}
         </Space>
-      </a>
+      </div>
     </Dropdown>
   );
 };

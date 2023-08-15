@@ -7,12 +7,11 @@ import { Link } from "react-router-dom";
 import HeaderRequest from "../Request/HeaderRequest";
 import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
-import Search from "antd/es/input/Search";
-import NavbarRequest from "../Request/NavbarRequest";
 import NavbarSetting from "./components/System/Structure-Organization/Navbar/NavbarSetting";
+import AppFooter from "../Request/component/Footer/footer";
 
 const Setting = () => {
-  const handleClickCard = () => {};
+  const handleClickCard = () => { };
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -70,6 +69,9 @@ const Setting = () => {
             </Content>
           </Layout>
         </Content>
+        <div style={{width:"100%", position:"absolute", top:"unset", bottom:0}}>
+          <AppFooter />
+        </div>
       </Layout>
     </div>
   );

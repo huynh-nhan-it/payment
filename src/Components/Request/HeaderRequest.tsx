@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout } from "antd";
 import "./request.css";
 import { IoIosSettings } from "react-icons/io";
@@ -6,74 +6,22 @@ import HelpRequest from "./Help";
 import Notification from "./Notification";
 import Person from "./Person";
 import { Link } from "react-router-dom";
-
+import { AiOutlineEllipsis } from "react-icons/ai";
 const { Header } = Layout;
 
 const HeaderRequest = () => {
-  // const menu = (
-  //   <Menu style={{ right: "-26px", top: "10px" }}>
-  //     <Menu.Item key="form">
-  //       <Form style={{ width: "300px" }} className="padding-bottom-12">
-  //         <Form.Item label="Filter">
-  //           <Button type="primary" htmlType="submit" className="clear-payment">
-  //             Clear
-  //           </Button>
-  //           <Button type="primary" htmlType="submit" className="apply-payment">
-  //             Submit
-  //           </Button>
-  //         </Form.Item>
-  //         <Form.Item
-  //           labelCol={{ span: 24 }}
-  //           label="Purpose"
-  //           labelAlign="left"
-  //           className="margin-bottom-8">
-  //           <Input />
-  //         </Form.Item>
-  //         <Form.Item
-  //           labelCol={{ span: 24 }}
-  //           label="Request Code"
-  //           labelAlign="left"
-  //           className="margin-bottom-8">
-  //           <Input />
-  //         </Form.Item>
-  //         <Form.Item
-  //           labelCol={{ span: 24 }}
-  //           label="Created"
-  //           labelAlign="left"
-  //           className="margin-bottom-8">
-  //           <DatePicker className="width-100 margin-bottom-8" />
-  //           <DatePicker className="width-100" />
-  //         </Form.Item>
-  //         <Form.Item
-  //           label="Select"
-  //           labelCol={{ span: 24 }}
-  //           className="margin-bottom-8">
-  //           <Select>
-  //             <Select.Option value="demo">Demo</Select.Option>
-  //             <Select.Option value="demo">Demo1</Select.Option>
-  //           </Select>
-  //         </Form.Item>
-  //         <Form.Item
-  //           label="Select"
-  //           labelCol={{ span: 24 }}
-  //           className="margin-bottom-8">
-  //           <Select>
-  //             <Select.Option value="demo">Demo</Select.Option>
-  //             <Select.Option value="demo">Demo1</Select.Option>
-  //           </Select>
-  //         </Form.Item>
-  //       </Form>
-  //     </Menu.Item>
-  //   </Menu>
-  // );
+
+  const [isVisible, setIsVisible] = useState(false);
+  const handleClickMenu = () => {
+    setIsVisible(!isVisible)
+  }
   return (
     <div>
       <Header
         className="header-request"
-       
       >
         <div
-          className="opus-logo-name"
+          className={`opus-logo-name ${!isVisible ? 'display-flex' : 'hidden'}`}
         >
           <div className="opus-logo">
             <Link to="/">
@@ -86,8 +34,11 @@ const HeaderRequest = () => {
             <div className="company-name"> Opus Solution</div>
           </Link>
           <div className="eOffice"> eOffice </div>
+
         </div>
-        <div className="right-request">
+        <div
+          className={`${isVisible ? 'display-flex' : 'hidden'} right-request`}
+        >
           <div className="help-request">
             <HelpRequest />
           </div>
@@ -102,9 +53,12 @@ const HeaderRequest = () => {
           <div className="person-request">
             <Person />
           </div>
-          <div className="avatar-header">
-            {/* <Person /> */}
-          </div>
+
+        </div>
+        <div
+          className='menu-responsive'
+          onClick={handleClickMenu}>
+          <i><AiOutlineEllipsis></AiOutlineEllipsis></i>
         </div>
       </Header>
     </div>
