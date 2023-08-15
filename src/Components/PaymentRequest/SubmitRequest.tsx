@@ -34,32 +34,29 @@ const App: React.FC = () => {
   const handleFormSubmit = (typeSave:any, id: any) => {
     
     //Gọi action submitForm
-    if(formData.form.purpose ==''){
+    if(formData.form.purpose ===''){
       showError.PurposeError();
     }
-    else if(formData.form.department ==''){
+    else if(formData.form.department ===''){
       showError.DepartmentError();
     }
-    else if(formData.form.paymentFor ==''){
+    else if(formData.form.paymentFor ===''){
       showError.PaymentForError();
     }
-    else if(formData.form.supplier ==''){
+    else if(formData.form.supplier ===''){
       showError.SupplierError();
     }
-    else if(formData.form.currency ==''){
+    else if(formData.form.currency ===''){
       showError.CurrencyError();
     }
-    else if(formData.form.poPrNumber==0){
+    else if(formData.form.poPrNumber===0){
       showError.PoPrError();
     }
     else if((formData.form.exchangeRate || formData.form.poPrNumber)<0){
       showError.NumberError();
     }
-    else if(formData.approve.ListApproveAPI===null){
+    else if(formData.approve.ListApproveAPI.length===0){
       showError.ApproverError();
-    }
-    else if(formData.table==null){
-      showError.TableError();
     }
     else{
     dispatch(submitForm(formData, typeSave, id));
