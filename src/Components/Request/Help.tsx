@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Dropdown, Menu } from "antd";
 import { BsQuestionLg } from "react-icons/bs";
 import { IoCloseSharp } from "react-icons/io5";
@@ -8,17 +8,6 @@ import { Link } from "react-router-dom";
 
 
 const HelpRequest: React.FC = () => {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-  };
-
-  const handleFormSubmit = (values: any) => {
-    console.log("Form values:", values);
-    // Perform desired actions with form values
-    setIsFormVisible(false); // Hide the form after submission
-  };
   interface MenuItem {
     key: string;
     label: string;
@@ -85,9 +74,9 @@ const HelpRequest: React.FC = () => {
 
   return (
     <Dropdown overlay={menu} trigger={['click']}>
-    <a onClick={(e) => e.preventDefault()}>
+    <div onClick={(e) => e.preventDefault()}>
       <BsQuestionLg />
-    </a>
+    </div>
   </Dropdown>
   );
 };

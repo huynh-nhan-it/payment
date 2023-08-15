@@ -39,6 +39,7 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
     updatedData["ImagePath"] = null;
     setData(updatedData);
   };
+  console.log(data);
   const [selectedFont, setSelectedFont] = useState<any>(fontOptions[0]); // Lựa chọn font chữ mặc định
   const [selectedImage, setSelectedImage] = useState<
     string | ArrayBuffer | null
@@ -180,36 +181,6 @@ const Signature: React.FC<SignatureProps> = ({ data, setData, isEditable }) => {
               </div>
             </Col>
           </Row>
-          {/* <div style={{ marginTop: "2rem" }}>
-            <QRCode value={inputText} />
-          </div> */}
-
-          {/* {selectedImage && (
-            <Row style={{ paddingTop: 20 }}>
-              <Col span={12} offset={6}>
-                <div
-                  style={{
-                    height: "200px",
-                    background: "#fff",
-                    display: "flex",
-                  }}>
-                  <div style={{ padding: "10px" }}>
-                    <QRCode
-                      style={{ width: "100px", height: "100px" }}
-                      value={inputText}
-                    />
-                  </div>
-                  <div style={{ marginTop: "1rem" }}>
-                    <img
-                      src={selectedImage as string}
-                      alt="Uploaded"
-                      style={{ width: "200px" }}
-                    />
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          )} */}
           {data?.ImagePath && (
             <Row style={{ paddingTop: 20 }}>
               <Col span={12} offset={6}>

@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Dropdown, Menu, MenuProps } from "antd";
-import { BsQuestionLg } from "react-icons/bs";
+import { Dropdown, Menu } from "antd";
 import { IoCloseSharp, IoPersonCircleOutline } from "react-icons/io5";
-
 import "./request.css";
 import { Link } from "react-router-dom";
 import request from "../../Services/User/getAccount";
 
 const Person: React.FC = () => {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const id = localStorage.getItem('id')
   const [dataName, setDataName] = useState('')
+  const [avatar, setDataAvatar] = useState()
+  const id = localStorage.getItem('id')
   useEffect(() => {
     const getUserInfor = async () => {
       const endpoint = "/Personal/EmployeeInfo?Id=" + id;
-      const response = await request.get(endpoint).then((res) => {
+      await request.get(endpoint).then((res) => {
         setDataName(res.data.userInfo.FirstName + ' ' + res.data.userInfo.LastName);
-        // setData(res.data)
+        if (res.data.avt) {
+          setDataAvatar(res.data.avt);
+        }
       });
     };
 
     getUserInfor();
-  }, []);
+  }, [id]);
   interface MenuItem {
     key: string;
     label: string;
@@ -77,8 +77,7 @@ const Person: React.FC = () => {
       return (
         <Menu.Item key={item.key}>
 
-          {item.name === 'signout' ? <Link to={`/setting/system/${item.name}`} onClick={(e)=>
-          {
+          {item.name === 'signout' ? <Link to={`/setting/system/${item.name}`} onClick={(e) => {
             e.preventDefault();
             localStorage.clear();
             window.location.href = '/login'
@@ -105,9 +104,19 @@ const Person: React.FC = () => {
 
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
-      <a onClick={(e) => e.preventDefault()}>
-        <IoPersonCircleOutline />
-      </a>
+      <div onClick={(e) => e.preventDefault()}>
+        <div className="avatar-header">
+          {!avatar ?
+            <IoPersonCircleOutline /> :
+            <img
+              style={{ width: "22px" }}
+              className="avatar-employee"
+              src={avatar}
+              alt="avatar"
+            />
+          }
+        </div>
+      </div>
     </Dropdown>
   );
 };

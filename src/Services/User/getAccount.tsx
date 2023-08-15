@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 
 const apiStr = "http://localhost:5005/api/";
 export const getUser = async () => {
@@ -104,5 +103,6 @@ export const remove = async (endpoint: string, data = {}) => {
     },
   });
 };
+
 
 export default request;
