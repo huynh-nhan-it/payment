@@ -7,6 +7,7 @@ import './RequestDetails.css';
 import { getBearDepartments } from '../../Services/PaymentRequest/apiForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { setListDetailAPI } from './Store/tableSlice';
+import * as showError from "./showError";
 import { updatePayMethod,
         updateTotalAmount,
         updateTax,
@@ -228,6 +229,8 @@ interface Item {
     
   
     const isEditing = (record: Item) => record.key === editingKey;
+    const [isEditingCheck, setIsEditingCheck] = useState(false);
+
   
     const edit = (record: Partial<Item> & { key: React.Key }) => {
       form.setFieldsValue({ 
@@ -240,6 +243,7 @@ interface Item {
         note: '', 
         ...record });
       setEditingKey(record.key);
+      setIsEditingCheck(true);
     };
 
     useEffect(() => {
@@ -249,6 +253,7 @@ interface Item {
     }, []); // [] đảm bảo rằng useEffect chỉ được gọi một lần khi trang được tải
   
     const cancel = () => {
+      setIsEditingCheck(false);
       setEditingKey('');
     };
     const formatDate = (dateString: string): string => {
@@ -260,6 +265,7 @@ interface Item {
         const row = (await form.validateFields()) as Item;
         const newData = [...tableData];
         const index = newData.findIndex((item) => key === item.key);
+        setIsEditingCheck(false)
         if (row.amount < 0 || row.invNo < 0) {
           // Hiển thị cảnh báo
           notification.error({
@@ -285,7 +291,6 @@ interface Item {
           setTableData(newData);
           setListDetail([jsonString]);
           dispatch(setListDetailAPI(ListDetail))
-
           setEditingKey('');
         }    
   
@@ -300,7 +305,7 @@ interface Item {
   
     const columns = [
       {
-        title: 'Inv/Rec date	',
+        title: 'Inv/Rec date',
         dataIndex: 'invDate',
         width: '15%',
         editable: true,
@@ -376,15 +381,15 @@ interface Item {
               <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
                 Save
               </Typography.Link>
-              <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+              {/* <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
                 <a>Cancel</a>
-              </Popconfirm>
+              </Popconfirm> */}
             </span>
           ) : (
             <span>
-            <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+            {/* <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
             <EditFilled style={{ fontSize: '30px' }} />
-            </Typography.Link>
+            </Typography.Link> */}
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
             <DeleteFilled style={{ fontSize: '30px' }} />
           </Popconfirm>
@@ -413,6 +418,7 @@ interface Item {
       };
     });
     const handleAdd = () => {
+      if (!isEditingCheck) {
       const newData: Item = {
         key: count.toString(),
         invDate: dayjs().toString(),
@@ -431,9 +437,11 @@ interface Item {
       form.resetFields();
       setListDetail([jsonString]);
       dispatch(setListDetailAPI(ListDetail))
-
-   
-      
+      setIsEditingCheck(true);
+      }
+      else{
+        showError.AddItemError();
+      }
     };
   
     const handleDelete = (key: React.Key) => {

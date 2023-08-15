@@ -53,3 +53,10 @@ export const SelectError = () => {
     description: 'You just selected Missing Data, Please fill in the data and Try Again',
   });
 };
+
+export const AddItemError = () => {
+  notification.error({
+    message: 'Cannot Add New Row :(',
+    description: 'You have to enter the information and save the selected item',
+  });
+};
