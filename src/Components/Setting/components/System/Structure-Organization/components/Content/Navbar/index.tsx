@@ -14,7 +14,7 @@ interface DepartmentContextProps {
   departmentName: string;
   setDepartmentName: (name: string) => void;
 }
-export const DepartmentContext = createContext<DepartmentContextProps | undefined>(undefined);
+
 const NavbarDepartment = () => {
   const [departmentName, setDepartmentName] = useState('');
   interface User {
@@ -136,7 +136,7 @@ if (myInput) {
   
   return (
     
-    <><Row>
+    <Row>
       <Col span={8}>
         <div className="navbar-department">
           <div className="search-department">
@@ -252,10 +252,7 @@ if (myInput) {
 
         </div>
       </Col>
-    </Row><DepartmentContext.Provider value={{ departmentName, setDepartmentName }}>
-        {/* Render Component C ở đây */}
-        <AddMemberForm departmentName={departmentName} />
-      </DepartmentContext.Provider></>
+    </Row>
   );
 };
 

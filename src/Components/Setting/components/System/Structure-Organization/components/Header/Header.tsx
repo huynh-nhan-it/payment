@@ -9,9 +9,10 @@ import { FaPen, FaRegPenToSquare } from "react-icons/fa6";
 import { RiDeleteBin6Line, RiOrganizationChart } from "react-icons/ri";
 import AddMemberForm from "./AddMember";
 import context from "antd/es/app/context";
-import { DepartmentContext } from "../Content/Navbar";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../../Request/component/store/store";
+import DeleteDepartment from "./DeleteDepartment";
 
 const { Header } = Layout;
 
@@ -37,7 +38,8 @@ const {departmentName} = useSelector((state:RootState) => state.departmentSlice)
 
         </Col>
         <Col>
-          <a style={{ display: 'none' }} id="delete" href="#" className="text-header"> <RiDeleteBin6Line style={{ marginRight: '5px' }} /> Delete Department</a>
+          <div style={{ display: 'none' }} id="delete" className="text-header"> <RiDeleteBin6Line style={{ marginRight: '5px' }} /> 
+          <DeleteDepartment departmentName={departmentName}/></div>
         </Col>
         <Col>
           <div style={{ display: 'none' }} id="addMember" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }} />

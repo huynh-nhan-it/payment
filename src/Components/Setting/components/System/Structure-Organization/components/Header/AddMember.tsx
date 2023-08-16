@@ -4,7 +4,6 @@ import { getDepartments } from "../../../../../../../Services/PaymentRequest/api
 import { getApprover } from "../../../../../../../Services/PaymentRequest/apiApprover";
 import { Button, Dropdown, Form, Input, Menu, Select, Space } from "antd";
 import { SelectError } from "../../../../../../PaymentRequest/showError";
-import { DepartmentContext } from "../Content/Navbar";
 
 interface Member{
   fullName: string;
@@ -15,7 +14,6 @@ interface Member{
 const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ departmentName }) => {
     const [departmentData, setDepartmentData] = useState<string[]>([]);
     const [memberData, setMemberData] = useState<Member[]>([]);
-    const context = useContext(DepartmentContext);
     const fetchData = async () => {
       try {
         const memberResponse = await getApprover();  
@@ -66,6 +64,9 @@ const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ depar
       .then((response) => {
         console.log("Response from API:", response.data);
         // Xử lý dữ liệu trả về nếu cần thiết
+
+        // Tải lại trang
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -117,7 +118,6 @@ const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ depar
   };
 
   
-  console.log("Department Name from Context:", context?.departmentName);
 
 
 

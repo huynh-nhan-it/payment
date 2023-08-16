@@ -61,8 +61,6 @@ const App: React.FC = () => {
     else{
     dispatch(submitForm(formData, typeSave, id));
     console.log(formData, typeSave);
-    
-
     navigate("/request/payment");
   }
   };
