@@ -1,5 +1,5 @@
 import { Card, Layout, theme } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineGroups } from "react-icons/md";
 import "./setting.css";
 import { BsFillPersonFill } from "react-icons/bs";
@@ -16,6 +16,22 @@ const Setting = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+
+    handleResize(); // Kiểm tra trạng thái ban đầu
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <div>
       <Layout>

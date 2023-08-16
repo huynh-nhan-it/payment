@@ -41,12 +41,12 @@ const items: MenuItem[] = [
 
 
 
-interface NavbarProps extends ConnectedProps<typeof connector> {}
-const NavbarRequest: React.FC<NavbarProps> = ({applyNavbar}) => {
-  const [navbarKey, setNavbarKey] = useState('')
+interface NavbarProps extends ConnectedProps<typeof connector> { }
+const NavbarRequest: React.FC<NavbarProps> = ({ applyNavbar }) => {
   const onClick: MenuProps['onClick'] = (e) => {
     // setNavbarKey()
     applyNavbar(e.key)
+    // navigate('/request/payment')
   };
   // console.log(navbarKey);
   return (

@@ -52,9 +52,11 @@ const ViewHeader: React.FC<IHeader> = ({
         background: "#ccc",
         position: "fixed",
         zIndex: 1,
+        // height: 125px,
         top: "64px",
         backgroundColor: "#F5F6FA",
       }}
+      className="header-view"
     >
       <Row gutter={24} style={{ paddingLeft: "1.5%" }}>
         <Col>

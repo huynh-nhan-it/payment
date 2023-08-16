@@ -212,6 +212,22 @@ function ViewPayment(userId: any) {
   const handleCancelProgress = () => {
     setIsModalOpenProgress(false);
   };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+
+    handleResize(); // Kiểm tra trạng thái ban đầu
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <div>
       {contextHolder}

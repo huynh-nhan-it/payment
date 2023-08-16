@@ -19,6 +19,7 @@
     border: #DFE8F1 solid 1px;
 }
 
+.filter:hover,
 .export-file:hover {
     cursor: pointer;
 }

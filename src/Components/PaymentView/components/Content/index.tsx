@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { reactIcon } from "../../common/type";
 import { PaymentRequest } from "../../interface/IRequest";
 import { formattedNumber } from "../../common/handleF";
-
+import './../../css/index.css'
 const { Text } = Typography;
 interface IViewContent {
   userId: any;
@@ -68,9 +68,9 @@ const ViewContent: React.FC<IViewContent> = ({
     <div>
       {
         <div
+        className="content-view"
           style={{
-            margin: 0,
-            paddingTop: 128,
+           
           }}
         >
           <div
@@ -117,39 +117,39 @@ const ViewContent: React.FC<IViewContent> = ({
               </b>
             </Typography.Title>
             <Row className="row">
-              <Col className="col-info-request">
+              <Col xs={24} sm={8} className="col-info-request">
                 <div>
                   <Text strong> Purpose</Text>
                   <br />
                   <Text> {detail?.purpose}</Text>
                 </div>
               </Col>
-              <Col className="col-info-request">
+              <Col xs={24} sm={8} className="col-info-request">
                 <div>
                   <Text strong> Department</Text>
                   <br />
                   <Text> {detail?.department}</Text>
                 </div>
               </Col>
-              <Col className="col-info-request">
+              <Col xs={24} sm={8} className="col-info-request">
                 <div>
                   <Text strong> Payment for</Text>
                   <br />
                   <Text>{detail?.paymentFor}</Text>
                 </div>
               </Col>
-              {detail?.currency !== "VND" &&  <Col className="col-info-request">
+              {detail?.currency !== "VND" &&  <Col xs={24} sm={8} className="col-info-request">
               </Col>}
             </Row>
             <Row className="row">
-              <Col className="col-info-request">
+              <Col xs={24} sm={8} className="col-info-request">
                 <div>
                   <Text strong>Supplier</Text>
                   <br />
                   <Text> {detail?.supplier}</Text>
                 </div>
               </Col>
-              <Col className="col-info-request">
+              <Col xs={24} sm={8} className="col-info-request">
                 <div>
                   <Text strong>Currency</Text>
                   <br />
@@ -157,7 +157,7 @@ const ViewContent: React.FC<IViewContent> = ({
                 </div>
               </Col>
               {detail?.currency !== "VND" && (
-                <Col className="col-info-request">
+                <Col xs={24} sm={8} className="col-info-request">
                   <div>
                     <Text strong>Exchange rate</Text>
                     <br />
@@ -165,7 +165,7 @@ const ViewContent: React.FC<IViewContent> = ({
                   </div>
                 </Col>
               )}
-              <Col className="col-info-request">
+              <Col xs={24} sm={8} className="col-info-request">
                 <div>
                   <Text strong> PO/PR number</Text>
                   <br />
