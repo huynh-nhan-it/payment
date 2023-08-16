@@ -6,6 +6,9 @@ import { getDepartments } from "../../../../../../../../Services/PaymentRequest/
 import { getCheckManager, getDepartmentUsers } from "../../../../../../../../Services/Organizations/apiDepartmentUsers";
 import AddMemberForm from "../../Header/AddMember";
 import HeaderOrganize from "../../Header/Header";
+import { AppDispatch } from "../../../../../../../PaymentRequest/Store";
+import { useDispatch } from "react-redux";
+import { setDepartmentNameAction } from "../../../../../../../Request/component/reducers/departmentSlice";
 
 interface DepartmentContextProps {
   departmentName: string;
@@ -24,6 +27,7 @@ const NavbarDepartment = () => {
   const [manager, setManager] = useState<User | null>(null);
   const [supervisor, setSupervisor] = useState<User[]>();
   const [employees, setEmployees] = useState<User[]>();
+  const dispatch : AppDispatch = useDispatch();
 
   useEffect(() => {
     fetchData();
@@ -48,6 +52,7 @@ const NavbarDepartment = () => {
   const [codeDepartment, setCodeDepartmen] = useState<any | null>(null);
   const [checkDisplay, setCheckDisplay] = useState('');
   const handleDepartmentClick = async (department: any) => {
+    dispatch(setDepartmentNameAction(department as string));
     setNameDepartment(department);
     setDepartmentName(department);
 
@@ -130,6 +135,7 @@ if (myInput) {
   
   
   return (
+    
     <><Row>
       <Col span={8}>
         <div className="navbar-department">

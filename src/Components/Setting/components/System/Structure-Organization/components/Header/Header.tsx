@@ -1,8 +1,8 @@
 import { RollbackOutlined } from "@ant-design/icons";
 import { Col, Row, theme } from "antd";
 import { Layout } from "antd";
-import {ImWindows} from 'react-icons/im';
-import {TiArrowBackOutline} from 'react-icons/ti';
+import { ImWindows } from 'react-icons/im';
+import { TiArrowBackOutline } from 'react-icons/ti';
 import '../../css/index.css';
 import React, { useContext } from "react";
 import { FaPen, FaRegPenToSquare } from "react-icons/fa6";
@@ -10,50 +10,51 @@ import { RiDeleteBin6Line, RiOrganizationChart } from "react-icons/ri";
 import AddMemberForm from "./AddMember";
 import context from "antd/es/app/context";
 import { DepartmentContext } from "../Content/Navbar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../../Request/component/store/store";
 
 const { Header } = Layout;
 
-const HeaderOrganize: React.FC = () => {  
+const HeaderOrganize: React.FC = () => {
 
-  const context = useContext(DepartmentContext);
-
+  // const context = useContext(DepartmentContext);
+const {departmentName} = useSelector((state:RootState) => state.departmentSlice);
   return (
     <Header
-    style={{
-      minWidth: '100%',
-      background: '#ccc',
-      position: 'fixed',
-      zIndex: 1,
-      top: "64px",
-      backgroundColor: "#F5F6FA"
-    }} >
+      style={{
+        minWidth: '100%',
+        background: '#ccc',
+        position: 'fixed',
+        zIndex: 1,
+        top: "64px",
+        backgroundColor: "#F5F6FA"
+      }} >
 
-      <Row gutter={24} style={{paddingLeft: '1.5%'}}>
-        
-        <Col > <a style={{display: 'none'}} id="add" href="/setting/system/department/add" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/> Add Department</a></Col>
+      <Row gutter={24} style={{ paddingLeft: '1.5%' }}>
+        <Col > <a style={{ display: 'none' }} id="add" href="/setting/system/department/add" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }} /> Add Department</a></Col>
         <Col>
-        <a style={{display: 'none'}} id="edit" href="#" className="text-header"> <FaPen style={{ marginRight: '5px' }}/> Edit Department</a>
+          <a style={{ display: 'none' }} id="edit" href="#" className="text-header"> <FaPen style={{ marginRight: '5px' }} /> Edit Department</a>
 
         </Col>
         <Col>
-        <a style={{display: 'none'}} id="delete" href="#" className="text-header"> <RiDeleteBin6Line style={{ marginRight: '5px' }}/> Delete Department</a>
+          <a style={{ display: 'none' }} id="delete" href="#" className="text-header"> <RiDeleteBin6Line style={{ marginRight: '5px' }} /> Delete Department</a>
         </Col>
         <Col>
-        <div style={{display: 'none'}} id="addMember" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }}/>
-        <AddMemberForm departmentName={context?.departmentName}/>
-        </div>
+          <div style={{ display: 'none' }} id="addMember" className="text-header"> <FaRegPenToSquare style={{ marginRight: '5px' }} />
+            <AddMemberForm departmentName={departmentName} />
+          </div>
         </Col>
         <Col>
-        <a style={{display: 'none'}} href="#" id="view" className="text-header"> <RiOrganizationChart style={{ marginRight: '5px' }}/> View orgchart</a>
+          <a style={{ display: 'none' }} href="#" id="view" className="text-header"> <RiOrganizationChart style={{ marginRight: '5px' }} /> View orgchart</a>
         </Col>
         <Col>
-        <a href="#" className="text-header"> <TiArrowBackOutline style={{ marginRight: '5px' }}/> Return</a>
+          <a href="#" className="text-header"> <TiArrowBackOutline style={{ marginRight: '5px' }} /> Return</a>
         </Col>
       </Row>
-      
+
     </Header>
-    
-  
+
+
 
   );
 }

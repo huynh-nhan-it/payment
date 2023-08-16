@@ -20,7 +20,6 @@ const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ depar
       try {
         const memberResponse = await getApprover();  
         const departmentResponse = await getDepartments();
-  
         setMemberData(memberResponse);
         setDepartmentData(departmentResponse);
       } catch (error) {
@@ -48,31 +47,31 @@ const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ depar
 
   
 
-  // const handleSubmit = (event: { preventDefault: () => void; }) => {
-  //   event.preventDefault();
-  //   if( position==""||member==null)
-  //   {
-  //     SelectError();
-  //   }
-  //   else if (member) {
-  //     const data = {
-  //       fullName: member.fullName,
-  //       email: member.email,
-  //       jobTitle: member.jobTitle,
-  //     };
+  const handleSubmit = (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    if( position==""||member==null)
+    {
+      SelectError();
+    }
+    else if (member) {
+      const data = {
+        fullName: member.fullName,
+        email: member.email,
+        jobTitle: member.jobTitle,
+      };
     
 
-  //   axios
-  //     .post(`http://localhost:5005/api/Department/add-member?DepartmentName=${departmentName}&Position=${position}`, data)
-  //     .then((response) => {
-  //       console.log("Response from API:", response.data);
-  //       // Xử lý dữ liệu trả về nếu cần thiết
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  //   }
-  // };
+    axios
+      .post(`http://localhost:5005/api/Department/add-member?DepartmentName=${departmentName}&Position=${position}`, data)
+      .then((response) => {
+        console.log("Response from API:", response.data);
+        // Xử lý dữ liệu trả về nếu cần thiết
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    }
+  };
   const handleFormClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Stop event propagation
   };
@@ -130,9 +129,9 @@ const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ depar
           style={{ width: 320 }}
           className="padding-bottom-12">
           <Form.Item style={{ display: "flex", justifyContent: "flex-end" }}>
-            {/* <Button type="primary" ghost onClick={handleSubmit}>
+            <Button type="primary" ghost onClick={handleSubmit}>
               Add Member
-            </Button> */}
+            </Button>
           </Form.Item>
           <Form.Item label="Select Member" style={{fontWeight: "bold", display: "flex", justifyContent: "flex-end" }}>
             <Select
@@ -150,7 +149,7 @@ const AddMemberForm: React.FC <{departmentName: string | undefined }> = ({ depar
             </Select>
           </Form.Item>
           <Form.Item label="Department" style={{fontWeight: "bold", display: "flex", justifyContent: "flex-end" }}>
-            <Input style={{width:200}} id="departmentAdd" value={context?.departmentName || 'check'}  disabled/>
+            <Input style={{width:200}} id="departmentAdd" value={departmentName || 'check'}  disabled/>
             {/* <Select
               showSearch
               style={{ width: 200}}
