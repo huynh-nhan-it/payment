@@ -142,11 +142,12 @@ namespace PaymentModule.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteDepartment(Guid id)
+        public IActionResult DeleteDepartment(string departmentName)
         {
             try
             {
-                _departmentService.DeleteDepartment(id);
+                Guid departId = _departmentService.GetIdByDepartmentName(departmentName);
+                _departmentService.DeleteDepartment(departId);
                 return Ok(new { mess = "Succeed" });
             }
             catch (Exception ex)
