@@ -10,6 +10,7 @@ import StructureOrganization from "./Components/Setting/components/System/Struct
 import SubmitRequest from "./Components/PaymentRequest";
 import Register from "./Components/Login/Register";
 import LoginPage from "./Components/Login";
+import NewForm from "./Components/PaymentRequest/NewForm";
 
 
 function App() {
@@ -45,6 +46,8 @@ function App() {
             <Route
               path="request/payment/new"
               element={<SubmitRequest />}></Route>
+
+            <Route path="newForm" element={<NewForm/>}></Route>
           </Routes>
         )}
 

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Provider } from "react-redux";
-import { AppDispatch, store } from "./Store";
-import FormRequest from "./FormRequest";
+import React, {useState } from "react";
+import { AppDispatch } from "./Store";
 import TableRequest from "./TableRequest";
 import AttachmentRequest from "./AttachmentRequest";
 import ApproverRequest from "./ApproverRequest";
 import useFormData from "./useData";
 import { useDispatch } from "react-redux";
 import { submitForm } from "./SubmitAPI";
-import { Alert, Button, Layout, Space, theme } from "antd";
+import { Button, Layout , theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
@@ -20,6 +18,8 @@ import { TiArrowBackOutline } from "react-icons/ti";
 import { BsFillSendFill } from "react-icons/bs";
 import { MdDrafts } from "react-icons/md";
 import * as showError from "./showError";
+import NewForm from "./NewForm";
+import Swal from 'sweetalert2';
 
 const App: React.FC = () => {
   const formData = useFormData();
@@ -30,50 +30,51 @@ const App: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const id = localStorage.getItem('id');
+  let isSubmit: boolean = false;
+  const handleFormSubmit = (typeSave: any, id: any) => {
 
-  const handleFormSubmit = (typeSave:any, id: any) => {
-    
     //Gọi action submitForm
-    if(formData.form.purpose ===''){
+    if (formData.form.purpose === '') {
       showError.PurposeError();
     }
-    else if(formData.form.department ===''){
+    else if (formData.form.department === '') {
       showError.DepartmentError();
     }
-    else if(formData.form.paymentFor ===''){
+    else if (formData.form.paymentFor === '') {
       showError.PaymentForError();
     }
-    else if(formData.form.supplier ===''){
+    else if (formData.form.supplier === '') {
       showError.SupplierError();
     }
-    else if(formData.form.currency ===''){
+    else if (formData.form.currency === '') {
       showError.CurrencyError();
     }
-    else if(formData.form.poPrNumber===0){
+    else if (formData.form.poPrNumber === 0) {
       showError.PoPrError();
     }
-    else if((formData.form.exchangeRate || formData.form.poPrNumber)<0){
+    else if ((formData.form.exchangeRate || formData.form.poPrNumber) < 0) {
       showError.NumberError();
     }
-    else if(formData.approve.ListApproveAPI.length===0){
+    else if (formData.approve.ListApproveAPI.length === 0) {
       showError.ApproverError();
     }
-    else{
-    dispatch(submitForm(formData, typeSave, id));
-    console.log(formData, typeSave);
-    navigate("/request/payment");
-  }
+    else {
+      dispatch(submitForm(formData, typeSave, id));
+      Swal.fire({
+        title: 'Congratulations!',
+        html: 'Submit Request Successfully',
+        icon: 'success', 
+        confirmButtonText: 'OK'
+      })
+      console.log(formData, typeSave);
+      navigate("/request/payment");
+    }
   };
 
-  const handleFormSubmitDraft = (typeSave:any, id: any) =>{
+  const handleFormSubmitDraft = (typeSave: any, id: any) => {
     dispatch(submitForm(formData, typeSave, id));
-    console.log(formData, typeSave);
-    console.log(formData.approve.ListApproveAPI)
-    navigate("/request/payment");
+    setTimeout(() => { navigate("/request/payment"); }, 2000);
   }
-
-  
-
 
   return (
 
@@ -139,7 +140,14 @@ const App: React.FC = () => {
                         <MdDrafts
                           style={{ marginRight: "5px" }}
                           onClick={() => {
+                            isSubmit = true;
                             handleFormSubmitDraft("save-draft", id);
+                            Swal.fire({
+                              title: 'Congratulations!',
+                              html: 'Save-Draft Successfully',
+                              icon: 'success', 
+                              confirmButtonText: 'OK'
+                            })
                           }}
                         />{" "}
                         Save Draft{" "}
@@ -153,6 +161,7 @@ const App: React.FC = () => {
                         <BsFillSendFill
                           style={{ marginRight: "5px" }}
                           onClick={() => {
+                            isSubmit = true;
                             handleFormSubmit("create-request", id);
                           }}
                         />{" "}
@@ -163,7 +172,7 @@ const App: React.FC = () => {
                 </Row>
               </Header>
               <div style={{ paddingTop: "100px" }}></div>
-              <FormRequest />
+              <NewForm isSubmit={isSubmit} />
               <TableRequest />
               <AttachmentRequest />
               <ApproverRequest />

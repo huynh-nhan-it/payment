@@ -1,20 +1,23 @@
 // store.ts
 
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import filterReducer from "../reducers/filterReducer";
 import searchReducer from "../reducers/searchReducer";
 import navbarReducer from "../reducers/navbarReducer";
 import departmentSlice from "../reducers/departmentSlice";
+import reduxThunk from 'redux-thunk'
+
+
 // Khởi tạo state gốc
 const rootReducer = combineReducers({
   filter: filterReducer,
   search: searchReducer,
   key: navbarReducer, 
-  departmentSlice
+  departmentSlice,
 });
 
 // Tạo Redux store
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(reduxThunk));
 // store.ts
 
 export type RootState = ReturnType<typeof rootReducer>;

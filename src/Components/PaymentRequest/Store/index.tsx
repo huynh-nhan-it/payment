@@ -5,6 +5,7 @@ import calReducer from "./calculateSlice";
 import approveReducer from "./approveSlice";
 import attachmentReducer from "./attachmentSlice";
 import departmentSlice from "../../Request/component/reducers/departmentSlice";
+import submitFormReducer from "./submitFormReducer";
 // import typeReducer from "./typeSlice";
 export type RootState = {
   form: ReturnType<typeof formReducer>;
@@ -13,6 +14,7 @@ export type RootState = {
   cal: ReturnType<typeof calReducer>;
   attachment: ReturnType<typeof attachmentReducer>;
   departmentSlice: ReturnType<typeof departmentSlice>;
+  submitFormReducer: ReturnType<typeof submitFormReducer>;
 };
 
 export const store = configureStore({
@@ -23,6 +25,7 @@ export const store = configureStore({
     approve: approveReducer,
     attachment: attachmentReducer, 
     departmentSlice,   
+    submitFormReducer
   },
 });
 

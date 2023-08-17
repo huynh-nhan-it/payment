@@ -1,4 +1,5 @@
 // paymentRequestService.ts
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 //GET API
@@ -44,3 +45,11 @@ export const getBearDepartments = async () => {
     return [];
   }
 };
+
+export const getSupplierFromApi = async () => {
+  const res = await axios({
+      url: `http://localhost:5005/api/Supplier/supplier-name-list`,
+      method: 'GET',
+  })
+  return res.data;
+}

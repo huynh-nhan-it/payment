@@ -35,7 +35,6 @@ const calSlice = createSlice({
         updateTotalPayment: (state, action: PayloadAction<number>) =>{
             state.totalPayment = action.payload;
         },
-        
     }
 });
 
@@ -45,4 +44,5 @@ export const {updatePayMethod,
             updateAdvanceAmount, 
             updateTotalPayment, 
             } = calSlice.actions;
+            
 export default calSlice.reducer;
