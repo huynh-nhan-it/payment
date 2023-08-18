@@ -1,0 +1,39 @@
+.font_text {
+    font-weight: bold;
+    text-align: left;
+    padding-left: 30px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.content-center {
+    overflow: initial;
+}
+
+
+.form-calculate {
+    display: flex;
+    flex-Direction: column;
+    align-Items: flex-start;
+    width: 500px;
+}
+
+.content-left {
+    font-Size: 18px;
+    font-Weight: bold;
+    text-Align: left;
+    padding: 30px;
+}
+
+.text-header {
+    color: #8894A1;
+    background: none; 
+    border: none; 
+    box-shadow: none;
+    padding: 0;
+}

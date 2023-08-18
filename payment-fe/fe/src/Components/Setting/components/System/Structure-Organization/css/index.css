@@ -1,0 +1,162 @@
+.header-payment-view {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin: '0 10px';
+}
+
+.header-payment-view>a {
+    padding: auto;
+    display: flex;
+    align-items: center;
+}
+
+.text-header {
+    color: #8894A1;
+}
+
+.parent-row-info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.parent-row-info>.child-row-info b {
+    font-size: 1.2rem;
+    line-height: 190%;
+    font-family: 'initial';
+    color: #130e0e;
+}
+
+.row {
+    padding-bottom: 16px;
+    display: flex;
+    justify-content: start;
+}
+
+.row>.col-info-request {
+    text-align: left;
+    width: 25%;
+}
+
+.midle-content-comment {
+    line-height: 220%;
+    display: flex;
+    align-items: center;
+}
+
+.row-comment {
+    padding-top: 2%;
+    padding-bottom: 2%;
+
+}
+
+.col-comment {
+    text-align: left;
+
+}
+
+.pr-8 {
+    padding-right: 8px;
+}
+
+.mr-8 {
+    margin-right: 8px;
+}
+
+.midle-content-comment ins {
+    color: cornflowerblue;
+}
+
+.fr {
+    float: right;
+}
+
+.te-r {
+    text-align: right;
+}
+
+.col-parent-comment {
+    border-top: 1px solid rgb(233, 224, 224);
+    box-sizing: border-box;
+}
+
+.children-comment {
+
+    padding-left: 4%;
+    padding-right: 2.5%;
+}
+
+.child-form-content {
+    padding-top: 2%;
+    width: 58%;
+    border-top: 1px solid rgb(233, 224, 224);
+}
+
+.navbar-department {
+    width: 300px;
+    padding: 20px;
+    padding-top: 64px;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.department-list {
+    padding: 10px 24px;
+    border: solid #ccc 0.1px;
+    font-size: 1.1em;
+}
+
+.org-department-icon svg {
+    font-size: 20px;
+}
+
+.org-department-icon{
+    border: solid #333 0.2px;
+    border-radius: 50%;
+    padding: 0 4px;
+}
+
+.org-department{
+    align-items: center;
+}
+
+.color-black {
+    color: #000;
+}
+
+.scrollable-container {
+    height: 700px;
+    overflow-y: scroll;
+}
+
+.background {
+    height: 100%;
+}
+
+.search-department {
+    padding: 10px 0;
+}
+
+.org-department-name{
+    margin-left: 16px;
+}
+
+.details-department{
+    text-align: left;
+}
+
+.title-details{
+    font-weight: bold;
+    width: 120px;
+}
+
+.content-details{
+    padding-left: 30px;
+}
+
+.line-list{
+    padding: 8px;
+}
