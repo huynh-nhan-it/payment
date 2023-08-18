@@ -26,5 +26,5 @@ Thực hiện các logic, nghiệp vụ,... phức tạp hơn. Cũng để contr
 Lệnh 1: add-migration initdb (Nếu đã có thư mục Migration rồi thì không thực hiện bước này)
 Lệnh 2: update-database
 
-Sau khi đã hoàn thành các bước trên hãy vào database kiểm tra và import file sql dược cung cấp để có thể sử dụng dự án.
+Sau khi đã hoàn thành các bước trên hãy vào database kiểm tra và import file db.sql dược cung cấp để có thể sử dụng dự án.
 
