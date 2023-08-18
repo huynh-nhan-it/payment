@@ -12,10 +12,12 @@ import ModalStatus from "./components/Modal/ModalStatus";
 import "./css/index.css";
 import axios from "axios";
 import Spinner from "../common/Loading";
+import ReactPDF, { PDFDownloadLink } from '@react-pdf/renderer';
 import { PaymentRequest } from "./interface/IRequest";
 import ModalShare from "./components/Modal/ModalShare";
 import ModalProgress from "./components/Modal/ModalProgress";
 import { openNotificationWithIcon } from "./common/notify";
+import DetailRequestPDF from "./common/exportPDF";
 
 function ViewPayment(userId: any) {
   const {
@@ -32,6 +34,7 @@ function ViewPayment(userId: any) {
   const [hasFetchedData, setHasFetchedData] = useState(false);
   const [isModalOpenShare, setIsModalOpenShare] = useState(false);
   const [isModalOpenProgress, setIsModalOpenProgress] = useState(false);
+  const [showPDF, setShowPDF] = useState(false);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest>(
     {} as PaymentRequest
   );
@@ -228,9 +231,22 @@ function ViewPayment(userId: any) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const exportPDF = () => {
+    console.log('exportPDF');
+    setShowPDF(true);
+  }
   return (
     <div>
       {contextHolder}
+      {showPDF && (
+        <PDFDownloadLink
+          document={<DetailRequestPDF />}
+          fileName={`${requestCode}.pdf`}
+        >
+          {({ blob, url, loading, error }) => (loading ? 'Loading...' : error ? error.message : "Download now !")}
+        </PDFDownloadLink>
+      )}
       {Loading ? (
         <Spinner></Spinner>
       ) : (
@@ -274,6 +290,7 @@ function ViewPayment(userId: any) {
                   showModal={showModal}
                   showModalShare={showModalShare}
                   showModalProgress={showModalProgress}
+                  exportPDF={exportPDF}
                   userId={userId.userId}
                   DetailRequestId={DetailRequestId}
                 ></ViewHeader>

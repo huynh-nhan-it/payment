@@ -138,7 +138,7 @@ const LoginPage: React.FC = () => {
     <div
       style={{
         backgroundColor: "white",
-        height: "calc(100vh - 48px)",
+        height: "100vh",
       }}
     >
       {contextHolder}

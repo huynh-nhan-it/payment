@@ -18,6 +18,7 @@ interface IHeader {
   showModal: (type: any) => void;
   showModalShare: () => void;
   showModalProgress: () => void;
+  exportPDF: () => void;
   userId: any;
   DetailRequestId: any;
 }
@@ -26,6 +27,7 @@ const ViewHeader: React.FC<IHeader> = ({
   showModal,
   showModalShare,
   showModalProgress,
+  exportPDF,
   userId,
   DetailRequestId,
 }) => {
@@ -64,16 +66,21 @@ const ViewHeader: React.FC<IHeader> = ({
           <Button href="/request/payment" className="text-header">
             {" "}
             <div style={{ display: "flex", alignItems: "center" }}>
-            <TiArrowBackOutline style={{ marginRight: "5px" }} /> Return
+              <TiArrowBackOutline style={{ marginRight: "5px" }} /> Return
             </div>
           </Button>
         </Col>
         <Col>
-          <Button href="#" className="text-header">
+          <Button
+            href="#"
+            // onClick={() => {
+            //   exportPDF();
+            // }}
+            className="text-header"
+          >
             {" "}
             <div style={{ display: "flex", alignItems: "center" }}>
-            <BsFiletypePdf style={{ marginRight: "5px" }} /> Download file
-             {" "}
+              <BsFiletypePdf style={{ marginRight: "5px" }} /> Download file{" "}
             </div>
           </Button>
         </Col>
@@ -88,16 +95,19 @@ const ViewHeader: React.FC<IHeader> = ({
             >
               {" "}
               <div style={{ display: "flex", alignItems: "center" }}>
-              <MdDeleteOutline style={{ marginRight: "5px" }} /> Delete
-              {" "}
-            </div>
+                <MdDeleteOutline style={{ marginRight: "5px" }} /> Delete{" "}
+              </div>
             </Button>
           </Col>
         )}
         <Col>
-          <Button href="#" className="text-header" onClick={() => {
-            showModalProgress();
-          }}>
+          <Button
+            href="#"
+            className="text-header"
+            onClick={() => {
+              showModalProgress();
+            }}
+          >
             {" "}
             <div style={{ display: "flex", alignItems: "center" }}>
               <AiOutlineFundProjectionScreen style={{ marginRight: "5px" }} />{" "}
@@ -113,7 +123,7 @@ const ViewHeader: React.FC<IHeader> = ({
                 className="text-header"
                 onClick={() => showModal("Approved")}
               >
-                 {" "}
+                {" "}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <FiCheck style={{ marginRight: "5px" }} /> Approve
                 </div>
@@ -125,7 +135,7 @@ const ViewHeader: React.FC<IHeader> = ({
                 className="text-header"
                 onClick={() => showModal("Rejected")}
               >
-                 {" "}
+                {" "}
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <TiDeleteOutline style={{ marginRight: "5px" }} /> Reject
                 </div>
@@ -134,7 +144,13 @@ const ViewHeader: React.FC<IHeader> = ({
           </>
         )}
         <Col>
-          <Button href="#" className="text-header" onClick={() => {showModalShare()}}>
+          <Button
+            href="#"
+            className="text-header"
+            onClick={() => {
+              showModalShare();
+            }}
+          >
             {" "}
             <div style={{ display: "flex", alignItems: "center" }}>
               <AiOutlineShareAlt style={{ marginRight: "5px" }} /> Share

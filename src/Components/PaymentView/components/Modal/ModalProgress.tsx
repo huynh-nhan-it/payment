@@ -47,7 +47,7 @@ const ModalProgress: React.FC<IModalProgress> = ({
                 ? "Approved with this approver"
                 : status === "Waiting"
                 ? "Waiting with this approver"
-                : status === "Rejected" ? "Rejected by this approver" : "In progress with this approver",
+                : status === "Rejected" ? "Rejected by this approver" : status === "Sender" ? "Send the progress with this user " : "In progress with this approver",
             icon: icon
             
           };
