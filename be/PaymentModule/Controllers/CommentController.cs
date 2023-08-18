@@ -38,7 +38,7 @@ namespace PaymentModule.Controllers
             try
             {
                 _detailRequestService.PostComment(cmtDto);
-                return Ok();
+                return Ok(cmtDto);
             }
             catch (Exception ex)
             {

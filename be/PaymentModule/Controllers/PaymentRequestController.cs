@@ -5,17 +5,27 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PaymentModule.Context;
 using PaymentModule.DTOs;
 using PaymentModule.Entities;
 using PaymentModule.Models;
 using PaymentModule.Services.Implements;
 using PaymentModule.Services.IServices;
-using PdfSharpCore;
 using SixLabors.ImageSharp;
 using System.Diagnostics;
+using System.Net.WebSockets;
+using System.Reflection.Metadata;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Drawing;
+using Syncfusion.Pdf.Grid;
+using PointF = Syncfusion.Drawing.PointF;
+using SizeF = Syncfusion.Drawing.SizeF;
+using System.Reflection.Metadata.Ecma335;
+using System.Data;
 
 namespace PaymentModule.Controllers
 {
@@ -332,5 +342,7 @@ namespace PaymentModule.Controllers
             }
             return BadRequest(new { success = false, error = true, message = "Id không chính xác", data = ""});
         }
+
+        
     }
 }
